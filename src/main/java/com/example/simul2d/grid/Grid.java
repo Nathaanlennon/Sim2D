@@ -7,3 +7,4 @@ public class Grid {
         private boolean isToric; // True = les bords se touchent, False = murs bloqués
         private Cell[][] matrix;
 }
+// ff
