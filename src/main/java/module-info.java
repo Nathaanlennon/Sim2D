@@ -3,6 +3,7 @@ module com.example.simul2d {
     requires javafx.controls;
     // JavaFX FXML = chargement de l'interface décrite en XML.
     requires javafx.fxml;
+    requires java.desktop;
 
 
     // `opens` autorise JavaFX FXML à accéder aux champs/méthodes annotés @FXML.
