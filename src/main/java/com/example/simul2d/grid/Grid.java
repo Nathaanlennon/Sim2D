@@ -15,14 +15,17 @@ public class Grid {
         }
 
         public int getRows() {
+
                 return rows;
         }
 
         public int getColumns() {
+
                 return columns;
         }
 
         public boolean isToric() {
+
                 return isToric;
         }
 
@@ -30,10 +33,10 @@ public class Grid {
 
                 if (isToric) {
 
-                        int toricR = Math.floorMod(x, rows);
-                        int toricC = Math.floorMod(y, columns);
+                        int toricX = Math.floorMod(x, rows);
+                        int toricY = Math.floorMod(y, columns);
 
-                        return matrix[toricR][toricC];
+                        return matrix[toricX][toricY];
                 }
                 else {
                         // Si pas torique, on vérifie  normalement juste qu'on est bien dans la grille
@@ -43,6 +46,20 @@ public class Grid {
                 }
 
                 return null;
+        }
+
+        public void setCell( int x, int y, Cell cell){
+                if( isToric){
+                        int toricX = math.floorMod(x,rows);
+                        int toricY = math.floorMod(y,rows);
+                        matrix[toricX][toricY] = cell;
+        }
+                else {
+
+                        if (x >= 0 && x < rows && y >= 0 && y < columns){
+                                matrix[x][y] = cell;
+                        }
+                }
         }
 
 
