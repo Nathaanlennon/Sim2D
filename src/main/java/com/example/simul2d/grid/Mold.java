@@ -2,9 +2,13 @@ package com.example.simul2d.grid;
 import java.util.Objects;
 
 /**
- * Abstract base class representing mold with a measurable growth and a
- * growth rate. Subclasses may override {@link #grow()} to provide
- * specific behavior. Growth is clamped implicitly by the implementation.
+ * Abstract base class representing a mold-like entity with growth and
+ * propagation behavior.
+ *
+ * <p>Subclasses may customize visual representation and growth-related
+ * parameters. Growth behavior uses {@link #grow(int)} which receives the
+ * aggregated growth present on the containing {@link Cell} and may use that
+ * information to adapt its update.
  */
 public abstract class Mold extends Entity implements Grow, Propagate {
 
@@ -30,6 +34,7 @@ public abstract class Mold extends Entity implements Grow, Propagate {
      *
      * @return current growth
      */
+    @Override
     public int getGrowth() {
         return growth;
     }
@@ -39,7 +44,8 @@ public abstract class Mold extends Entity implements Grow, Propagate {
      *
      * @param growth new growth value
      */
-    protected void setGrowth(int growth) {
+    @Override
+    public void setGrowth(int growth) {
         this.growth = growth;
     }
 
@@ -48,25 +54,41 @@ public abstract class Mold extends Entity implements Grow, Propagate {
      *
      * @return growth rate per step
      */
+    @Override
     public int getGrowthRate() {
         return growthRate;
     }
-
 
     /**
      * Sets the growth rate for subsequent growth steps.
      *
      * @param growthRate new growth rate
      */
-    protected void setGrowthRate(int growthRate) {
+    @Override
+    public void setGrowthRate(int growthRate) {
         this.growthRate = growthRate;
     }
 
+    /**
+     * Default growth behavior invoked each step.
+     *
+     * <p>The implementation is conservative: it does nothing if the
+     * configured growth rate is non-positive, the total growth on the
+     * containing cell has reached a global limit (100), or this mold has
+     * already reached a maximum (100). Otherwise, the mold's growth is
+     * increased by its {@link #growthRate}.
+     *
+     * @param totalGrowthOnCell aggregated growth value for the containing cell
+     */
     @Override
-    public void grow() {
+    public void grow(int totalGrowthOnCell) {
 
         if (growthRate <= 0) {
             return; // No growth if growth rate is zero or negative
+        }
+
+        if (totalGrowthOnCell >= 100) {
+            return; // No growth if total growth on the cell has reached or exceeded the limit
         }
 
         if (growth >= 100) {
@@ -91,23 +113,22 @@ public abstract class Mold extends Entity implements Grow, Propagate {
 
     @Override
     public boolean equals(Object other) {
-        
         if (this == other) {
-            return true; // Check if both references point to the same object
+            return true;
         }
 
         if (other == null || getClass() != other.getClass()) {
-            return false; // Check if the other object is null or of a different class
+            return false;
         }
 
-        Mold otherMold = (Mold) other; // Cast the other object to Mold
-        return this.growth == otherMold.growth && this.growthRate == otherMold.growthRate && this.minGrowthValueToPropagate == otherMold.minGrowthValueToPropagate; // Check if growth, growth rate, and minimum growth value are equal
+        Mold otherMold = (Mold) other;
+        return this.growth == otherMold.growth && this.growthRate == otherMold.growthRate && this.minGrowthValueToPropagate == otherMold.minGrowthValueToPropagate;
 
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(growth, growthRate, minGrowthValueToPropagate); // Generate a hash code based on growth, growth rate, and minimum growth value
+        return Objects.hash(growth, growthRate, minGrowthValueToPropagate);
     }
 
 }

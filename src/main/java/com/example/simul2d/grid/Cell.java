@@ -28,7 +28,13 @@ public class Cell {
      * once per cell.
      */
     private HashMap<Class<? extends Entity>, Entity> entities;
-
+    
+    /**
+     * Aggregated growth across all {@link Grow} entities in this cell.
+     * <p>Used by {@link #step()} and passed into {@link Grow#grow(int)} so
+     * that individual growth behavior can depend on the cell-level total.
+     */
+    private int totalGrowthOnCell;
 
     /**
      * Constructs a new {@code Cell} positioned at (0, 0) with an empty
@@ -37,6 +43,7 @@ public class Cell {
     public Cell() {
         this.pos = new Vec2(0, 0);
         this.entities = new HashMap<>();
+        this.totalGrowthOnCell = 0;
     }
 
     /**
@@ -49,8 +56,23 @@ public class Cell {
     public Cell(int x, int y) {
         this.pos = new Vec2(x, y);
         this.entities = new HashMap<>();
+        this.totalGrowthOnCell = 0;
     }
 
+    public int getTotalGrowthOnCell() {
+        return totalGrowthOnCell;
+    }
+
+
+
+    public void step() {
+        for (Entity entity : entities.values()) {
+            if (entity instanceof Grow growable) {
+                growable.grow(totalGrowthOnCell); 
+                totalGrowthOnCell += growable.getGrowthRate(); // Update total growth after growth step
+            }
+        }
+    }
 
     /**
      * Adds or replaces an {@link Entity} stored in this cell. The entity is
@@ -61,7 +83,10 @@ public class Cell {
      *               same concrete class)
      */
     public void addEntity(Entity entity) {
-        entities.put(entity.getClass(), entity);
+        entities.put(entity.getClass(), entity); // Add or replace the entity in the map
+        if (entity instanceof Grow growable) {
+            totalGrowthOnCell += growable.getGrowth(); // Update total growth when adding a new entity
+        }
     }
 
     /**
