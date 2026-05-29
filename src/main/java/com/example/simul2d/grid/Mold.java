@@ -6,20 +6,23 @@ import java.util.Objects;
  * growth rate. Subclasses may override {@link #grow()} to provide
  * specific behavior. Growth is clamped implicitly by the implementation.
  */
-public abstract class Mold implements Grow {
+public abstract class Mold extends Entity implements Grow, Propagate {
 
     private int growth;
     private int growthRate;
+    private final int minGrowthValueToPropagate; // Minimum growth required for propagation
 
     /**
      * Constructs a Mold with the supplied initial growth and growth rate.
      *
      * @param growth the initial growth value (units)
      * @param growthRate growth per step (units)
+     * @param minGrowthValueToPropagate minimum growth required for propagation
      */
-    public Mold(int growth, int growthRate) {
+    public Mold(int growth, int growthRate, int minGrowthValueToPropagate) {
         this.growth = growth;
         this.growthRate = growthRate;
+        this.minGrowthValueToPropagate = minGrowthValueToPropagate;
     }
 
     /**
@@ -36,7 +39,7 @@ public abstract class Mold implements Grow {
      *
      * @param growth new growth value
      */
-    public void setGrowth(int growth) {
+    protected void setGrowth(int growth) {
         this.growth = growth;
     }
 
@@ -49,12 +52,13 @@ public abstract class Mold implements Grow {
         return growthRate;
     }
 
+
     /**
      * Sets the growth rate for subsequent growth steps.
      *
      * @param growthRate new growth rate
      */
-    public void setGrowthRate(int growthRate) {
+    protected void setGrowthRate(int growthRate) {
         this.growthRate = growthRate;
     }
 
@@ -71,6 +75,11 @@ public abstract class Mold implements Grow {
 
         // Default growth behavior (can be overridden by subclasses)
         this.growth += this.growthRate;
+    }
+
+    @Override
+    public boolean isAbleToPropagate() {
+        return growth > minGrowthValueToPropagate; // Propagation is possible if growth exceeds the threshold
     }
 
     /**
@@ -92,13 +101,13 @@ public abstract class Mold implements Grow {
         }
 
         Mold otherMold = (Mold) other; // Cast the other object to Mold
-        return this.growth == otherMold.growth && this.growthRate == otherMold.growthRate; // Check if growth and growth rate are equal
-    
+        return this.growth == otherMold.growth && this.growthRate == otherMold.growthRate && this.minGrowthValueToPropagate == otherMold.minGrowthValueToPropagate; // Check if growth, growth rate, and minimum growth value are equal
+
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(growth, growthRate); // Generate a hash code based on growth and growth rate
+        return Objects.hash(growth, growthRate, minGrowthValueToPropagate); // Generate a hash code based on growth, growth rate, and minimum growth value
     }
 
 }

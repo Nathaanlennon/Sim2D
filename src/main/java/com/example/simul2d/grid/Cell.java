@@ -1,42 +1,82 @@
 package com.example.simul2d.grid;
 
+import java.util.HashMap;
+
 /**
- * Represents a single cell in the simulation grid holding a 2D integer
- * position. The cell acts as a lightweight container for a {@link Vec2}
- * coordinate.
+ * A grid cell used by the simulation to represent a discrete location.
+ *
+ * <p>Each {@code Cell} stores an integer 2D position ({@link Vec2}) and a
+ * collection of {@link Entity} instances present at that location. Entities
+ * are stored in a map keyed by their concrete class which ensures at most one
+ * instance per concrete entity type can be associated with a single cell.
+ *
+ * <p>This class is intentionally lightweight — it does not perform any
+ * simulation logic itself; it only provides storage for position and
+ * entity references used by higher-level simulation code.
+ *
+ * @see Vec2
+ * @see Entity
  */
 public class Cell {
 
+    /** The position of the cell in the grid. */
     private Vec2 pos;
 
     /**
-     * Creates a cell located at (0,0).
+     * Map of entities currently present in this cell, keyed by their concrete
+     * class. This allows a single concrete entity type to be stored at most
+     * once per cell.
+     */
+    private HashMap<Class<? extends Entity>, Entity> entities;
+
+
+    /**
+     * Constructs a new {@code Cell} positioned at (0, 0) with an empty
+     * entity collection.
      */
     public Cell() {
         this.pos = new Vec2(0, 0);
+        this.entities = new HashMap<>();
     }
 
     /**
-     * Creates a cell at the given coordinates.
+     * Constructs a new {@code Cell} at the provided integer coordinates with
+     * an empty entity collection.
      *
      * @param x the x coordinate
      * @param y the y coordinate
      */
     public Cell(int x, int y) {
         this.pos = new Vec2(x, y);
+        this.entities = new HashMap<>();
+    }
+
+
+    /**
+     * Adds or replaces an {@link Entity} stored in this cell. The entity is
+     * stored under its concrete runtime class (the result of
+     * {@code entity.getClass()}).
+     *
+     * @param entity the entity to add (may replace an existing entry for the
+     *               same concrete class)
+     */
+    public void addEntity(Entity entity) {
+        entities.put(entity.getClass(), entity);
     }
 
     /**
-     * Returns the cell's position.
+     * Returns the cell's {@link Vec2} position. The returned object is the
+     * actual instance used by this cell; callers modifying it will change the
+     * cell's stored coordinates.
      *
-     * @return the position as a {@link Vec2}
+     * @return the position vector (never {@code null})
      */
     public Vec2 getPos() { 
         return pos; 
     }
 
     /**
-     * Sets the cell's position.
+     * Replaces this cell's position with the supplied {@link Vec2}.
      *
      * @param pos the new position
      */
