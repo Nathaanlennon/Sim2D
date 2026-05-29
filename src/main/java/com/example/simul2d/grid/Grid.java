@@ -15,19 +15,19 @@ public class Grid {
 
                 for (int i = 0; i < rows; i++) {
                         for (int j = 0; j < columns; j++) {
-                                this.matrix[i][j] = new Cell();
+                                this.matrix[i][j] = new Cell(i, j);
                         }
                 }
         }
 
-        public int getWitdh() {
+        public int getWidth() {
 
-                return rows;
+                return columns;
         }
 
         public int getHeight() {
 
-                return columns;
+                return rows;
         }
 
         public boolean isToric() {
@@ -45,7 +45,7 @@ public class Grid {
                         return matrix[Math.floorMod(x, rows)][Math.floorMod(y, columns)];
                 }
                 else {
-                        // Si pas torique, on vérifie  normalement juste qu'on est bien dans la grille
+                        // Si pas torique, on vérifie  normalement : il faut juste qu'on est bien dans la grille
                         if (x >= 0 && x < rows && y >= 0 && y < columns){
                                 return matrix[x][y];
                         }
@@ -56,9 +56,9 @@ public class Grid {
 
         public void setCell( int x, int y, Cell cell){
                 if( isToric){
-                        int toricX = math.floorMod(x,rows);
-                        int toricY = math.floorMod(y,rows);
-                        matrix[toricX][toricY] = cell;
+                     //   int toricX = Math.floorMod(x,rows);
+                      //  int toricY = Math.floorMod(y,columns);
+                        matrix[Math.floorMod(x,rows)][Math.floorMod(y,columns)] = cell;
         }
                 else {
 
@@ -73,6 +73,29 @@ public class Grid {
 
 
 
-        @Override  String toString
+        @Override
+        public String toString() {
+                StringBuilder sb = new StringBuilder();
+
+                for (int i = 0; i < rows; i++) {
+                        for (int j = 0; j < columns; j++) {
+                                Cell cell = matrix[i][j];
+
+                                if (cell == null) {
+                                        sb.append("[ ]"); // Case vide
+                                } else {
+
+                                        int cx = cell.getPos().x();
+                                        int cy = cell.getPos().y();
+
+                                        sb.append("[").append(cx).append(",").append(cy).append("]");
+                                }
+                                sb.append(" ");
+                        }
+                        sb.append("\n");
+                }
+
+                return sb.toString();
+        }
 
 }
