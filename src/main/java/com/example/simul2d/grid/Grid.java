@@ -26,19 +26,19 @@ public class Grid {
                 return isToric;
         }
 
-        public Cell getCell(int r, int c) {
+        public Cell getCell(int x, int y) {
 
                 if (isToric) {
 
-                        int toricR = Math.floorMod(r, rows);
-                        int toricC = Math.floorMod(c, columns);
+                        int toricR = Math.floorMod(x, rows);
+                        int toricC = Math.floorMod(y, columns);
 
                         return matrix[toricR][toricC];
                 }
                 else {
                         // Si pas torique, on vérifie  normalement juste qu'on est bien dans la grille
-                        if (r >= 0 && r < rows && c >= 0 && c < columns){
-                                return matrix[r][c];
+                        if (x >= 0 && x < rows && y >= 0 && y < columns){
+                                return matrix[x][y];
                         }
                 }
 
