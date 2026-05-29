@@ -33,10 +33,10 @@ public class Grid {
 
                 if (isToric) {
 
-                        int toricX = Math.floorMod(x, rows);
-                        int toricY = Math.floorMod(y, columns);
+                     //   int toricX = Math.floorMod(x, rows);
+                      //  int toricY = Math.floorMod(y, columns);
 
-                        return matrix[toricX][toricY];
+                        return matrix[Math.floorMod(x, rows)][Math.floorMod(y, columns)];
                 }
                 else {
                         // Si pas torique, on vérifie  normalement juste qu'on est bien dans la grille
