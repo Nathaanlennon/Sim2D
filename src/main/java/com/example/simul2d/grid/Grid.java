@@ -14,12 +14,12 @@ public class Grid {
                 this.matrix = new Cell[rows][columns];
         }
 
-        public int getRows() {
+        public int getWitdh() {
 
                 return rows;
         }
 
-        public int getColumns() {
+        public int getHeight() {
 
                 return columns;
         }
@@ -60,8 +60,13 @@ public class Grid {
                                 matrix[x][y] = cell;
                         }
                 }
+
+
+
         }
 
 
+
+        @Override  String toString
 
 }
