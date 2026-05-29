@@ -12,6 +12,12 @@ public class Grid {
                 this.columns= columns;
                 this.isToric = isToric;
                 this.matrix = new Cell[rows][columns];
+
+                for (int i = 0; i < rows; i++) {
+                        for (int j = 0; j < columns; j++) {
+                                this.matrix[i][j] = new Cell();
+                        }
+                }
         }
 
         public int getWitdh() {
