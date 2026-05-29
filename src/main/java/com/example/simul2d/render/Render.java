@@ -16,8 +16,26 @@ public class Render {
     
 //public methods
 
+    /**
+     * for debug purposes only
+     * 
+     * @param message lessage to send
+     * @param clear boolean to see if we clear the terminal or not, default false through surcharge
+     */
+    public static void printSomething(String message, boolean clear){
+        if (clear) clear();
+        System.out.println(message);
+    }
+    public static void printSomething(String message){
+        printSomething(message, false);
+    }
+
     public static void clear() {
-        System.out.print("\u001B[2J\u001B[H");
+        // Code ANSI pour clear le terminal
+        // \u001B[2J = clear toute l'écran
+        // \u001B[H = cursor au début (0,0)
+        // \u001B[3J = clear aussi l'historique du scrollback
+        System.out.print("\u001B[H\u001B[2J\u001B[3J");
         System.out.flush();
     }
     public void printSimulation(){

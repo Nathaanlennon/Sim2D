@@ -3,6 +3,7 @@ package com.example.simul2d.Console;
 
 import com.example.simul2d.Core.*;
 import com.example.simul2d.input.InputHandler;
+import com.example.simul2d.input.InputReader;
 import com.example.simul2d.render.Render;
 
 public class ConsoleMain {
@@ -13,7 +14,9 @@ public class ConsoleMain {
 
         SimulationLoop loop = new SimulationLoop(state);
         Render renderer = new Render(state);
-        loop.runSimulation(renderer);
+        InputHandler inputHandler = new InputHandler(state);
+        new Thread(new InputReader()).start();
+        loop.runSimulation(renderer, inputHandler);
         
     }
 
