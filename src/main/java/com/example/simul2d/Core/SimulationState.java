@@ -35,6 +35,11 @@ public class SimulationState {
     }
 
     //get methods
+
+    public Grid getGrid() {
+        return grid;
+    }
+
     public boolean isPaused() {
         return paused;
     }

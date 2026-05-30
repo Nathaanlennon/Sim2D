@@ -109,5 +109,19 @@ public class Cell {
         this.pos = pos; 
     }
 
+    public HashMap<Class<? extends Entity>, Entity> getEntities() {
+        return entities;
+    }
+
+    @Override
+    public String toString() {
+        if (getEntities().isEmpty()){
+            return ".";
+        }
+        StringBuilder sb = new StringBuilder();
+        getEntities().values().forEach(entity -> sb.append(entity.toString()));
+        
+        return sb.toString();
+    }
 }
 

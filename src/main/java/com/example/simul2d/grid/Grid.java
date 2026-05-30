@@ -79,18 +79,7 @@ public class Grid {
 
                 for (int i = 0; i < rows; i++) {
                         for (int j = 0; j < columns; j++) {
-                                Cell cell = matrix[i][j];
-
-                                if (cell == null) {
-                                        sb.append("[ ]"); // Case vide
-                                } else {
-
-                                        int cx = cell.getPos().x();
-                                        int cy = cell.getPos().y();
-
-                                        sb.append("[").append(cx).append(",").append(cy).append("]");
-                                }
-                                sb.append(" ");
+                                sb.append(matrix[i][j].toString());
                         }
                         sb.append("\n");
                 }

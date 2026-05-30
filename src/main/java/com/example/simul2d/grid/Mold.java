@@ -29,6 +29,7 @@ public abstract class Mold extends Entity implements Grow, Propagate {
         this.minGrowthValueToPropagate = minGrowthValueToPropagate;
     }
 
+    
     /**
      * Returns the current growth value.
      *

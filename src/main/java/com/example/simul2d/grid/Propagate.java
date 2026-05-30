@@ -20,4 +20,12 @@ public interface Propagate {
      * @return true if propagation is possible
      */
     boolean isAbleToPropagate();
+
+    /**
+     * Propagate the object to the specified target location. 
+     * Assumption is that basic propagation is creating a new instance of the class
+     *
+     * @param target the cell where the object should propagate to.
+     */
+    void propagateTo(Cell target);
 }

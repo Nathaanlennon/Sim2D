@@ -14,6 +14,10 @@ public class SlowMold extends Mold {
         super(0, 1, 20); // Call the parent constructor with initial growth and growth rate and minimum growth value for propagation
     }
 
+    @Override
+    public void propagateTo(Cell targetCell) {
+        targetCell.addEntity(new SlowMold());
+    }
 
     @Override
     public String toString() {
