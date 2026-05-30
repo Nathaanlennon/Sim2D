@@ -12,39 +12,90 @@ public class Grid {
                 this.columns= columns;
                 this.isToric = isToric;
                 this.matrix = new Cell[rows][columns];
+
+                for (int i = 0; i < rows; i++) {
+                        for (int j = 0; j < columns; j++) {
+                                this.matrix[i][j] = new Cell(i, j);
+                        }
+                }
         }
 
-        public int getRows() {
-                return rows;
-        }
+        public int getWidth() {
 
-        public int getColumns() {
                 return columns;
         }
 
+        public int getHeight() {
+
+                return rows;
+        }
+
         public boolean isToric() {
+
                 return isToric;
         }
 
-        public Cell getCell(int r, int c) {
+        public Cell getCell(int x, int y) {
 
                 if (isToric) {
 
-                        int toricR = Math.floorMod(r, rows);
-                        int toricC = Math.floorMod(c, columns);
+                     //   int toricX = Math.floorMod(x, rows);
+                      //  int toricY = Math.floorMod(y, columns);
 
-                        return matrix[toricR][toricC];
+                        return matrix[Math.floorMod(x, rows)][Math.floorMod(y, columns)];
                 }
                 else {
-                        // Si pas torique, on vérifie  normalement juste qu'on est bien dans la grille
-                        if (r >= 0 && r < rows && c >= 0 && c < columns){
-                                return matrix[r][c];
+                        // Si pas torique, on vérifie  normalement : il faut juste qu'on est bien dans la grille
+                        if (x >= 0 && x < rows && y >= 0 && y < columns){
+                                return matrix[x][y];
                         }
                 }
 
                 return null;
         }
 
+        public void setCell( int x, int y, Cell cell){
+                if( isToric){
+                     //   int toricX = Math.floorMod(x,rows);
+                      //  int toricY = Math.floorMod(y,columns);
+                        matrix[Math.floorMod(x,rows)][Math.floorMod(y,columns)] = cell;
+        }
+                else {
 
+                        if (x >= 0 && x < rows && y >= 0 && y < columns){
+                                matrix[x][y] = cell;
+                        }
+                }
+
+
+
+        }
+
+
+
+        @Override
+        public String toString() {
+                StringBuilder sb = new StringBuilder();
+
+                for (int i = 0; i < rows; i++) {
+                        for (int j = 0; j < columns; j++) {
+                                Cell cell = matrix[i][j];
+
+                                if (cell == null) {
+                                        sb.append("[ ]"); // Case vide
+                                } else {
+
+                                        int cx = cell.getPos().x();
+                                        int cy = cell.getPos().y();
+
+                                        sb.append("[").append(cx).append(",").append(cy).append("]");
+                                }
+                                sb.append(" ");
+                        }
+                        sb.append("\n");
+                }
+
+                return sb.toString();
+        }
 
 }
