@@ -12,7 +12,7 @@ public interface Propagate {
      * cells). Implementations should update their internal state
      * accordingly.
      */
-    void propagate();
+    //void propagate();
 
     /**
      * Indicates whether the object is currently able to propagate.
