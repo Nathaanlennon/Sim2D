@@ -59,6 +59,7 @@ public class Cell {
         this.totalGrowthOnCell = 0;
     }
 
+    
     public int getTotalGrowthOnCell() {
         return totalGrowthOnCell;
     }
@@ -66,10 +67,14 @@ public class Cell {
 
 
     public void step() {
+        int currentGrowth;
         for (Entity entity : entities.values()) {
             if (entity instanceof Grow growable) {
-                growable.grow(totalGrowthOnCell); 
-                totalGrowthOnCell += growable.getGrowthRate(); // Update total growth after growth step
+                if(!growable.isAbleToGrow(totalGrowthOnCell)) {
+                    continue; // Skip growth if the entity is not able to grow based on current conditions
+                }
+                currentGrowth = growable.grow(totalGrowthOnCell); 
+                totalGrowthOnCell += currentGrowth; // Update total growth after growth step
             }
         }
     }
@@ -87,6 +92,28 @@ public class Cell {
         if (entity instanceof Grow growable) {
             totalGrowthOnCell += growable.getGrowth(); // Update total growth when adding a new entity
         }
+    }
+
+
+    /**
+     * Returns the map of entities currently present in this cell.
+     *
+     * @return the map of entities (never {@code null})
+     */
+    public HashMap<Class<? extends Entity>, Entity> getEntities() {
+        return entities;
+    }
+
+    /**
+     * Retrieves the entity of the specified concrete class present in this cell.
+     *
+     * @param entity the concrete class of the entity to retrieve
+     * @return the entity instance if present, or {@code null} if no such entity
+     *         is stored in this cell
+     */
+    public Entity getEntity(Class<? extends Entity> entity) {
+
+        return entities.get(entity);
     }
 
     /**
@@ -108,6 +135,25 @@ public class Cell {
     public void setPos(Vec2 pos) { 
         this.pos = pos; 
     }
+
+    @Override
+    public String toString() {
+        if (entities.isEmpty()) {
+            return " ";
+        } else {
+            //get the Mold in entity with the highest growth value and return the tostring of this mold
+            Mold moldWithHighestGrowth = null;
+            for (Entity entity : entities.values()) {
+                if (entity instanceof Mold mold) {
+                    if (moldWithHighestGrowth == null || mold.getGrowth() > moldWithHighestGrowth.getGrowth()) {
+                        moldWithHighestGrowth = mold;
+                    }
+                }
+            }
+            return moldWithHighestGrowth != null ? moldWithHighestGrowth.toString() : " ";
+        }
+    }
+
 
 }
 

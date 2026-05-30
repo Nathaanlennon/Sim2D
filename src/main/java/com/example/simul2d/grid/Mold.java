@@ -81,22 +81,38 @@ public abstract class Mold extends Entity implements Grow, Propagate {
      * @param totalGrowthOnCell aggregated growth value for the containing cell
      */
     @Override
-    public void grow(int totalGrowthOnCell) {
+    public int grow(int totalGrowthOnCell) {
 
         if (growthRate <= 0) {
-            return; // No growth if growth rate is zero or negative
-        }
-
-        if (totalGrowthOnCell >= 100) {
-            return; // No growth if total growth on the cell has reached or exceeded the limit
+            return 0; // No growth if growth rate is zero or negative
         }
 
         if (growth >= 100) {
-            return; // Maximum growth reached
+            return 0; // No growth if this mold has reached the limit
+        }
+
+        if(totalGrowthOnCell >= 100) {
+            return 0; // No growth if the cell has reached the total growth limit
+        }
+
+        if (growth + growthRate > 100) {
+            growth = 100; // Cap growth at 100
+            return 100 - growth; // Return the actual growth added
+        }
+
+        if(totalGrowthOnCell + this.growthRate > 100) {
+            this.growth += (100 - totalGrowthOnCell); // Increase growth only up to the cell limit
+            return 100 - totalGrowthOnCell; // Return the actual growth added
         }
 
         // Default growth behavior (can be overridden by subclasses)
         this.growth += this.growthRate;
+        return this.growthRate;
+    }
+
+    @Override
+    public boolean isAbleToGrow(int totalGrowthOnCell) {
+        return growthRate > 0 && totalGrowthOnCell < 100 && growth < 100; // Growth is possible if growth rate is positive and limits are not reached
     }
 
     @Override

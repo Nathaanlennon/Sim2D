@@ -17,7 +17,7 @@ public interface Grow {
      *                          in the containing cell; implementations may
      *                          use this to alter growth behavior
      */
-    void grow(int totalGrowthOnCell);
+    int grow(int totalGrowthOnCell);
 
     /** Returns the current growth value. */
     int getGrowth();
@@ -30,5 +30,7 @@ public interface Grow {
 
     /** Sets the growth rate (units per step). */
     void setGrowthRate(int growthRate);
+
+    boolean isAbleToGrow(int totalGrowthOnCell);
 
 }
