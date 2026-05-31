@@ -14,7 +14,7 @@ public class FastMold extends Mold {
         super(0, 5, 60); // Call the parent constructor with initial growth and growth rate and minimum growth value for propagation
     }
 
-
+    
     @Override
     public String toString() {
         return "X"; // Return a string representation for visualization (e.g., "X" for fast mold)

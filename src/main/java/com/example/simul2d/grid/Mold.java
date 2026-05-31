@@ -2,13 +2,13 @@ package com.example.simul2d.grid;
 import java.util.Objects;
 
 /**
- * Abstract base class representing a mold-like entity with growth and
- * propagation behavior.
+ * Base type for mold entities in the simulation. This abstract class provides
+ * common properties and behaviors for different mold variants, such as growth
+ * and propagation logic.
  *
- * <p>Subclasses may customize visual representation and growth-related
- * parameters. Growth behavior uses {@link #grow(int)} which receives the
- * aggregated growth present on the containing {@link Cell} and may use that
- * information to adapt its update.
+ * <p>Concrete subclasses (e.g., {@link SlowMold} and {@link FastMold}) can
+ * override the default growth behavior and provide specific implementations of
+ * the {@link #toString()} method for visualization purposes.
  */
 public abstract class Mold extends Entity implements Grow, Propagate {
 
@@ -110,11 +110,32 @@ public abstract class Mold extends Entity implements Grow, Propagate {
         return this.growthRate;
     }
 
+
+    /**
+     * Determines if this mold is able to grow based on its growth rate and
+     * the current growth conditions of the containing cell.
+     *
+     * <p>Growth is possible if the growth rate is positive, the total growth
+     * on the cell has not reached a global limit (100), and this mold has
+     * not already reached its maximum growth (100).
+     *
+     * @param totalGrowthOnCell aggregated growth value for the containing cell
+     * @return true if growth is possible under current conditions, false otherwise
+     */
     @Override
     public boolean isAbleToGrow(int totalGrowthOnCell) {
         return growthRate > 0 && totalGrowthOnCell < 100 && growth < 100; // Growth is possible if growth rate is positive and limits are not reached
     }
 
+
+    /**
+     * Determines if this mold is able to propagate based on its current growth.
+     *
+     * <p>Propagation is possible if the mold's growth has reached or exceeded
+     * the configured minimum growth value required for propagation.
+     *
+     * @return true if propagation is possible, false otherwise
+     */
     @Override
     public boolean isAbleToPropagate() {
         return growth > minGrowthValueToPropagate; // Propagation is possible if growth exceeds the threshold

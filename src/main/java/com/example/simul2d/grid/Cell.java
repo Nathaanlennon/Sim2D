@@ -59,13 +59,22 @@ public class Cell {
         this.totalGrowthOnCell = 0;
     }
 
-    
+    /**
+     * Returns the aggregated growth across all {@link Grow} entities in this cell.
+     *
+     * @return the total growth on the cell
+     */
     public int getTotalGrowthOnCell() {
         return totalGrowthOnCell;
     }
 
 
-
+    /**
+     * Executes a simulation step for this cell, updating all contained entities
+     * that implement {@link Grow}. Each growable entity's growth is updated
+     * based on the current total growth on the cell, and the total is updated
+     * accordingly after each entity's growth step.
+     */
     public void step() {
         int currentGrowth;
         for (Entity entity : entities.values()) {
