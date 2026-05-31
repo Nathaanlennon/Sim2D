@@ -1,14 +1,16 @@
 package com.example.simul2d;
 
+import java.util.Objects;
+
 /**
  * Classe représentant un personnage simple.
- * 
+ *
  * Un personnage a des propriétés comme :
  * - Son nom
  * - Sa vie (HP)
  * - Sa position
  * etc.
- * 
+ *
  * Pour cet exemple, on commence avec juste le nom !
  */
 public class Personnage {
@@ -83,5 +85,21 @@ public class Personnage {
             this.vie = 100; // La vie ne peut pas dépasser 100
         }
     }
+    
+    @Override
+    public boolean equals(Object object){
+        // conditions * 50
+        if (object instanceof Personnage) return false;
+        
+        return Objects.equals(((Personnage) object).getNom(), this.getNom());
+        
+    }
+    
+    @Override
+    public int hashCode(){
+        return Objects.hash(getNom());
+    }
 }
+
+
 
