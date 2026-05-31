@@ -59,13 +59,22 @@ public class Cell {
         this.totalGrowthOnCell = 0;
     }
 
-    
+    /**
+     * Returns the aggregated growth across all {@link Grow} entities in this cell.
+     *
+     * @return the total growth on the cell
+     */
     public int getTotalGrowthOnCell() {
         return totalGrowthOnCell;
     }
 
 
-
+    /**
+     * Executes a simulation step for this cell, updating all contained entities
+     * that implement {@link Grow}. Each growable entity's growth is updated
+     * based on the current total growth on the cell, and the total is updated
+     * accordingly after each entity's growth step.
+     */
     public void step() {
         int currentGrowth;
         for (Entity entity : entities.values()) {
@@ -80,17 +89,19 @@ public class Cell {
     }
 
     /**
-     * Adds or replaces an {@link Entity} stored in this cell. The entity is
-     * stored under its concrete runtime class (the result of
-     * {@code entity.getClass()}).
+     * Adds the provided entity to this cell. If an entity of the same concrete
+     * class is already present, the new entity will not be added and the
+     * existing one will remain unchanged.
      *
-     * @param entity the entity to add (may replace an existing entry for the
-     *               same concrete class)
+     * @param entity the entity to add (must not be {@code null})
      */
     public void addEntity(Entity entity) {
-        if (!entities.containsKey(entity.getClass())) {
-            entities.put(entity.getClass(), entity); // Add or replace the entity in the map
+
+        if (entities.containsKey(entity.getClass())) {
+            return;
         }
+
+        entities.put(entity.getClass(), entity); // Add the entity to the map
         if (entity instanceof Grow growable) {
             totalGrowthOnCell += growable.getGrowth(); // Update total growth when adding a new entity
         }

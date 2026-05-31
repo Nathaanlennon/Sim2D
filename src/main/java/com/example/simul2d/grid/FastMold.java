@@ -15,6 +15,7 @@ public class FastMold extends Mold {
     }
 
     
+    
     @Override
     public void propagateTo(Cell targetCell) {
         targetCell.addEntity(new FastMold());
