@@ -8,10 +8,10 @@ public class SlowMold extends Mold {
 
     /**
      * Constructs a SlowMold with an initial growth of 0 and a growth rate
-     * of 1 unit per growth step.
+     * of 2 units per growth step.
      */
     public SlowMold() {
-        super(0, 1, 20); // Call the parent constructor with initial growth and growth rate and minimum growth value for propagation
+        super(0, 2, 20); // Call the parent constructor with initial growth and growth rate and minimum growth value for propagation
     }
 
     @Override
