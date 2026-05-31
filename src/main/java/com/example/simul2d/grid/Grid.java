@@ -75,7 +75,7 @@ public class Grid {
 
         @Override
         public String toString() {
-                StringBuilder sb = new StringBuilder();
+                        StringBuilder sb = new StringBuilder();
 
                 for (int i = 0; i < rows; i++) {
                         for (int j = 0; j < columns; j++) {

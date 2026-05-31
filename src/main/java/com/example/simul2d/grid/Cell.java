@@ -88,7 +88,9 @@ public class Cell {
      *               same concrete class)
      */
     public void addEntity(Entity entity) {
-        entities.put(entity.getClass(), entity); // Add or replace the entity in the map
+        if (!entities.containsKey(entity.getClass())) {
+            entities.put(entity.getClass(), entity); // Add or replace the entity in the map
+        }
         if (entity instanceof Grow growable) {
             totalGrowthOnCell += growable.getGrowth(); // Update total growth when adding a new entity
         }

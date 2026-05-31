@@ -14,8 +14,7 @@ public enum Command {
     
     //TODO: add commands directty to the enum
 
-
-    // La touche associée à la commande
+    
     private final String key;
 
     // Constructeur
@@ -27,8 +26,8 @@ public enum Command {
     public String getKey() {
         return key;
     }
-
-
+    
+  
     public static Command fromString(String input) {
         if (input == null || input.isBlank()) {
             return null;

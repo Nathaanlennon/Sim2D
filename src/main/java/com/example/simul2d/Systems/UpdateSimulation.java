@@ -2,7 +2,9 @@ package com.example.simul2d.Systems;
 
 import com.example.simul2d.Core.SimulationState;
 import com.example.simul2d.grid.Cell;
+import com.example.simul2d.grid.Grow;
 import com.example.simul2d.grid.Propagate;
+import com.example.simul2d.render.Render;
 
 public class UpdateSimulation {
     private final SimulationState data;
@@ -35,13 +37,22 @@ public class UpdateSimulation {
                 cell.step();
                 int finalX = x;
                 int finalY = y;
-                cell.getEntities().values().forEach(entity ->  {
-                    if (entity instanceof Propagate && ((Propagate) entity).isAbleToPropagate()){
-                        int[] dir = directions[(int) (Math.random() * directions.length)];
-                        ((Propagate) entity).propagateTo(data.getGrid().getCell(finalX + dir[0], finalY + dir[1]));
+                cell.getEntities().values().forEach(entity -> {
+                    if (entity instanceof Grow){
+//                        Render.printSomething("Growing on cell (" + finalX + ", " + finalY + ") with growth " + ((Grow) entity).getGrowth());
+                    }
+                    
+                    if (entity instanceof Propagate && ((Propagate) entity).isAbleToPropagate()) {
+                        Cell target = null;
+                        while (target == null) {
+                            int[] dir = directions[(int) (Math.random() * directions.length)];
+                            target = data.getGrid().getCell(finalX + dir[0], finalY + dir[1]);
+                        }
+                        Render.printSomething("Propagating from (" + finalX + ", " + finalY + ") to (" + target.getPos());
+                        ((Propagate) entity).propagateTo(target);
                     }
                 });
-                
+
 
             }
         }

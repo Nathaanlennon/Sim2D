@@ -16,7 +16,10 @@ public class SlowMold extends Mold {
 
     @Override
     public void propagateTo(Cell targetCell) {
-        targetCell.addEntity(new SlowMold());
+        try {
+            targetCell.addEntity(new SlowMold());
+        } catch (NullPointerException ignored) {
+        }
     }
 
     @Override
