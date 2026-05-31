@@ -80,15 +80,19 @@ public class Cell {
     }
 
     /**
-     * Adds or replaces an {@link Entity} stored in this cell. The entity is
-     * stored under its concrete runtime class (the result of
-     * {@code entity.getClass()}).
+     * Adds the provided entity to this cell. If an entity of the same concrete
+     * class is already present, the new entity will not be added and the
+     * existing one will remain unchanged.
      *
-     * @param entity the entity to add (may replace an existing entry for the
-     *               same concrete class)
+     * @param entity the entity to add (must not be {@code null})
      */
     public void addEntity(Entity entity) {
-        entities.put(entity.getClass(), entity); // Add or replace the entity in the map
+
+        if (entities.containsKey(entity.getClass())) {
+            return;
+        }
+
+        entities.put(entity.getClass(), entity); // Add the entity to the map
         if (entity instanceof Grow growable) {
             totalGrowthOnCell += growable.getGrowth(); // Update total growth when adding a new entity
         }
