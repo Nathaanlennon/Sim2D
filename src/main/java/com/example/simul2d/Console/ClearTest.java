@@ -2,7 +2,16 @@ package com.example.simul2d.Console;
 
 import com.example.simul2d.render.Render;
 
+/**
+ * Small console program that demonstrates the terminal clearing behavior.
+ */
 public class ClearTest {
+    /**
+     * Runs the clear-screen demonstration.
+     *
+     * @param args command-line arguments, unused in this test
+     * @throws InterruptedException if the sleep pauses are interrupted
+     */
     public static void main(String[] args) throws InterruptedException {
         System.out.println("Test 1: Avant le clear()");
         System.out.println("Ligne 2");

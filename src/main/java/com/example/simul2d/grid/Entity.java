@@ -9,9 +9,5 @@ package com.example.simul2d.grid;
  * {@link Grow} and {@link Propagate}.
  */
 public abstract class Entity {
-    
-    public void propagate(){
-        
-    }
-
+        // No fields or methods; serves as a common supertype for all entities
 }

@@ -10,8 +10,17 @@ import com.example.simul2d.input.InputHandler;
 import com.example.simul2d.input.InputReader;
 import com.example.simul2d.render.Render;
 
+/**
+ * Console-based entry point for running the simulation loop.
+ */
 public class ConsoleMain {
 
+    /**
+     * Starts the simulation and the background input reader.
+     *
+     * @param args command-line arguments, unused by this launcher
+     * @throws InterruptedException if the simulation loop is interrupted while sleeping
+     */
     public static void main(String[] args) throws InterruptedException {
 
         SimulationState state = new SimulationState();

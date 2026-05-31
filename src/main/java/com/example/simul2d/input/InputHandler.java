@@ -7,12 +7,22 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 
 
+/**
+ * Consumes raw input strings and applies the matching command to the simulation state.
+ */
 public class InputHandler {
     private final SimulationState data;
+    /**
+     * Shared queue that stores raw input lines read from the console.
+     */
     public static final ConcurrentLinkedQueue<String> queue =
             new ConcurrentLinkedQueue<>();  // it's the cue for the input system
-
-    //constructors
+    //constructor
+    /**
+     * Creates a handler bound to a simulation state.
+     *
+     * @param data the simulation state to update
+     */
     public InputHandler(SimulationState data) {
         this.data = data;
     }
@@ -21,6 +31,9 @@ public class InputHandler {
 //get methods
 //private methods
 //public methods
+    /**
+     * Processes every queued input command until the queue becomes empty.
+     */
     public void handleInput() {
         while (!queue.isEmpty()) {
             String rawInput = queue.poll();

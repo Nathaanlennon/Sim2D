@@ -4,13 +4,13 @@ import java.util.Objects;
 
 /**
  * Classe représentant un personnage simple.
- * 
+ *
  * Un personnage a des propriétés comme :
  * - Son nom
  * - Sa vie (HP)
  * - Sa position
  * etc.
- * 
+ *
  * Pour cet exemple, on commence avec juste le nom !
  */
 public class Personnage {

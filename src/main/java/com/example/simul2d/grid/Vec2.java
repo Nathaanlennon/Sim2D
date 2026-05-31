@@ -1,9 +1,7 @@
 package com.example.simul2d.grid;
 
 /**
- * Immutable 2D integer vector used for grid coordinates and simple
- * arithmetic. This record provides convenience methods to add and
- * subtract other vectors.
+ * Immutable 2D integer vector used for grid coordinates
  *
  * @param x x coordinate
  * @param y y coordinate

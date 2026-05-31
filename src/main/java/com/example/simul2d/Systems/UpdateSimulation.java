@@ -6,10 +6,18 @@ import com.example.simul2d.grid.Grow;
 import com.example.simul2d.grid.Propagate;
 import com.example.simul2d.render.Render;
 
+/**
+ * Applies one simulation step to the current state.
+ */
 public class UpdateSimulation {
     private final SimulationState data;
-
-    //constructors
+    
+        //constructors
+    /**
+     * Creates an updater bound to a simulation state.
+     *
+     * @param data the simulation state to update
+     */
     public UpdateSimulation(SimulationState data) {
         this.data = data;
     }
@@ -19,12 +27,20 @@ public class UpdateSimulation {
 //private methods
 //public methods
 
-    //TODO: change that to real input
+    //TODO: change that to real input size
+    /**
+     * Placeholder hook for content-driven updates.
+     *
+     * @param content arbitrary content to process
+     */
     public void contentUpdate(Object content) {
 
     }
 
 
+    /**
+     * Advances the simulation by one update tick.
+     */
     public void update() {
         data.addTime(data.getSpeed());
 

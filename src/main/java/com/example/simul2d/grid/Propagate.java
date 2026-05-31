@@ -7,12 +7,7 @@ package com.example.simul2d.grid;
  */
 public interface Propagate {
 
-    /**
-     * Perform one propagation step (for example, spread to adjacent
-     * cells). Implementations should update their internal state
-     * accordingly.
-     */
-    //void propagate();
+    
 
     /**
      * Indicates whether the object is currently able to propagate.

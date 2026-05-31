@@ -6,6 +6,9 @@ import com.example.simul2d.render.Render;
 
 import static java.lang.Thread.sleep;
 
+/**
+ * Runs the update-render-input loop for the simulation.
+ */
 public class SimulationLoop {
     private final SimulationState data;
     private UpdateSimulation updateSimulation;
@@ -24,12 +27,24 @@ public class SimulationLoop {
 
 //get methods
 
+    /**
+     * Returns whether the loop is still running.
+     *
+     * @return {@code true} while the loop remains active
+     */
     public boolean isRunning() {
         return running;
     }
 
     //private methods
 //public methods
+    /**
+     * Executes the main simulation loop until {@code running} becomes false.
+     *
+     * @param render the renderer used to display the simulation state
+     * @param inputHandler the input handler used to consume queued commands
+     * @throws InterruptedException if the loop sleep is interrupted
+     */
     public void runSimulation(Render render, InputHandler inputHandler) throws InterruptedException {
         while (running) {
             if (!data.isPaused()) {
