@@ -20,6 +20,11 @@ public class Grid {
                 }
         }
 
+
+        public Grid(int rows, int columns) {
+                this(rows, columns, false);
+        }
+
         public int getWidth() {
 
                 return columns;
