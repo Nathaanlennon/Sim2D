@@ -47,12 +47,12 @@ public class Grid {
                      //   int toricX = Math.floorMod(x, rows);
                       //  int toricY = Math.floorMod(y, columns);
 
-                        return matrix[Math.floorMod(x, rows)][Math.floorMod(y, columns)];
+                        return matrix[Math.floorMod(y, rows)][Math.floorMod(x, columns)];
                 }
                 else {
                         // Si pas torique, on vérifie  normalement : il faut juste qu'on est bien dans la grille
-                        if (x >= 0 && x < rows && y >= 0 && y < columns){
-                                return matrix[x][y];
+                        if (x >= 0 && x < columns && y >= 0 && y < rows){
+                                return matrix[y][x];
                         }
                 }
 
@@ -63,12 +63,12 @@ public class Grid {
                 if( isToric){
                      //   int toricX = Math.floorMod(x,rows);
                       //  int toricY = Math.floorMod(y,columns);
-                        matrix[Math.floorMod(x,rows)][Math.floorMod(y,columns)] = cell;
+                        matrix[Math.floorMod(y,rows)][Math.floorMod(x,columns)] = cell;
         }
                 else {
 
-                        if (x >= 0 && x < rows && y >= 0 && y < columns){
-                                matrix[x][y] = cell;
+                        if (x >= 0 && x < columns && y >= 0 && y < rows){
+                                matrix[y][x] = cell;
                         }
                 }
 
