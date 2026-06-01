@@ -1,22 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.TilePane?>
+<?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.control.ToggleGroup?>
 
-<?import javafx.scene.control.Button?>
-<VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.example.simul2d.HelloController">
-    <padding>
-        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
-    </padding>
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.simul2d.HelloController" style="-fx-background-color: #1a1a1a;">
 
-    <!-- fx:id relie cette balise au champ Java welcomeText dans le contrôleur. -->
-    <Label fx:id="welcomeText" text="Le contrôleur va changer ce texte au démarrage."/>
+    <left>
+        <VBox prefWidth="250" spacing="15" style="-fx-background-color: #222222; -fx-padding: 20;">
+            <Label text="OUTIL DE DESSIN" style="-fx-text-fill: #555555; -fx-font-weight: bold;"/>
 
-    <!-- Deuxième exemple : un autre champ injecté depuis le FXML. -->
-    <Label fx:id="infoText" text="Appuie sur le bouton pour déclencher une action."/>
+            <fx:define>
+                <ToggleGroup fx:id="outilsGroup"/>
+            </fx:define>
 
-    <!-- onAction appelle la méthode onHelloButtonClick() du contrôleur. -->
-    <Button text="Clique-moi" onAction="#onHelloButtonClick"/>
-</VBox>
+            <TilePane prefColumns="2" hgap="10" vgap="10">
+                <ToggleButton text="Béton" toggleGroup="$outilsGroup" onAction="#setModeBeton" prefWidth="100" style="-fx-base: #556b7d;"/>
+                <ToggleButton text="Caca" toggleGroup="$outilsGroup" onAction="#setModeCACA" prefWidth="100" style="-fx-base: #522b4e;"/>
+                <ToggleButton text="Bois" toggleGroup="$outilsGroup" onAction="#setModeBois" prefWidth="100" style="-fx-base: #8b5a2b;"/>
+                <ToggleButton text="Plâtre" toggleGroup="$outilsGroup" onAction="#setModePlatre" prefWidth="100" style="-fx-base: #e6e6e6;"/>
+                <ToggleButton text="Verre" toggleGroup="$outilsGroup" onAction="#setModeVerre" prefWidth="100" style="-fx-base: #87cefa;"/>
+
+                <ToggleButton text="Inoculer" toggleGroup="$outilsGroup" selected="true" onAction="#setModeInoculer" prefWidth="100" style="-fx-base: #00ffaa;"/>
+                <ToggleButton text="Effacer" toggleGroup="$outilsGroup" onAction="#setModeEffacer" prefWidth="100" style="-fx-base: #ff4444;"/>
+            </TilePane>
+        </VBox>
+    </left>
+
+    <center>
+        <Pane style="-fx-background-color: #111111;">
+            <Canvas fx:id="simulationCanvas" width="880" height="720"
+                    onMousePressed="#handleMousePressed"
+                    onMouseDragged="#handleMouseDragged"/>
+        </Pane>
+    </center>
+
+</BorderPane>
