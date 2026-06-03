@@ -8,100 +8,120 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 
 public class HelloController {
-
+    @FXML
+    private javafx.scene.control.Label analyticsLabel;
     @FXML
     private Canvas simulationCanvas;
 
     private GraphicsContext gc;
     private GridData data;
-    private final int CELL_SIZE = 5;
 
-    // 6 ÉTATS (Matériaux + Actions)
-    public enum ModeOutil { BETON, BOIS, PLATRE, VERRE,CACA, INOCULER, EFFACER }
-    private ModeOutil outilActuel = ModeOutil.INOCULER;
+    private final int CELL_SIZE = 20;
+
+    // 7 STATES (Materials + Actions)
+    public enum ToolMode { CONCRETE, WOOD, PLASTER, GLASS, DIRT, INOCULATE, ERASE }
+    private ToolMode currentTool = ToolMode.INOCULATE;
 
     @FXML
     public void initialize() {
-        data = new GridData(176, 144, false);
+        data = new GridData(45, 45, false);
         gc = simulationCanvas.getGraphicsContext2D();
+
+        int totalCells = data.columns * data.rows;
+        String analyticsText = "GRID SIZE : " + data.columns + " x " + data.rows + "\n\n" +
+                "TOTAL : " + totalCells + " cells";
+        analyticsLabel.setText(analyticsText);
+
         drawGraphics();
     }
 
-    // CONNEXIONS AVEC LES BOUTONS FXML
-    @FXML protected void setModeBeton() { outilActuel = ModeOutil.BETON; }
-    @FXML protected void setModeBois() { outilActuel = ModeOutil.BOIS; }
-    @FXML protected void setModeCACA() { outilActuel = ModeOutil.CACA; }
-    @FXML protected void setModePlatre() { outilActuel = ModeOutil.PLATRE; }
-    @FXML protected void setModeVerre() { outilActuel = ModeOutil.VERRE; }
-    @FXML protected void setModeInoculer() { outilActuel = ModeOutil.INOCULER; }
-    @FXML protected void setModeEffacer() { outilActuel = ModeOutil.EFFACER; }
+    // CONNECTIONS WITH FXML BUTTONS ---
+    @FXML protected void setModeConcrete() { currentTool = ToolMode.CONCRETE; }
+    @FXML protected void setModeWood() { currentTool = ToolMode.WOOD; }
+    @FXML protected void setModeDirt() { currentTool = ToolMode.DIRT; }
+    @FXML protected void setModePlaster() { currentTool = ToolMode.PLASTER; }
+    @FXML protected void setModeGlass() { currentTool = ToolMode.GLASS; }
+    @FXML protected void setModeInoculate() { currentTool = ToolMode.INOCULATE; }
+    @FXML protected void setModeErase() { currentTool = ToolMode.ERASE; }
 
-    // PHASE 1 INPUT (ÉCRITURE DANS LA DATA)
-    @FXML protected void handleMousePressed(MouseEvent event) { ecrireDansData(event); }
-    @FXML protected void handleMouseDragged(MouseEvent event) { ecrireDansData(event); }
+    // PHASE 1 INPUT (WRITING TO DATA)
+    @FXML protected void handleMousePressed(MouseEvent event) { writeToData(event); }
+    @FXML protected void handleMouseDragged(MouseEvent event) { writeToData(event); }
 
-    private void ecrireDansData(MouseEvent event) {
+    private void writeToData(MouseEvent event) {
         int x = (int) (event.getX() / CELL_SIZE);
         int y = (int) (event.getY() / CELL_SIZE);
         GridData.CellData cell = data.getCell(x, y);
 
         if (cell != null) {
-            cell.caca = cell.caca+1;
-            switch (outilActuel) {
-                case BETON:
-                    cell.materiau = GridData.Materiau.BETON;
+            cell.dirt = cell.dirt + 1;
+            switch (currentTool) {
+                case CONCRETE:
+                    cell.material = GridData.Material.CONCRETE;
                     break;
-                case CACA:
-                    cell.materiau = GridData.Materiau.CACA;
+                case DIRT:
+                    cell.material = GridData.Material.DIRT;
                     break;
-                case BOIS:
-                    cell.materiau = GridData.Materiau.BOIS;
+                case WOOD:
+                    cell.material = GridData.Material.WOOD;
                     break;
-                case PLATRE:
-                    cell.materiau = GridData.Materiau.PLATRE;
+                case PLASTER:
+                    cell.material = GridData.Material.PLASTER;
                     break;
-                case VERRE:
-                    cell.materiau = GridData.Materiau.VERRE;
+                case GLASS:
+                    cell.material = GridData.Material.GLASS;
                     break;
 
-
-                case INOCULER:
-                    cell.moisissure = GridData.Moisissure.ACTIVE;
+                // Painting Mold
+                case INOCULATE:
+                    cell.mold = GridData.Mold.ACTIVE;
                     break;
-                case EFFACER:
-                    cell.moisissure = GridData.Moisissure.AUCUNE;
+                case ERASE:
+                    cell.mold = GridData.Mold.NONE;
                     break;
             }
         }
         drawGraphics();
     }
 
-    // Partie GRAPHIQUE (LECTURE DE LA DATA)
+    // GRAPHICS PART (READING FROM DATA)
     private void drawGraphics() {
+        // Absolute Canvas cleanup
+        gc.clearRect(0, 0, simulationCanvas.getWidth(), simulationCanvas.getHeight());
+
         for (int x = 0; x < data.columns; x++) {
             for (int y = 0; y < data.rows; y++) {
 
-                GridData.CellData cell = data.matrice[x][y];
+                GridData.CellData cell = data.matrix[x][y];
 
-                // Affiche la moisissure
-                if (cell.moisissure == GridData.Moisissure.ACTIVE) {
+                // Display mold
+                if (cell.mold == GridData.Mold.ACTIVE) {
                     gc.setFill(Color.web("#00ffaa")); 
                 }
-                else if (cell.moisissure == GridData.Moisissure.NAISSANTE) {
-                    gc.setFill(Color.web("#008855")); 
+                else if (cell.mold == GridData.Mold.SPAWNING) {
+                    gc.setFill(Color.web("#008855"));
                 }
-  
                 else {
-                    switch (cell.materiau) {
-                        case BETON:  gc.setFill(Color.web("#556b7d")); break;
-                        case CACA:  gc.setFill(Color.web("#522b4e")); break;
-                        case BOIS:   gc.setFill(Color.web("#2b1d14")); break; 
-                        case PLATRE: gc.setFill(Color.web("#e6e6e6")); break;
-                        case VERRE:  gc.setFill(Color.web("#87cefa")); break;
+                    switch (cell.material) {
+                        case CONCRETE:  gc.setFill(Color.web("#556b7d")); break;
+                        case DIRT:      gc.setFill(Color.web("#522b4e")); break;
+                        case WOOD:      gc.setFill(Color.web("#2b1d14")); break;
+                        case PLASTER:   gc.setFill(Color.web("#e6e6e6")); break;
+                        case GLASS:     gc.setFill(Color.web("#e8f4f8")); break;
                     }
                 }
                 gc.fillRect(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
             }
+        }
+
+        gc.setStroke(Color.web("#b0c4de")); 
+        gc.setLineWidth(0.5);
+
+        for (int x = 0; x <= data.columns; x++) {
+            gc.strokeLine(x * CELL_SIZE, 0, x * CELL_SIZE, data.rows * CELL_SIZE);
+        }
+        for (int y = 0; y <= data.rows; y++) {
+            gc.strokeLine(0, y * CELL_SIZE, data.columns * CELL_SIZE, y * CELL_SIZE);
         }
     }
 }
