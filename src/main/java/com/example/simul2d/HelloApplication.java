@@ -8,27 +8,38 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class HelloApplication extends Application {
+
     @Override
     public void init() {
-        // Appelée une seule fois avant l'affichage de la fenêtre.
-        System.out.println("init() : l'application JavaFX démarre.");
+        // Called exactly once before the window is displayed.
+        System.out.println("init(): JavaFX application is starting.");
     }
 
     @Override
     public void start(Stage stage) throws IOException {
-        // FXMLLoader lit le fichier FXML et construit l'interface graphique.
+        // FXMLLoader reads the FXML file and builds the graphical interface.
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
-        // Scene = le contenu de la fenêtre.
-        Scene scene = new Scene(fxmlLoader.load(), 320, 240);
+
+        // Increased base resolution to hide OS resizing transition
+        Scene scene = new Scene(fxmlLoader.load(), 1200, 800);
+
         stage.setTitle("Simul2D - JavaFX demo");
         stage.setScene(scene);
-        // show() affiche enfin la fenêtre à l'écran.
+
+        // ENGINEERING DIRECTIVE: Force the OS to maximize the window before rendering
+        stage.setMaximized(true);
+
+        // show() performs the global Draw Call and displays the window on screen.
         stage.show();
     }
 
     @Override
     public void stop() {
-        // Appelée quand l'application se ferme.
-        System.out.println("stop() : fermeture de l'application JavaFX.");
+        // Called when the application closes (memory deallocation).
+        System.out.println("stop(): JavaFX application closing.");
+    }
+
+    public static void main(String[] args) {
+        launch();
     }
 }
