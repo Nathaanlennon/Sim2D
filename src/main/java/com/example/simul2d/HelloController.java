@@ -4,9 +4,10 @@ package com.example.simul2d;
 
 
 import javafx.fxml.FXML;
+import com.example.simul2d.Core.SimulationState;
 import javafx.scene.control.Label;
 
-public class HelloController {
+public class HelloController implements NeedsSimulationState{
     @FXML
     private Label welcomeText;
 
@@ -18,6 +19,12 @@ public class HelloController {
     private Personnage monPersonnage;
 
     private int clickCount = 0;
+    // Shared simulation state injected by the application
+    private com.example.simul2d.Core.SimulationState simulationState;
+
+    // reference to the included controller (time-control-view.fxml)
+    @FXML
+    private TimeController timeController;
 
     @FXML
     private void initialize() {
@@ -26,24 +33,25 @@ public class HelloController {
         // On crée un nouveau personnage appelé "Héros"
         monPersonnage = new Personnage("Héros");
         
-        // On affiche le nom du personnage avec un message de bienvenue
-        welcomeText.setText("Bienvenue " + monPersonnage.getNom() + " !");
-        
-        // On affiche d'autres infos du personnage
-        infoText.setText("Vie: " + monPersonnage.getVie() + " HP | Position: (" + 
-                         monPersonnage.getX() + ", " + monPersonnage.getY() + ")");
+       
     }
 
     @FXML
     protected void onHelloButtonClick() {
-        // Chaque clic fait perdre 10 points de vie au personnage
-        clickCount++;
-        
-        // Le personnage prend 10 dégâts
-        monPersonnage.prenderDegats(10);
-        
-        // On met à jour l'interface avec les nouvelles infos
-        welcomeText.setText(monPersonnage.getNom() + " a été touché " + clickCount + " fois !");
-        infoText.setText("Vie restante: " + monPersonnage.getVie() + " HP | " + monPersonnage.toString());
+    }
+
+    /**
+     * Inject the simulation state for this controller. Call after FXMLLoader.load().
+     */
+    public void setSimulationState(SimulationState state) {
+        this.simulationState = state;
+        // optional: update UI with initial info from state
+        if (infoText != null && state != null) {
+            infoText.setText("Speed: " + state.getSpeed());
+        }
+        // forward to included controller if available
+        if (timeController != null) {
+            timeController.setSimulationState(state);
+        }
     }
 }

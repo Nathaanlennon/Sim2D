@@ -2,9 +2,10 @@ package com.example.simul2d.grid;
 
 public enum Material {
 
-    WOOD,     
+    WOOD(),     
     CONCRETE, 
     PLASTER,  
     TILE,     
     EMPTY     
 }
+

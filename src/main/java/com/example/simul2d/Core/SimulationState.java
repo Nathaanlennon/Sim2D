@@ -1,15 +1,19 @@
 package com.example.simul2d.Core;
 
 import com.example.simul2d.grid.Grid;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Holds the mutable state of the simulation. (It's like the data)
  */
 public class SimulationState {
-    private double speed;
-    private double time;
+    private volatile double speed;
+    private volatile double time;
     private Grid grid;
-    private boolean paused;
+    private volatile boolean paused;
+    // A thread-safe pre-rendered snapshot of the grid for UI consumption.
+    // The simulation thread should call updateGridSnapshot() after it mutates the grid.
+    private final AtomicReference<String> gridSnapshot = new AtomicReference<>("");
 
 
     //constructors
@@ -42,7 +46,9 @@ public class SimulationState {
      * Toggles the paused state.
      */
     public void changePause() {
-        this.paused = !this.paused;
+        boolean copyPaused = this.paused;
+        this.paused = !copyPaused;
+        
     }
     
     /**
@@ -60,6 +66,25 @@ public class SimulationState {
 
     public Grid getGrid() {
         return grid;
+    }
+
+    /**
+     * Update the string snapshot of the grid. Call this from the simulation thread
+     * after mutating the grid; the UI can safely read {@link #getGridSnapshot()} from
+     * any thread without locking.
+     */
+    public void updateGridSnapshot() {
+        // create a textual representation once and publish it atomically
+        String snap = grid == null ? "" : grid.toString();
+        gridSnapshot.set(snap);
+    }
+
+    /**
+     * Returns the most recent grid snapshot (may be empty if never published yet).
+     */
+    public String getGridSnapshot() {
+        String s = gridSnapshot.get();
+        return (s == null || s.isEmpty()) ? (grid == null ? "" : grid.toString()) : s;
     }
 
     /**
@@ -98,7 +123,8 @@ public class SimulationState {
      * @param dt the time increment to add
      */
     public void addTime(double dt) {
-        this.time += dt;
+        double newTime = this.time + dt;
+        this.time = newTime >= 0 ? newTime : 0.0; // Prevent negative time values
     }
 //override methods
 

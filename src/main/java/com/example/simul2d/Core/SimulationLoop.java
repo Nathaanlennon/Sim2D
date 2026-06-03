@@ -12,7 +12,7 @@ import static java.lang.Thread.sleep;
 public class SimulationLoop {
     private final SimulationState data;
     private UpdateSimulation updateSimulation;
-    private boolean running;
+    private volatile boolean running;
     
 
     //constructors
@@ -20,6 +20,13 @@ public class SimulationLoop {
         this.data = data;
         this.running = true;
         this.updateSimulation = new UpdateSimulation(data);
+    }
+
+    /**
+     * Request that the simulation loop stop at the next convenient point.
+     */
+    public void stop() {
+        this.running = false;
     }
 
 
@@ -47,17 +54,19 @@ public class SimulationLoop {
      */
     public void runSimulation(Render render, InputHandler inputHandler) throws InterruptedException {
         while (running) {
+            inputHandler.handleInput();
             if (!data.isPaused()) {
 
                 
                 updateSimulation.update();
 
-
+                // update an atomic snapshot of the grid so the UI can read a stable
+                // pre-rendered string representation without locking.
+                data.updateGridSnapshot();
 
                 render.printSimulation();
                 sleep((long) (1000 / data.getSpeed()));
             }
-            inputHandler.handleInput();
         }
     }
 //override methods
