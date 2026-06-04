@@ -3,7 +3,6 @@ package com.example.simul2d.Console;
 
 import com.example.simul2d.Core.*;
 import com.example.simul2d.Systems.UpdateSimulation;
-import com.example.simul2d.grid.FastMold;
 import com.example.simul2d.grid.Grid;
 import com.example.simul2d.grid.AxialMold1;
 import com.example.simul2d.grid.CircMold1;
@@ -41,7 +40,7 @@ public class ConsoleMain {
         // create the model
         SimulationState state = new SimulationState();
         publishedState = state;
-
+        
         // create loop and helpers
         SimulationLoop loop = new SimulationLoop(state);
         Render renderer = new Render(state);
@@ -49,8 +48,6 @@ public class ConsoleMain {
 
         // sample test setup (same as main)
         Grid grid = state.getGrid();
-        grid.getCell(0,0).addEntity(new SlowMold());
-        grid.getCell(grid.getWidth()-1, grid.getHeight()-1).addEntity(new FastMold());
 
         // start the console input reader
         new Thread(new InputReader(), "InputReader-Thread").start();

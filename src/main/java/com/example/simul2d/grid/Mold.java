@@ -7,7 +7,7 @@ import java.util.Objects;
  * common properties and behaviors for different mold variants, such as growth
  * and propagation logic.
  *
- * <p>Concrete subclasses (e.g., {@link SlowMold} and {@link FastMold}) can
+ * <p>Concrete subclasses (e.g., {@link AxialMold} and {@link CircularMold}) can
  * override the default growth behavior and provide specific implementations of
  * the {@link #toString()} method for visualization purposes.
  */
