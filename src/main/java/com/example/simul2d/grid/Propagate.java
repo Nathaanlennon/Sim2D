@@ -1,4 +1,6 @@
 package com.example.simul2d.grid;
+import java.util.List;
+
 
 /**
  * Trait interface for objects that can propagate to neighboring cells or
@@ -6,8 +8,6 @@ package com.example.simul2d.grid;
  * whether the object is currently able to propagate.
  */
 public interface Propagate {
-
-    
 
     /**
      * Indicates whether the object is currently able to propagate.
@@ -23,4 +23,14 @@ public interface Propagate {
      * @param target the cell where the object should propagate to.
      */
     void propagateTo(Cell target);
+
+    /**
+     * Return a sorted from highest to lowest probability list of coordinates for each cell
+     *
+     * @return a list of map entries containing target positions and associated weights
+     */
+    List<CoorWeight> getPropagationDistributionList();
+
+    double getPropagationProbability();
+
 }
