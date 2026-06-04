@@ -8,6 +8,8 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class HelloApplication extends Application {
     private SimulationLoop simulationLoop;
@@ -33,15 +35,31 @@ public class HelloApplication extends Application {
         // show() affiche enfin la fenêtre à l'écran.
         stage.show();
 
+        List<Runnable> neededSimulationCallbacks = new ArrayList<>();
+        
         // After loading, inject the published SimulationState into controllers
         Object controller = fxmlLoader.getController();
         if (controller instanceof NeedsSimulationState) {
             ((NeedsSimulationState) controller).setSimulationState(published);
+            neededSimulationCallbacks.add(((NeedsSimulationState) controller)::refreshUI);
+        }
+
+        // Also inject into included controllers (like TimeController)
+        java.util.Map<String, Object> namespace = fxmlLoader.getNamespace();
+        for (Object ctrl : namespace.values()) {
+            if (ctrl instanceof NeedsSimulationState) {
+                ((NeedsSimulationState) ctrl).setSimulationState(published);
+                neededSimulationCallbacks.add(((NeedsSimulationState) ctrl)::refreshUI);
+            }
+            
         }
 
         // keep loop/thread for shutdown
         this.simulationLoop = run.loop();
+        this.simulationLoop.setContentUpdateCallbacks(neededSimulationCallbacks);
         this.simThread = run.thread();
+        
+        
     }
 
     @Override

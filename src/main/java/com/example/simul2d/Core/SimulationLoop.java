@@ -3,6 +3,9 @@ package com.example.simul2d.Core;
 import com.example.simul2d.Systems.UpdateSimulation;
 import com.example.simul2d.input.InputHandler;
 import com.example.simul2d.render.Render;
+import javafx.application.Platform;
+
+import java.util.List;
 
 import static java.lang.Thread.sleep;
 
@@ -13,7 +16,8 @@ public class SimulationLoop {
     private final SimulationState data;
     private UpdateSimulation updateSimulation;
     private volatile boolean running;
-    
+    private volatile List<Runnable> contentUpdateCallbacks;
+
 
     //constructors
     public SimulationLoop(SimulationState data) {
@@ -30,8 +34,10 @@ public class SimulationLoop {
     }
 
 
-    
-
+    //set methods
+    public void setContentUpdateCallbacks(List<Runnable> callbacks) {
+        this.contentUpdateCallbacks = callbacks;
+    }
 //get methods
 
     /**
@@ -45,10 +51,11 @@ public class SimulationLoop {
 
     //private methods
 //public methods
+
     /**
      * Executes the main simulation loop until {@code running} becomes false.
      *
-     * @param render the renderer used to display the simulation state
+     * @param render       the renderer used to display the simulation state
      * @param inputHandler the input handler used to consume queued commands
      * @throws InterruptedException if the loop sleep is interrupted
      */
@@ -57,7 +64,7 @@ public class SimulationLoop {
             inputHandler.handleInput();
             if (!data.isPaused()) {
 
-                
+
                 updateSimulation.update();
 
                 // update an atomic snapshot of the grid so the UI can read a stable
@@ -65,6 +72,11 @@ public class SimulationLoop {
                 data.updateGridSnapshot();
 
                 render.printSimulation();
+                if (contentUpdateCallbacks != null) {
+                    for (Runnable callback : contentUpdateCallbacks) {
+                        Platform.runLater(callback);
+                    }
+                }
                 sleep((long) (1000 / data.getSpeed()));
             }
         }

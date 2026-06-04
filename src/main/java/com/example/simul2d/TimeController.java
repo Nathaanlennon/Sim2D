@@ -42,5 +42,11 @@ public class TimeController implements NeedsSimulationState {
 //public methods
 
 //override methods
+    @Override
+    public void refreshUI() {
+        if (currentTime != null && state != null) {
+            currentTime.setText(String.format("Time: %.2f", state.getTime()));
+        }
+    }
 
 }

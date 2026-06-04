@@ -14,4 +14,10 @@ public interface NeedsSimulationState {
      * @param state the SimulationState to be injected
      */
     void setSimulationState(SimulationState state);
+
+    /**
+     * Optional method to refresh the UI based on the current state.
+     */
+    void refreshUI();
+    
 }

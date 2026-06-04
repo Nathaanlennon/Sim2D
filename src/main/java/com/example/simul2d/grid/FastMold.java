@@ -25,4 +25,6 @@ public class FastMold extends Mold {
     public String toString() {
         return "X"; // Return a string representation for visualization (e.g., "X" for fast mold)
     }
+    
+    
 }

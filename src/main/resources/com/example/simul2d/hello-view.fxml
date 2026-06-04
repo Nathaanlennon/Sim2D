@@ -20,7 +20,7 @@
                     <Label text="Milieu" style="-fx-border-color: green; -fx-border-width: 1; -fx-padding:4;"/>
                 </center>
                 <bottom>
-                    <fx:include fx:id="timeController" source="time-control-view.fxml"/>
+                    <fx:include fx:id="timeControlPane" source="time-control-view.fxml"/>
                 </bottom>
             </BorderPane>
         </left>
