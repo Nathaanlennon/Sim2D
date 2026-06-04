@@ -1,4 +1,5 @@
 package com.example.simul2d.grid;
+
 import java.util.Objects;
 
 /**
@@ -11,7 +12,7 @@ import java.util.Objects;
  * the {@link #toString()} method for visualization purposes.
  */
 public abstract class Mold extends Entity implements Grow, Propagate {
-
+//todo : sizemax
     private int growth;
     private int growthRate;
     private final int minGrowthValueToPropagate; // Minimum growth required for propagation
@@ -96,33 +97,29 @@ public abstract class Mold extends Entity implements Grow, Propagate {
      * @param totalGrowthOnCell aggregated growth value for the containing cell
      */
     @Override
-    public int grow(int totalGrowthOnCell) {
-
-        if (growthRate <= 0) {
-            return 0; // No growth if growth rate is zero or negative
-        }
-
-        if (growth >= 100) {
-            return 0; // No growth if this mold has reached the limit
-        }
-
-        if(totalGrowthOnCell >= 100) {
-            return 0; // No growth if the cell has reached the total growth limit
-        }
+    public int grow(int totalGrowthOnCell) { //Todo: envoyer capacitÃ© de cellule aussi
+        int return_growed = 0;
+        
+        
 
         if (growth + growthRate > 100) {
-            growth = 100; // Cap growth at 100
-            return 100 - growth; // Return the actual growth added
+            return_growed=  100 - growth; // Return the actual growth added
+            this.growth = 100; // Cap growth at 100
         }
 
-        if(totalGrowthOnCell + this.growthRate > 100) {
+        else if(totalGrowthOnCell + this.growthRate > 100) {
             this.growth += (100 - totalGrowthOnCell); // Increase growth only up to the cell limit
-            return 100 - totalGrowthOnCell; // Return the actual growth added
+            return_growed=  100 - totalGrowthOnCell; // Return the actual growth added
         }
 
         // Default growth behavior (can be overridden by subclasses)
-        this.growth += this.growthRate;
-        return this.growthRate;
+        else{
+            this.growth += this.growthRate;
+            return_growed = this.growthRate; // Return the growth added
+                    
+        }
+        
+        return return_growed;
     }
 
 
@@ -153,7 +150,7 @@ public abstract class Mold extends Entity implements Grow, Propagate {
      */
     @Override
     public boolean isAbleToPropagate() {
-        return growth > minGrowthValueToPropagate; // Propagation is possible if growth exceeds the threshold
+        return growth >= minGrowthValueToPropagate; // Propagation is possible if growth exceeds the threshold
     }
 
     /**

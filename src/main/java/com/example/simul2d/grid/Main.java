@@ -4,7 +4,7 @@ public class Main {
     public static void main(String[] args) {
 
         Cell initialCell = new Cell();
-        Mold slowMold = new FastMold();
+        Mold slowMold = new CircMold1();
         initialCell.addEntity(slowMold);
 
         initialCell.getEntities().forEach((type, entity) -> {
