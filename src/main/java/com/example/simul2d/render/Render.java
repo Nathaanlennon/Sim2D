@@ -61,7 +61,6 @@ public class Render {
 
         System.out.println(data.getGrid().toString());
         
-        System.out.println(data.getGrid().getCell(0, 0).getTotalGrowthOnCell());
         
         System.out.printf("time : %f, speed : %f \n", data.getTime(), data.getSpeed());
         System.out.flush();  // Flush the output to ensure it appears immediately

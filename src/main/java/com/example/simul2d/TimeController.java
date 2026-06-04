@@ -18,9 +18,7 @@ public class TimeController implements NeedsSimulationState {
     private Label currentTime;
     @FXML
     private Label currentSpeed;
-    
-    
-    
+
 
     //set methods
 //get methods
@@ -31,7 +29,7 @@ public class TimeController implements NeedsSimulationState {
         if (currentTime != null) {
             currentTime.setText("Time: 0.00");
         }
-        
+
     }
 
     /**
@@ -46,17 +44,42 @@ public class TimeController implements NeedsSimulationState {
     }
 //public methods
 
-//override methods
+    //override methods
     @Override
     public void refreshUI() {
         if (state != null) {
-            if (currentTime !=null) currentTime.setText(String.format("Time: %.2f", state.getTime()));
-            if (currentSpeed!=null) currentSpeed.setText(String.format("Speed: %.2f", state.getSpeed()));
+            if (currentTime != null) currentTime.setText(String.format("Time: %.2f", state.getTime()));
+            if (currentSpeed != null) currentSpeed.setText(String.format("Speed: %.2f", state.getSpeed()));
         }
     }
 
     @FXML
     public void handlePlayPause() {
         InputHandler.commandQueue.add(Command.PAUSE);
+    }
+
+    @FXML
+    public void handleSpeedUp() {
+        InputHandler.commandQueue.add(Command.INCREASE_SPEED);
+    }
+
+    @FXML
+    public void handleSpeedDown() {
+        InputHandler.commandQueue.add(Command.DECREASE_SPEED);
+    }
+
+    @FXML
+    public void handleSpeed1() {
+        InputHandler.commandQueue.add(Command.SPEED1);
+    }
+
+    @FXML
+    public void handleSpeed2() {
+        InputHandler.commandQueue.add(Command.SPEED2);
+    }
+
+    @FXML
+    public void handleSpeed3() {
+        InputHandler.commandQueue.add(Command.SPEED3);
     }
 }

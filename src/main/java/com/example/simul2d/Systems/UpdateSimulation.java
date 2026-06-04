@@ -42,7 +42,7 @@ public class UpdateSimulation {
      * Advances the simulation by one update tick.
      */
     public void update() {
-        data.addTime(data.getSpeed());
+        data.addTime(1);
 
         //liste de dérivation de coordonnées pour les 4 casses adjecancetes 
         int[][] directions = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
