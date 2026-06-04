@@ -2,19 +2,24 @@ package com.example.simul2d;
 
 
 import com.example.simul2d.Core.SimulationState;
+import com.example.simul2d.input.Command;
+import com.example.simul2d.input.InputHandler;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
+
 public class TimeController implements NeedsSimulationState {
-    
-    
-    @FXML
-    private Label currentTime;
+
     // Reference to the shared simulation state (injected by HelloApplication)
     private SimulationState state;
-    
 
-    //constructors
+    @FXML
+    private Label currentTime;
+    @FXML
+    private Label currentSpeed;
+    
+    
     
 
     //set methods
@@ -44,9 +49,14 @@ public class TimeController implements NeedsSimulationState {
 //override methods
     @Override
     public void refreshUI() {
-        if (currentTime != null && state != null) {
-            currentTime.setText(String.format("Time: %.2f", state.getTime()));
+        if (state != null) {
+            if (currentTime !=null) currentTime.setText(String.format("Time: %.2f", state.getTime()));
+            if (currentSpeed!=null) currentSpeed.setText(String.format("Speed: %.2f", state.getSpeed()));
         }
     }
 
+    @FXML
+    public void handlePlayPause() {
+        InputHandler.commandQueue.add(Command.PAUSE);
+    }
 }

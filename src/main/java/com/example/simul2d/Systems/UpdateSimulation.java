@@ -64,7 +64,7 @@ public class UpdateSimulation {
                             int[] dir = directions[(int) (Math.random() * directions.length)];
                             target = data.getGrid().getCell(finalX + dir[0], finalY + dir[1]);
                         }
-                        Render.printSomething("Propagating from (" + finalX + ", " + finalY + ") to (" + target.getPos());
+//                        Render.printSomething("Propagating from (" + finalX + ", " + finalY + ") to (" + target.getPos());
                         ((Propagate) entity).propagateTo(target);
                     }
                 });
