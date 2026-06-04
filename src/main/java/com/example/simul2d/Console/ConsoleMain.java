@@ -3,9 +3,11 @@ package com.example.simul2d.Console;
 
 import com.example.simul2d.Core.*;
 import com.example.simul2d.Systems.UpdateSimulation;
-import com.example.simul2d.grid.FastMold;
 import com.example.simul2d.grid.Grid;
-import com.example.simul2d.grid.SlowMold;
+import com.example.simul2d.grid.AxialMold1;
+import com.example.simul2d.grid.CircMold1;
+import com.example.simul2d.grid.CircularMold;
+import com.example.simul2d.grid.DividedMold1;
 import com.example.simul2d.input.InputHandler;
 import com.example.simul2d.input.InputReader;
 import com.example.simul2d.render.Render;
@@ -31,8 +33,10 @@ public class ConsoleMain {
         
         // for test purposes for now
         Grid grid = state.getGrid();
-        grid.getCell(0,0).addEntity(new SlowMold());
-        grid.getCell(grid.getWidth()-1, grid.getHeight()-1).addEntity(new FastMold());
+        grid.getCell(0,0).addEntity(new CircMold1());
+        grid.getCell(grid.getWidth()-1, grid.getHeight()-1).addEntity(new DividedMold1());
+        grid.getCell(0, grid.getHeight()-1).addEntity(new AxialMold1());
+
         
         new Thread(new InputReader()).start();
         loop.runSimulation(renderer, inputHandler);
