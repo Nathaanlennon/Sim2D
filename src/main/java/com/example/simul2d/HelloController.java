@@ -4,46 +4,56 @@ package com.example.simul2d;
 
 
 import javafx.fxml.FXML;
+import com.example.simul2d.Core.SimulationState;
 import javafx.scene.control.Label;
 
-public class HelloController {
+public class HelloController implements NeedsSimulationState{
     @FXML
     private Label welcomeText;
 
     @FXML
     private Label infoText;
 
-    // On crée une variable pour stocker notre personnage
-    // Elle est utilisable partout dans ce contrôleur
-    private Personnage monPersonnage;
+    
+    // Shared simulation state injected by the application
+    private com.example.simul2d.Core.SimulationState simulationState;
 
-    private int clickCount = 0;
 
     @FXML
     private void initialize() {
         // Cette méthode est appelée automatiquement après le chargement du FXML.
         
-        // On crée un nouveau personnage appelé "Héros"
-        monPersonnage = new Personnage("Héros");
-        
-        // On affiche le nom du personnage avec un message de bienvenue
-        welcomeText.setText("Bienvenue " + monPersonnage.getNom() + " !");
-        
-        // On affiche d'autres infos du personnage
-        infoText.setText("Vie: " + monPersonnage.getVie() + " HP | Position: (" + 
-                         monPersonnage.getX() + ", " + monPersonnage.getY() + ")");
+       
+       
     }
 
     @FXML
     protected void onHelloButtonClick() {
-        // Chaque clic fait perdre 10 points de vie au personnage
-        clickCount++;
-        
-        // Le personnage prend 10 dégâts
-        monPersonnage.prenderDegats(10);
-        
-        // On met à jour l'interface avec les nouvelles infos
-        welcomeText.setText(monPersonnage.getNom() + " a été touché " + clickCount + " fois !");
-        infoText.setText("Vie restante: " + monPersonnage.getVie() + " HP | " + monPersonnage.toString());
     }
+
+    /**
+     * 
+     * @param state the SimulationState to be injected
+     */
+    @Override
+    public void setSimulationState(SimulationState state) {
+        this.simulationState = state;
+        // optional: update UI with initial info from state
+        if (infoText != null && state != null) {
+            infoText.setText("Speed: " + state.getSpeed());
+        }
+    }
+
+    /**
+     * This method will be called by the simmulation loop as callback to update the UI with the latest state.
+     */
+    @Override
+    public void refreshUI() {
+        
+        if (infoText != null && simulationState != null) {
+            infoText.setText("Speed: " + simulationState.getSpeed());
+        }
+    }
+    
+    
 }

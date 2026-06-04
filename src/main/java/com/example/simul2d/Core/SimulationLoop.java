@@ -3,6 +3,9 @@ package com.example.simul2d.Core;
 import com.example.simul2d.Systems.UpdateSimulation;
 import com.example.simul2d.input.InputHandler;
 import com.example.simul2d.render.Render;
+import javafx.application.Platform;
+
+import java.util.List;
 
 import static java.lang.Thread.sleep;
 
@@ -12,8 +15,9 @@ import static java.lang.Thread.sleep;
 public class SimulationLoop {
     private final SimulationState data;
     private UpdateSimulation updateSimulation;
-    private boolean running;
-    
+    private volatile boolean running;
+    private volatile List<Runnable> contentUpdateCallbacks;
+
 
     //constructors
     public SimulationLoop(SimulationState data) {
@@ -22,9 +26,18 @@ public class SimulationLoop {
         this.updateSimulation = new UpdateSimulation(data);
     }
 
+    /**
+     * Request that the simulation loop stop at the next convenient point.
+     */
+    public void stop() {
+        this.running = false;
+    }
 
-    
 
+    //set methods
+    public void setContentUpdateCallbacks(List<Runnable> callbacks) {
+        this.contentUpdateCallbacks = callbacks;
+    }
 //get methods
 
     /**
@@ -38,26 +51,34 @@ public class SimulationLoop {
 
     //private methods
 //public methods
+
     /**
      * Executes the main simulation loop until {@code running} becomes false.
      *
-     * @param render the renderer used to display the simulation state
+     * @param render       the renderer used to display the simulation state
      * @param inputHandler the input handler used to consume queued commands
      * @throws InterruptedException if the loop sleep is interrupted
      */
     public void runSimulation(Render render, InputHandler inputHandler) throws InterruptedException {
         while (running) {
+            inputHandler.handleInput();
             if (!data.isPaused()) {
 
-                
+
                 updateSimulation.update();
 
-
+                // update an atomic snapshot of the grid so the UI can read a stable
+                // pre-rendered string representation without locking.
+                data.updateGridSnapshot();
 
                 render.printSimulation();
+                if (contentUpdateCallbacks != null) {
+                    for (Runnable callback : contentUpdateCallbacks) {
+                        Platform.runLater(callback);
+                    }
+                }
                 sleep((long) (1000 / data.getSpeed()));
             }
-            inputHandler.handleInput();
         }
     }
 //override methods

@@ -37,3 +37,6 @@ build/
 
 ### Mac OS ###
 .DS_Store
+src/main/java/com/example/simul2d/grid/Main.java
+src/main/java/com/example/simul2d/grid/PropagationType
+src/main/java/com/example/simul2d/grid/Main.java

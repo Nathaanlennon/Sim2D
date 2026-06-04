@@ -1,4 +1,5 @@
 package com.example.simul2d.grid;
+
 import java.util.Objects;
 
 /**
@@ -6,27 +7,29 @@ import java.util.Objects;
  * common properties and behaviors for different mold variants, such as growth
  * and propagation logic.
  *
- * <p>Concrete subclasses (e.g., {@link SlowMold} and {@link FastMold}) can
+ * <p>Concrete subclasses (e.g., {@link AxialMold} and {@link CircularMold}) can
  * override the default growth behavior and provide specific implementations of
  * the {@link #toString()} method for visualization purposes.
  */
 public abstract class Mold extends Entity implements Grow, Propagate {
-
+//todo : sizemax
     private int growth;
     private int growthRate;
     private final int minGrowthValueToPropagate; // Minimum growth required for propagation
-
+    private double PropagationProbability = 0.5; // Default propagation probability
     /**
      * Constructs a Mold with the supplied initial growth and growth rate.
      *
      * @param growth the initial growth value (units)
      * @param growthRate growth per step (units)
      * @param minGrowthValueToPropagate minimum growth required for propagation
+     * @param PropagationProbability the probability of successful propagation (0-1)
      */
-    public Mold(int growth, int growthRate, int minGrowthValueToPropagate) {
+    public Mold(int growth, int growthRate, int minGrowthValueToPropagate, double PropagationProbability) {
         this.growth = growth;
         this.growthRate = growthRate;
         this.minGrowthValueToPropagate = minGrowthValueToPropagate;
+        this.PropagationProbability = PropagationProbability;
     }
 
     
@@ -71,6 +74,18 @@ public abstract class Mold extends Entity implements Grow, Propagate {
     }
 
     /**
+     * Returns the minimum growth value required for this mold to be able to propagate.
+     *
+     * @return minimum growth value for propagation
+     */
+    @Override
+    public double getPropagationProbability() {
+        return PropagationProbability;
+    }
+
+
+
+    /**
      * Default growth behavior invoked each step.
      *
      * <p>The implementation is conservative: it does nothing if the
@@ -82,33 +97,29 @@ public abstract class Mold extends Entity implements Grow, Propagate {
      * @param totalGrowthOnCell aggregated growth value for the containing cell
      */
     @Override
-    public int grow(int totalGrowthOnCell) {
-
-        if (growthRate <= 0) {
-            return 0; // No growth if growth rate is zero or negative
-        }
-
-        if (growth >= 100) {
-            return 0; // No growth if this mold has reached the limit
-        }
-
-        if(totalGrowthOnCell >= 100) {
-            return 0; // No growth if the cell has reached the total growth limit
-        }
+    public int grow(int totalGrowthOnCell) { //Todo: envoyer capacitÃ© de cellule aussi
+        int return_growed = 0;
+        
+        
 
         if (growth + growthRate > 100) {
-            growth = 100; // Cap growth at 100
-            return 100 - growth; // Return the actual growth added
+            return_growed=  100 - growth; // Return the actual growth added
+            this.growth = 100; // Cap growth at 100
         }
 
-        if(totalGrowthOnCell + this.growthRate > 100) {
+        else if(totalGrowthOnCell + this.growthRate > 100) {
             this.growth += (100 - totalGrowthOnCell); // Increase growth only up to the cell limit
-            return 100 - totalGrowthOnCell; // Return the actual growth added
+            return_growed=  100 - totalGrowthOnCell; // Return the actual growth added
         }
 
         // Default growth behavior (can be overridden by subclasses)
-        this.growth += this.growthRate;
-        return this.growthRate;
+        else{
+            this.growth += this.growthRate;
+            return_growed = this.growthRate; // Return the growth added
+                    
+        }
+        
+        return return_growed;
     }
 
 
@@ -139,7 +150,7 @@ public abstract class Mold extends Entity implements Grow, Propagate {
      */
     @Override
     public boolean isAbleToPropagate() {
-        return growth > minGrowthValueToPropagate; // Propagation is possible if growth exceeds the threshold
+        return growth >= minGrowthValueToPropagate; // Propagation is possible if growth exceeds the threshold
     }
 
     /**

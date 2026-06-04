@@ -42,7 +42,7 @@ public class UpdateSimulation {
      * Advances the simulation by one update tick.
      */
     public void update() {
-        data.addTime(data.getSpeed());
+        data.addTime(1);
 
         //liste de dérivation de coordonnées pour les 4 casses adjecancetes 
         int[][] directions = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
@@ -64,7 +64,7 @@ public class UpdateSimulation {
                             int[] dir = directions[(int) (Math.random() * directions.length)];
                             target = data.getGrid().getCell(finalX + dir[0], finalY + dir[1]);
                         }
-                        Render.printSomething("Propagating from (" + finalX + ", " + finalY + ") to (" + target.getPos());
+//                        Render.printSomething("Propagating from (" + finalX + ", " + finalY + ") to (" + target.getPos());
                         ((Propagate) entity).propagateTo(target);
                     }
                 });
