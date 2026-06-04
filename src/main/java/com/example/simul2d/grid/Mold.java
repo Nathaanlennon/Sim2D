@@ -15,18 +15,20 @@ public abstract class Mold extends Entity implements Grow, Propagate {
     private int growth;
     private int growthRate;
     private final int minGrowthValueToPropagate; // Minimum growth required for propagation
-
+    private double PropagationProbability = 0.5; // Default propagation probability
     /**
      * Constructs a Mold with the supplied initial growth and growth rate.
      *
      * @param growth the initial growth value (units)
      * @param growthRate growth per step (units)
      * @param minGrowthValueToPropagate minimum growth required for propagation
+     * @param PropagationProbability the probability of successful propagation (0-1)
      */
-    public Mold(int growth, int growthRate, int minGrowthValueToPropagate) {
+    public Mold(int growth, int growthRate, int minGrowthValueToPropagate, double PropagationProbability) {
         this.growth = growth;
         this.growthRate = growthRate;
         this.minGrowthValueToPropagate = minGrowthValueToPropagate;
+        this.PropagationProbability = PropagationProbability;
     }
 
     
@@ -69,6 +71,18 @@ public abstract class Mold extends Entity implements Grow, Propagate {
     public void setGrowthRate(int growthRate) {
         this.growthRate = growthRate;
     }
+
+    /**
+     * Returns the minimum growth value required for this mold to be able to propagate.
+     *
+     * @return minimum growth value for propagation
+     */
+    @Override
+    public double getPropagationProbability() {
+        return PropagationProbability;
+    }
+
+
 
     /**
      * Default growth behavior invoked each step.
