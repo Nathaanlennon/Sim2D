@@ -1,6 +1,6 @@
 package com.example.simul2d.grid;
 
-public class GridData {
+public class Grid{
 
     public enum Material { CONCRETE, WOOD, PLASTER, GLASS, DIRT }
     public enum Mold { NONE, SPAWNING, ACTIVE }
@@ -16,7 +16,7 @@ public class GridData {
     public final boolean isToric;
     public final CellData[][] matrix;
 
-    public GridData(int columns, int rows, boolean isToric) {
+    public Grid(int columns, int rows, boolean isToric) {
         this.columns = columns;
         this.rows = rows;
         this.isToric = isToric;
