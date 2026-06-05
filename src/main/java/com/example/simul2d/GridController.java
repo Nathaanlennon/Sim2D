@@ -43,7 +43,7 @@ public class GridController implements NeedsSimulationState {
         if (grid == null) {
             return;
         }
-
+// f
         int columns = grid.getWidth();
         int rows = grid.getHeight();
 
