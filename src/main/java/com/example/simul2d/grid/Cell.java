@@ -40,10 +40,16 @@ public class Cell {
      * Constructs a new {@code Cell} positioned at (0, 0) with an empty
      * entity collection.
      */
+
+
+    private Material material;
+
+
     public Cell() {
         this.pos = new Vec2(0, 0);
         this.entities = new HashMap<>();
         this.totalGrowthOnCell = 0;
+        this.material = Material.EMPTY;
     }
 
     /**
@@ -57,6 +63,16 @@ public class Cell {
         this.pos = new Vec2(x, y);
         this.entities = new HashMap<>();
         this.totalGrowthOnCell = 0;
+        this.material = Material.EMPTY;
+    }
+
+
+    public Material getMaterial() {
+        return material;
+    }
+
+    public void setMaterial(Material material) {
+        this.material = material;
     }
 
     /**
