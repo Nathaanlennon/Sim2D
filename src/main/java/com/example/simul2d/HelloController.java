@@ -18,9 +18,19 @@ public class HelloController {
 
     private final int CELL_SIZE = 20;
 
-    // 7 STATES (Materials + Actions)
+    // STATES
     public enum ToolMode { CONCRETE, WOOD, PLASTER, GLASS, DIRT, INOCULATE, ERASE }
     private ToolMode currentTool = ToolMode.INOCULATE;
+
+    public enum InputMode { BRUSH, ZONE }
+    private InputMode currentInputMode = InputMode.BRUSH;
+
+    // ZONE TRACKING VARIABLES
+    private boolean isDraggingZone = false;
+    private int startCellX = -1;
+    private int startCellY = -1;
+    private int currentCellX = -1;
+    private int currentCellY = -1;
 
     @FXML
     public void initialize() {
@@ -35,7 +45,10 @@ public class HelloController {
         drawGraphics();
     }
 
-    // CONNECTIONS WITH FXML BUTTONS ---
+    // UI EVENT HANDLERS
+    @FXML protected void setModeBrush() { currentInputMode = InputMode.BRUSH; }
+    @FXML protected void setModeZone() { currentInputMode = InputMode.ZONE; }
+
     @FXML protected void setModeConcrete() { currentTool = ToolMode.CONCRETE; }
     @FXML protected void setModeWood() { currentTool = ToolMode.WOOD; }
     @FXML protected void setModeDirt() { currentTool = ToolMode.DIRT; }
@@ -44,63 +57,117 @@ public class HelloController {
     @FXML protected void setModeInoculate() { currentTool = ToolMode.INOCULATE; }
     @FXML protected void setModeErase() { currentTool = ToolMode.ERASE; }
 
-    // PHASE 1 INPUT (WRITING TO DATA)
-    @FXML protected void handleMousePressed(MouseEvent event) { writeToData(event); }
-    @FXML protected void handleMouseDragged(MouseEvent event) { writeToData(event); }
-
-    private void writeToData(MouseEvent event) {
+    // PHASE 1: MOUSE INPUT LOGIC
+    @FXML
+    protected void handleMousePressed(MouseEvent event) {
         int x = (int) (event.getX() / CELL_SIZE);
         int y = (int) (event.getY() / CELL_SIZE);
-        GridData.CellData cell = data.getCell(x, y);
 
-        if (cell != null) {
-            cell.dirt = cell.dirt + 1;
-            switch (currentTool) {
-                case CONCRETE:
-                    cell.material = GridData.Material.CONCRETE;
-                    break;
-                case DIRT:
-                    cell.material = GridData.Material.DIRT;
-                    break;
-                case WOOD:
-                    cell.material = GridData.Material.WOOD;
-                    break;
-                case PLASTER:
-                    cell.material = GridData.Material.PLASTER;
-                    break;
-                case GLASS:
-                    cell.material = GridData.Material.GLASS;
-                    break;
-
-                // Painting Mold
-                case INOCULATE:
-                    cell.mold = GridData.Mold.ACTIVE;
-                    break;
-                case ERASE:
-                    cell.mold = GridData.Mold.NONE;
-                    break;
-            }
+        if (currentInputMode == InputMode.BRUSH) {
+            writeSingleCell(x, y);
+        } else if (currentInputMode == InputMode.ZONE) {
+            isDraggingZone = true;
+            startCellX = x;
+            startCellY = y;
+            currentCellX = x;
+            currentCellY = y;
+            // No writing to memory yet, just visual tracking
         }
-        drawGraphics();
     }
 
-    // GRAPHICS PART (READING FROM DATA)
+    @FXML
+    protected void handleMouseDragged(MouseEvent event) {
+        int x = (int) (event.getX() / CELL_SIZE);
+        int y = (int) (event.getY() / CELL_SIZE);
+
+        if (currentInputMode == InputMode.BRUSH) {
+            writeSingleCell(x, y);
+        } else if (currentInputMode == InputMode.ZONE && isDraggingZone) {
+            currentCellX = x;
+            currentCellY = y;
+            drawGraphics(); // Triggers the visual ghost box, without writing to memory
+        }
+    }
+
+    @FXML
+    protected void handleMouseReleased(MouseEvent event) {
+        //  Validate the zone and write to memory
+        if (currentInputMode == InputMode.ZONE && isDraggingZone) {
+            fillZone();
+            isDraggingZone = false;
+            drawGraphics();
+        }
+    }
+
+    // PHASE 2: MEMORY MUTATION (DATA WRITING)
+    private void writeSingleCell(int x, int y) {
+        GridData.CellData cell = data.getCell(x, y);
+        if (cell != null) {
+            applyToolToCell(cell);
+            drawGraphics();
+        }
+    }
+
+    private void fillZone() {
+        // Robustness: Handle inverse dragging (bottom-right to top-left)
+        int minX = Math.min(startCellX, currentCellX);
+        int maxX = Math.max(startCellX, currentCellX);
+        int minY = Math.min(startCellY, currentCellY);
+        int maxY = Math.max(startCellY, currentCellY);
+
+        for (int x = minX; x <= maxX; x++) {
+            for (int y = minY; y <= maxY; y++) {
+                GridData.CellData cell = data.getCell(x, y);
+                if (cell != null) {
+                    applyToolToCell(cell);
+                }
+            }
+        }
+    }
+
+    private void applyToolToCell(GridData.CellData cell) {
+        switch (currentTool) {
+            case CONCRETE:
+                cell.material = GridData.Material.CONCRETE;
+                cell.mold = GridData.Mold.NONE;
+                break;
+            case DIRT:
+                cell.material = GridData.Material.DIRT;
+                cell.mold = GridData.Mold.NONE;
+                break;
+            case WOOD:
+                cell.material = GridData.Material.WOOD;
+                cell.mold = GridData.Mold.NONE;
+                break;
+            case PLASTER:
+                cell.material = GridData.Material.PLASTER;
+                cell.mold = GridData.Mold.NONE;
+                break;
+            case GLASS:
+                cell.material = GridData.Material.GLASS;
+                cell.mold = GridData.Mold.NONE;
+                break;
+
+            case INOCULATE:
+                cell.mold = GridData.Mold.ACTIVE;
+                break;
+            case ERASE:
+                cell.mold = GridData.Mold.NONE;
+                break;
+        }
+    }
+
+    // PHASE 3: RENDERING (READING FROM DATA)
     private void drawGraphics() {
-        // Absolute Canvas cleanup
         gc.clearRect(0, 0, simulationCanvas.getWidth(), simulationCanvas.getHeight());
 
+        // Draw memory state
         for (int x = 0; x < data.columns; x++) {
             for (int y = 0; y < data.rows; y++) {
-
                 GridData.CellData cell = data.matrix[x][y];
 
-                // Display mold
-                if (cell.mold == GridData.Mold.ACTIVE) {
-                    gc.setFill(Color.web("#00ffaa")); 
-                }
-                else if (cell.mold == GridData.Mold.SPAWNING) {
-                    gc.setFill(Color.web("#008855"));
-                }
+                if (cell.mold == GridData.Mold.ACTIVE) { gc.setFill(Color.web("#00ffaa")); }
+                else if (cell.mold == GridData.Mold.SPAWNING) { gc.setFill(Color.web("#008855")); }
                 else {
                     switch (cell.material) {
                         case CONCRETE:  gc.setFill(Color.web("#556b7d")); break;
@@ -114,14 +181,37 @@ public class HelloController {
             }
         }
 
-        gc.setStroke(Color.web("#b0c4de")); 
+        // draw blueprint grid overlay
+        gc.setStroke(Color.web("#b0c4de"));
         gc.setLineWidth(0.5);
-
         for (int x = 0; x <= data.columns; x++) {
             gc.strokeLine(x * CELL_SIZE, 0, x * CELL_SIZE, data.rows * CELL_SIZE);
         }
         for (int y = 0; y <= data.rows; y++) {
             gc.strokeLine(0, y * CELL_SIZE, data.columns * CELL_SIZE, y * CELL_SIZE);
+        }
+
+        // draw ghost box if currently dragging a zone
+        if (isDraggingZone) {
+            int minX = Math.min(startCellX, currentCellX);
+            int maxX = Math.max(startCellX, currentCellX);
+            int minY = Math.min(startCellY, currentCellY);
+            int maxY = Math.max(startCellY, currentCellY);
+
+            // calculate width and height in pixels (+1 to include the end cell)
+            double rectX = minX * CELL_SIZE;
+            double rectY = minY * CELL_SIZE;
+            double rectW = (maxX - minX + 1) * CELL_SIZE;
+            double rectH = (maxY - minY + 1) * CELL_SIZE;
+
+            // semi-transparent overlay to show the selection
+            gc.setFill(Color.color(1, 1, 1, 0.2));
+            gc.fillRect(rectX, rectY, rectW, rectH);
+
+            //  border for the selection box
+            gc.setStroke(Color.WHITE);
+            gc.setLineWidth(5.0);
+            gc.strokeRect(rectX, rectY, rectW, rectH);
         }
     }
 }
