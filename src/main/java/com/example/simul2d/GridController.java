@@ -4,6 +4,7 @@ import com.example.simul2d.Core.SimulationState;
 import com.example.simul2d.grid.Grid;
 import com.example.simul2d.grid.Cell;
 import com.example.simul2d.grid.Material;
+import com.example.simul2d.render.Render;
 import javafx.fxml.FXML;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
@@ -13,6 +14,7 @@ public class GridController implements NeedsSimulationState {
 
     // Reference to the shared simulation state (injected by HelloApplication)
     private SimulationState state;
+    private Grid grid= null;
 
     @FXML
     private GridPane gridDisplay;
@@ -25,6 +27,7 @@ public class GridController implements NeedsSimulationState {
     @Override
     public void setSimulationState(SimulationState state) {
         this.state = state;
+        this.grid = state.getGrid();
         refreshUI(); // Dessine la grille dès qu'on reçoit les données
     }
 
@@ -38,17 +41,13 @@ public class GridController implements NeedsSimulationState {
         gridDisplay.getChildren().clear();  // 1. On efface les carrés du tour précédent
 
 
-        // we recup grid from SimulationState
-        Grid grid = state.getGrid();
         if (grid == null) {
             return;
         }
 // f
-        int columns = grid.getWidth();
-        int rows = grid.getHeight();
-
-        for (int x = 0; x < columns; x++) {
-            for (int y = 0; y < rows; y++) {
+   
+        for(int y = 0; y< grid.getHeight();y++){
+            for (int x = 0; x < grid.getWidth(); x++) {
 
                 // we recupe cell who corspond
                 Cell cell = grid.getCell(x, y);

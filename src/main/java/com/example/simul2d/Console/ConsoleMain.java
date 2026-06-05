@@ -3,11 +3,7 @@ package com.example.simul2d.Console;
 
 import com.example.simul2d.Core.*;
 import com.example.simul2d.Systems.UpdateSimulation;
-import com.example.simul2d.grid.Grid;
-import com.example.simul2d.grid.AxialMold1;
-import com.example.simul2d.grid.CircMold1;
-import com.example.simul2d.grid.CircularMold;
-import com.example.simul2d.grid.DividedMold1;
+import com.example.simul2d.grid.*;
 import com.example.simul2d.input.InputHandler;
 import com.example.simul2d.input.InputReader;
 import com.example.simul2d.render.Render;
@@ -62,6 +58,13 @@ public class ConsoleMain {
         }, "ConsoleMain-Thread");
         t.start();
 
+        // for test purposes for now
+        grid.getCell(0,0).addEntity(new CircMold1());
+        grid.getCell(0,0).setMaterial(Material.WOOD);
+  
+        grid.getCell(grid.getWidth()-1, grid.getHeight()-1).addEntity(new DividedMold1());
+        grid.getCell(0, grid.getHeight()-1).addEntity(new AxialMold1());
+
         return new SimulationRun(t, state, loop);
     }
 
@@ -83,11 +86,7 @@ public class ConsoleMain {
         Render renderer = new Render(state);
         InputHandler inputHandler = new InputHandler(state);
         
-        // for test purposes for now
-        Grid grid = state.getGrid();
-        grid.getCell(0,0).addEntity(new CircMold1());
-        grid.getCell(grid.getWidth()-1, grid.getHeight()-1).addEntity(new DividedMold1());
-        grid.getCell(0, grid.getHeight()-1).addEntity(new AxialMold1());
+        
 
         
         new Thread(new InputReader()).start();
