@@ -1,6 +1,6 @@
 package com.example.simul2d;
 
-import com.example.simul2d.grid.GridData;
+import com.example.simul2d.grid.Grid;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -14,7 +14,7 @@ public class HelloController {
     private Canvas simulationCanvas;
 
     private GraphicsContext gc;
-    private GridData data;
+    private Grid data;
 
     private final int CELL_SIZE = 20;
 
@@ -22,8 +22,8 @@ public class HelloController {
     public enum ToolMode { CONCRETE, WOOD, PLASTER, GLASS, DIRT, INOCULATE, ERASE }
     private ToolMode currentTool = ToolMode.INOCULATE;
 
-    public enum InputMode { BRUSH, ZONE }
-    private InputMode currentInputMode = InputMode.BRUSH;
+    public enum InputMode { CLICK, BRUSH, ZONE }
+    private InputMode currentInputMode = InputMode.CLICK; // Click par défaut
 
     // ZONE TRACKING VARIABLES
     private boolean isDraggingZone = false;
@@ -34,7 +34,7 @@ public class HelloController {
 
     @FXML
     public void initialize() {
-        data = new GridData(45, 45, false);
+        data = new Grid(45, 45, false);
         gc = simulationCanvas.getGraphicsContext2D();
 
         int totalCells = data.columns * data.rows;
@@ -46,6 +46,7 @@ public class HelloController {
     }
 
     // UI EVENT HANDLERS
+    @FXML protected void setModeClick() { currentInputMode = InputMode.CLICK; } 
     @FXML protected void setModeBrush() { currentInputMode = InputMode.BRUSH; }
     @FXML protected void setModeZone() { currentInputMode = InputMode.ZONE; }
 
@@ -63,7 +64,7 @@ public class HelloController {
         int x = (int) (event.getX() / CELL_SIZE);
         int y = (int) (event.getY() / CELL_SIZE);
 
-        if (currentInputMode == InputMode.BRUSH) {
+        if (currentInputMode == InputMode.CLICK || currentInputMode == InputMode.BRUSH) {
             writeSingleCell(x, y);
         } else if (currentInputMode == InputMode.ZONE) {
             isDraggingZone = true;
@@ -101,7 +102,7 @@ public class HelloController {
 
     // PHASE 2: MEMORY MUTATION (DATA WRITING)
     private void writeSingleCell(int x, int y) {
-        GridData.CellData cell = data.getCell(x, y);
+        Grid.CellData cell = data.getCell(x, y);
         if (cell != null) {
             applyToolToCell(cell);
             drawGraphics();
@@ -117,7 +118,7 @@ public class HelloController {
 
         for (int x = minX; x <= maxX; x++) {
             for (int y = minY; y <= maxY; y++) {
-                GridData.CellData cell = data.getCell(x, y);
+                Grid.CellData cell = data.getCell(x, y);
                 if (cell != null) {
                     applyToolToCell(cell);
                 }
@@ -125,34 +126,34 @@ public class HelloController {
         }
     }
 
-    private void applyToolToCell(GridData.CellData cell) {
+    private void applyToolToCell(Grid.CellData cell) {
         switch (currentTool) {
             case CONCRETE:
-                cell.material = GridData.Material.CONCRETE;
-                cell.mold = GridData.Mold.NONE;
+                cell.material = Grid.Material.CONCRETE;
+                cell.mold = Grid.Mold.NONE;
                 break;
             case DIRT:
-                cell.material = GridData.Material.DIRT;
-                cell.mold = GridData.Mold.NONE;
+                cell.material = Grid.Material.DIRT;
+                cell.mold = Grid.Mold.NONE;
                 break;
             case WOOD:
-                cell.material = GridData.Material.WOOD;
-                cell.mold = GridData.Mold.NONE;
+                cell.material = Grid.Material.WOOD;
+                cell.mold = Grid.Mold.NONE;
                 break;
             case PLASTER:
-                cell.material = GridData.Material.PLASTER;
-                cell.mold = GridData.Mold.NONE;
+                cell.material = Grid.Material.PLASTER;
+                cell.mold = Grid.Mold.NONE;
                 break;
             case GLASS:
-                cell.material = GridData.Material.GLASS;
-                cell.mold = GridData.Mold.NONE;
+                cell.material = Grid.Material.GLASS;
+                cell.mold = Grid.Mold.NONE;
                 break;
 
             case INOCULATE:
-                cell.mold = GridData.Mold.ACTIVE;
+                cell.mold = Grid.Mold.ACTIVE;
                 break;
             case ERASE:
-                cell.mold = GridData.Mold.NONE;
+                cell.mold = Grid.Mold.NONE;
                 break;
         }
     }
@@ -164,10 +165,10 @@ public class HelloController {
         // Draw memory state
         for (int x = 0; x < data.columns; x++) {
             for (int y = 0; y < data.rows; y++) {
-                GridData.CellData cell = data.matrix[x][y];
+                Grid.CellData cell = data.matrix[x][y];
 
-                if (cell.mold == GridData.Mold.ACTIVE) { gc.setFill(Color.web("#00ffaa")); }
-                else if (cell.mold == GridData.Mold.SPAWNING) { gc.setFill(Color.web("#008855")); }
+                if (cell.mold == Grid.Mold.ACTIVE) { gc.setFill(Color.web("#00ffaa")); }
+                else if (cell.mold == Grid.Mold.SPAWNING) { gc.setFill(Color.web("#008855")); }
                 else {
                     switch (cell.material) {
                         case CONCRETE:  gc.setFill(Color.web("#556b7d")); break;
