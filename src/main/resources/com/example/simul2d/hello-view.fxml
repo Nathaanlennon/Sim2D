@@ -19,7 +19,8 @@
                 <fx:define>
                     <ToggleGroup fx:id="inputModeGroup"/>
                 </fx:define>
-                <RadioButton text="Brush (Drag Paint)" toggleGroup="$inputModeGroup" selected="true" onAction="#setModeBrush" style="-fx-text-fill: #cccccc;"/>
+                <RadioButton text="Point &amp; Click (1 case)" toggleGroup="$inputModeGroup" selected="true" onAction="#setModeClick" style="-fx-text-fill: #cccccc;"/>
+                <RadioButton text="Brush (Drag Paint)" toggleGroup="$inputModeGroup" onAction="#setModeBrush" style="-fx-text-fill: #cccccc;"/>
                 <RadioButton text="Zone Selection (Box)" toggleGroup="$inputModeGroup" onAction="#setModeZone" style="-fx-text-fill: #cccccc;"/>
             </VBox>
 
