@@ -7,27 +7,38 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.control.RadioButton?>
 
 <BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.simul2d.HelloController" style="-fx-background-color: #1a1a1a;">
 
     <left>
-        <VBox prefWidth="250" spacing="15" style="-fx-background-color: #222222; -fx-padding: 20;">
-            <Label text="DRAWING TOOL" style="-fx-text-fill: #555555; -fx-font-weight: bold;"/>
+        <VBox prefWidth="250" spacing="25" style="-fx-background-color: #222222; -fx-padding: 20;">
 
-            <fx:define>
-                <ToggleGroup fx:id="toolsGroup"/>
-            </fx:define>
+            <VBox spacing="10">
+                <Label text="BRUSH CONFIGURATION" style="-fx-text-fill: #555555; -fx-font-weight: bold;"/>
+                <fx:define>
+                    <ToggleGroup fx:id="inputModeGroup"/>
+                </fx:define>
+                <RadioButton text="Brush (Drag Paint)" toggleGroup="$inputModeGroup" selected="true" onAction="#setModeBrush" style="-fx-text-fill: #cccccc;"/>
+                <RadioButton text="Zone Selection (Box)" toggleGroup="$inputModeGroup" onAction="#setModeZone" style="-fx-text-fill: #cccccc;"/>
+            </VBox>
 
-            <TilePane prefColumns="2" hgap="10" vgap="10">
-                <ToggleButton text="Concrete" toggleGroup="$toolsGroup" onAction="#setModeConcrete" prefWidth="100" style="-fx-base: #556b7d;"/>
-                <ToggleButton text="Dirt" toggleGroup="$toolsGroup" onAction="#setModeDirt" prefWidth="100" style="-fx-base: #522b4e;"/>
-                <ToggleButton text="Wood" toggleGroup="$toolsGroup" onAction="#setModeWood" prefWidth="100" style="-fx-base: #8b5a2b;"/>
-                <ToggleButton text="Plaster" toggleGroup="$toolsGroup" onAction="#setModePlaster" prefWidth="100" style="-fx-base: #e6e6e6;"/>
-                <ToggleButton text="Glass" toggleGroup="$toolsGroup" onAction="#setModeGlass" prefWidth="100" style="-fx-base: #e8f4f8;"/>
+            <VBox spacing="10">
+                <Label text="DRAWING TOOL" style="-fx-text-fill: #555555; -fx-font-weight: bold;"/>
+                <fx:define>
+                    <ToggleGroup fx:id="toolsGroup"/>
+                </fx:define>
+                <TilePane prefColumns="2" hgap="10" vgap="10">
+                    <ToggleButton text="Concrete" toggleGroup="$toolsGroup" onAction="#setModeConcrete" prefWidth="100" style="-fx-base: #556b7d;"/>
+                    <ToggleButton text="Dirt" toggleGroup="$toolsGroup" onAction="#setModeDirt" prefWidth="100" style="-fx-base: #522b4e;"/>
+                    <ToggleButton text="Wood" toggleGroup="$toolsGroup" onAction="#setModeWood" prefWidth="100" style="-fx-base: #8b5a2b;"/>
+                    <ToggleButton text="Plaster" toggleGroup="$toolsGroup" onAction="#setModePlaster" prefWidth="100" style="-fx-base: #e6e6e6;"/>
+                    <ToggleButton text="Glass" toggleGroup="$toolsGroup" onAction="#setModeGlass" prefWidth="100" style="-fx-base: #e8f4f8;"/>
 
-                <ToggleButton text="Inoculate" toggleGroup="$toolsGroup" selected="true" onAction="#setModeInoculate" prefWidth="100" style="-fx-base: #00ffaa;"/>
-                <ToggleButton text="Erase" toggleGroup="$toolsGroup" onAction="#setModeErase" prefWidth="100" style="-fx-base: #ff4444;"/>
-            </TilePane>
+                    <ToggleButton text="Inoculate" toggleGroup="$toolsGroup" selected="true" onAction="#setModeInoculate" prefWidth="100" style="-fx-base: #00ffaa;"/>
+                    <ToggleButton text="Erase" toggleGroup="$toolsGroup" onAction="#setModeErase" prefWidth="100" style="-fx-base: #ff4444;"/>
+                </TilePane>
+            </VBox>
         </VBox>
     </left>
 
@@ -35,13 +46,14 @@
         <Pane style="-fx-background-color: #111111;">
             <Canvas fx:id="simulationCanvas" width="900" height="900"
                     onMousePressed="#handleMousePressed"
-                    onMouseDragged="#handleMouseDragged"/>
+                    onMouseDragged="#handleMouseDragged"
+                    onMouseReleased="#handleMouseReleased"/>
         </Pane>
     </center>
+
     <right>
         <VBox prefWidth="250" spacing="15" style="-fx-background-color: #222222; -fx-padding: 20; -fx-border-color: #333333; -fx-border-width: 0 0 0 1;">
             <Label text="SIMULATION ANALYTICS" style="-fx-text-fill: #555555; -fx-font-weight: bold;"/>
-
             <Label fx:id="analyticsLabel" style="-fx-text-fill: #aaaaaa; -fx-font-family: monospace; -fx-font-size: 12px;"/>
         </VBox>
     </right>
