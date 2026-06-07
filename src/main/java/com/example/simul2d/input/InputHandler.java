@@ -1,9 +1,9 @@
 package com.example.simul2d.input;
 
-import com.example.simul2d.Core.SimulationState;
-
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import com.example.simul2d.Core.SimulationState;
+import com.example.simul2d.Systems.SaveSystem;
 
 /**
  * Consumes raw input strings and applies the matching command to the simulation state.
@@ -44,6 +44,23 @@ public class InputHandler {
             case SPEED2 -> data.setSpeed(2);
             case SPEED3 -> data.setSpeed(3);
             case PAUSE -> data.changePause();
+            case SAVE -> {
+                try {
+                    SaveSystem.saveSystem(data.getGrid(), "savefile.dat");
+                } catch (Exception e) {
+                    data.changePause();
+                    System.err.println("Error occurred while saving the simulation. Simulation paused.");
+                }
+            }
+
+            case LOAD -> {
+                try {
+                    data.setGrid(SaveSystem.loadSystem("savefile.dat"));
+                } catch (Exception e) {
+                    data.changePause();
+                    System.err.println("Error occurred while loading the simulation. Simulation remains paused.");
+                }
+            }
         }
     }
 //public methods

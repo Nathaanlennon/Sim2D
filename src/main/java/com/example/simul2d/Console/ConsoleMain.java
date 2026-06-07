@@ -1,13 +1,13 @@
 package com.example.simul2d.Console;
 
 
-import com.example.simul2d.Core.*;
-import com.example.simul2d.grid.Grid;
+import com.example.simul2d.Core.SimulationLoop;
+import com.example.simul2d.Core.SimulationState;
 import com.example.simul2d.Entities.Mold.AxialMold1;
 import com.example.simul2d.Entities.Mold.CircMold1;
 import com.example.simul2d.Entities.Mold.DividedMold1;
-import com.example.simul2d.Systems.UpdateSimulation;
-import com.example.simul2d.grid.*;
+import com.example.simul2d.grid.Grid;
+import com.example.simul2d.grid.Material;
 import com.example.simul2d.input.InputHandler;
 import com.example.simul2d.input.InputReader;
 import com.example.simul2d.render.Render;
@@ -79,7 +79,7 @@ public class ConsoleMain {
      * @throws InterruptedException if the simulation loop is interrupted while sleeping
      */
     public static void main(String[] args) throws InterruptedException {
-
+        
             startSimulation();
 
 

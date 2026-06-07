@@ -1,10 +1,12 @@
 package com.example.simul2d.grid;
 
+import java.io.Serializable;
+import java.util.HashMap;
+
 import com.example.simul2d.Entities.Entity;
 import com.example.simul2d.Entities.Grow;
 import com.example.simul2d.Entities.Mold.Mold;
 
-import java.util.HashMap;
 
 /**
  * A grid cell used by the simulation to represent a discrete location.
@@ -21,7 +23,7 @@ import java.util.HashMap;
  * @see Vec2
  * @see Entity
  */
-public class Cell {
+public class Cell implements Serializable {
 
     /** The position of the cell in the grid. */
     private Vec2 pos;

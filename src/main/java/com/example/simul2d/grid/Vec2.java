@@ -1,12 +1,12 @@
 package com.example.simul2d.grid;
-
+import java.io.Serializable;
 /**
  * Immutable 2D integer vector used for grid coordinates
  *
  * @param x x coordinate
  * @param y y coordinate
  */
-public record Vec2(int x, int y) {
+public record Vec2(int x, int y) implements Serializable {
 
     /**
      * Returns a new {@link Vec2} representing the vector addition of

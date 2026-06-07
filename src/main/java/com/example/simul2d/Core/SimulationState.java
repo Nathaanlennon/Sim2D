@@ -1,7 +1,8 @@
 package com.example.simul2d.Core;
 
-import com.example.simul2d.grid.Grid;
 import java.util.concurrent.atomic.AtomicReference;
+
+import com.example.simul2d.grid.Grid;
 
 /**
  * Holds the mutable state of the simulation. (It's like the data)
@@ -60,6 +61,10 @@ public class SimulationState {
         if (speed>0){
             this.speed = speed;
         }
+    }
+
+    public void setGrid(Grid grid) {
+        this.grid = grid;
     }
 
     //get methods

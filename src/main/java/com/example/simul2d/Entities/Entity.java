@@ -1,5 +1,7 @@
 package com.example.simul2d.Entities;
 
+import java.io.Serializable;
+
 import com.example.simul2d.Entities.Mold.Mold;
 import com.example.simul2d.grid.Cell;
 
@@ -11,6 +13,6 @@ import com.example.simul2d.grid.Cell;
  * Concrete entities provide behavior via additional interfaces such as
  * {@link Grow} and {@link Propagate}.
  */
-public abstract class Entity {
+public abstract class Entity implements Serializable {
         // No fields or methods; serves as a common supertype for all entities
 }
