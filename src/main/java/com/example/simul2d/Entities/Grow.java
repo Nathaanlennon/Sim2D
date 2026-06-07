@@ -1,4 +1,6 @@
-package com.example.simul2d.grid;
+package com.example.simul2d.Entities;
+
+import com.example.simul2d.grid.Cell;
 
 /**
  * Trait interface for objects that can grow over time.

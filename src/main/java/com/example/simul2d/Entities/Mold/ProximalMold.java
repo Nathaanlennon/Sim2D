@@ -1,4 +1,6 @@
-package com.example.simul2d.grid;
+package com.example.simul2d.Entities.Mold;
+import com.example.simul2d.grid.Vec2;
+
 import java.util.*;
 
 

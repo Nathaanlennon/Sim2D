@@ -14,7 +14,7 @@ import static java.lang.Thread.sleep;
  */
 public class SimulationLoop {
     private final SimulationState data;
-    private UpdateSimulation updateSimulation;
+    private final UpdateSimulation updateSimulation;
     private volatile boolean running;
     private volatile List<Runnable> contentUpdateCallbacks;
 

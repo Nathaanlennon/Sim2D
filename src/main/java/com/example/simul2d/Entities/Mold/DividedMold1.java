@@ -1,5 +1,7 @@
-package com.example.simul2d.grid;
+package com.example.simul2d.Entities.Mold;
 
+
+import com.example.simul2d.grid.Cell;
 
 import java.util.List;
 

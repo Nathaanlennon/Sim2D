@@ -1,4 +1,7 @@
-package com.example.simul2d.grid;
+package com.example.simul2d.Entities;
+
+import com.example.simul2d.Entities.Mold.Mold;
+import com.example.simul2d.grid.Cell;
 
 /**
  * Base type for objects that can be placed into a {@link Cell}.

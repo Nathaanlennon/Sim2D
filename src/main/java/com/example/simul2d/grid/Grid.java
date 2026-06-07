@@ -103,6 +103,9 @@ public class Grid {
                 return null;
 
         }
+        public Cell getCell(Vec2 pos) {
+                return getCell(pos.x(), pos.y());
+        }
 
         /**
          * Sets or replaces the cell at the specified coordinates.

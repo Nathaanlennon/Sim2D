@@ -1,5 +1,7 @@
-package com.example.simul2d.grid;
+package com.example.simul2d.Entities.Mold;
 
+
+import com.example.simul2d.grid.Vec2;
 
 /**
  * A simple record to hold a coordinate and its associated weight for propagation
@@ -15,6 +17,13 @@ public record CoorWeight(Vec2 coordinate, int weight) {
         if (weight < 0 || weight > 100) {
             throw new IllegalArgumentException("weight must be between 0 and 100");
         }
+    }
+    
+    public int getWeight() {
+        return weight;
+    }
+    public Vec2 getCoordinates() {
+        return coordinate;
     }
 
     @Override

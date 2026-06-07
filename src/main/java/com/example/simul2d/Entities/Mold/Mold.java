@@ -1,4 +1,8 @@
-package com.example.simul2d.grid;
+package com.example.simul2d.Entities.Mold;
+
+import com.example.simul2d.Entities.Entity;
+import com.example.simul2d.Entities.Grow;
+import com.example.simul2d.Entities.Propagate;
 
 import java.util.Objects;
 

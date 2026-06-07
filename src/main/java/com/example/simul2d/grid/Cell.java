@@ -1,12 +1,16 @@
 package com.example.simul2d.grid;
 
+import com.example.simul2d.Entities.Entity;
+import com.example.simul2d.Entities.Grow;
+import com.example.simul2d.Entities.Mold.Mold;
+
 import java.util.HashMap;
 
 /**
  * A grid cell used by the simulation to represent a discrete location.
  *
  * <p>Each {@code Cell} stores an integer 2D position ({@link Vec2}) and a
- * collection of {@link Entity} instances present at that location. Entities
+ * collection of {@link Entity} instances present at that location. com.example.simul2d.Entities
  * are stored in a map keyed by their concrete class which ensures at most one
  * instance per concrete entity type can be associated with a single cell.
  *
@@ -66,11 +70,18 @@ public class Cell {
         this.material = Material.EMPTY;
     }
 
-
+    /**
+     * 
+     * @return the material of the cell
+     */
     public Material getMaterial() {
         return material;
     }
 
+    /**
+     * 
+     * @param material the material to set for the cell
+     */
     public void setMaterial(Material material) {
         this.material = material;
     }

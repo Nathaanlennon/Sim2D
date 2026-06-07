@@ -14,7 +14,7 @@ public class SimulationState {
     // A thread-safe pre-rendered snapshot of the grid for UI consumption.
     // The simulation thread should call updateGridSnapshot() after it mutates the grid.
     private final AtomicReference<String> gridSnapshot = new AtomicReference<>("");
-
+    
 
     //constructors
     /**

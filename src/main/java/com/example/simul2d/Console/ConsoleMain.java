@@ -2,6 +2,10 @@ package com.example.simul2d.Console;
 
 
 import com.example.simul2d.Core.*;
+import com.example.simul2d.grid.Grid;
+import com.example.simul2d.Entities.Mold.AxialMold1;
+import com.example.simul2d.Entities.Mold.CircMold1;
+import com.example.simul2d.Entities.Mold.DividedMold1;
 import com.example.simul2d.Systems.UpdateSimulation;
 import com.example.simul2d.grid.*;
 import com.example.simul2d.input.InputHandler;
@@ -76,24 +80,10 @@ public class ConsoleMain {
      */
     public static void main(String[] args) throws InterruptedException {
 
-        SimulationState state = new SimulationState();
+            startSimulation();
 
-        // publish the state so other code (for example a JavaFX launcher) can
-        // obtain the instance and bind UI to it.
-        publishedState = state;
 
-        SimulationLoop loop = new SimulationLoop(state);
-        Render renderer = new Render(state);
-        InputHandler inputHandler = new InputHandler(state);
-        
-        
 
-        
-        new Thread(new InputReader()).start();
-        loop.runSimulation(renderer, inputHandler);
-        
-        
-        
     }
 
 }
