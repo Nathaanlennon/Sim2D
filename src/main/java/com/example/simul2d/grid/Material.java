@@ -4,8 +4,7 @@ package com.example.simul2d.grid;
 public enum Material {
     WOOD(0.6),
     CONCRETE(0.1),
-    PLASTER(0.4),
-    EMPTY(0);
+    PLASTER(0.4);
 
     private final double vunerability;
 

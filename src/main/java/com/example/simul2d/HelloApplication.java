@@ -25,18 +25,18 @@ public class HelloApplication extends Application {
         // Start the console simulation and obtain the running SimulationState and thread.
         com.example.simul2d.Console.ConsoleMain.SimulationRun run = com.example.simul2d.Console.ConsoleMain.startSimulation();
         SimulationState published = run.state();
-        
+
         // FXMLLoader lit le fichier FXML et construit l'interface graphique.
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
         // Scene = le contenu de la fenêtre. Load FXML and inject the shared state into controllers.
-        Scene scene = new Scene(fxmlLoader.load(), 320, 240);
+        Scene scene = new Scene(fxmlLoader.load(), 1200, 950);
         stage.setTitle("Simul2D - JavaFX demo");
         stage.setScene(scene);
         // show() affiche enfin la fenêtre à l'écran.
         stage.show();
 
         List<Runnable> neededSimulationCallbacks = new ArrayList<>();
-        
+
         // After loading, inject the published SimulationState into controllers
         Object controller = fxmlLoader.getController();
         if (controller instanceof NeedsSimulationState) {
@@ -51,15 +51,15 @@ public class HelloApplication extends Application {
                 ((NeedsSimulationState) ctrl).setSimulationState(published);
                 neededSimulationCallbacks.add(((NeedsSimulationState) ctrl)::refreshUI);
             }
-            
+
         }
 
         // keep loop/thread for shutdown
         this.simulationLoop = run.loop();
         this.simulationLoop.setContentUpdateCallbacks(neededSimulationCallbacks);
         this.simThread = run.thread();
-        
-        
+
+
     }
 
     @Override

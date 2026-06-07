@@ -1,22 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
 
-<VBox xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.example.simul2d.TimeController"
-            prefHeight="50.0" prefWidth="200.0">
-    <Label fx:id="currentTime" text="Time : 0" />
-    <Label fx:id="currentSpeed" text="Speed : 1x" />
-    <Button fx:id="playPauseButton" text="Play" onAction="#handlePlayPause"/>
-    <Button fx:id="speedUpButton" text="Speed Up" onAction="#handleSpeedUp"/>
-    <Button fx:id="slowDownButton" text="Slow Down" onAction="#handleSpeedDown"/>
-    <Button fx:id="speed1xButton" text="1x" onAction="#handleSpeed1"/>
-    <Button fx:id="speed2xButton" text="2x" onAction="#handleSpeed2"/>
-    <Button fx:id="speed3xButton" text="3x" onAction="#handleSpeed3"/>
-    
-</VBox>
+<HBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.example.simul2d.TimeController"
+      spacing="20.0" alignment="CENTER"
+      style="-fx-background-color: #222222; -fx-padding: 15; -fx-border-color: #333333; -fx-border-width: 1 0 0 0;">
+
+    <Label fx:id="currentTime" text="Time : 0" style="-fx-text-fill: #00ffaa; -fx-font-weight: bold; -fx-font-family: monospace; -fx-font-size: 14px;"/>
+    <Label fx:id="currentSpeed" text="Speed : 1x" style="-fx-text-fill: #aaaaaa; -fx-font-weight: bold; -fx-font-family: monospace; -fx-font-size: 14px;"/>
+
+    <Region prefWidth="30" /> <Button fx:id="playPauseButton" text="⏯ Play / Pause" onAction="#handlePlayPause" style="-fx-base: #444444; -fx-text-fill: white; -fx-font-weight: bold;"/>
+
+    <Region prefWidth="15" />
+
+    <Button fx:id="slowDownButton" text="⏪ Slower" onAction="#handleSpeedDown" style="-fx-base: #333333; -fx-text-fill: white;"/>
+    <Button fx:id="speedUpButton" text="⏩ Faster" onAction="#handleSpeedUp" style="-fx-base: #333333; -fx-text-fill: white;"/>
+
+    <Region prefWidth="15" />
+
+    <Button fx:id="speed1xButton" text="1x" onAction="#handleSpeed1" style="-fx-base: #555555; -fx-text-fill: white;"/>
+    <Button fx:id="speed2xButton" text="2x" onAction="#handleSpeed2" style="-fx-base: #555555; -fx-text-fill: white;"/>
+    <Button fx:id="speed3xButton" text="3x" onAction="#handleSpeed3" style="-fx-base: #555555; -fx-text-fill: white;"/>
+
+</HBox>
