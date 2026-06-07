@@ -1,12 +1,13 @@
 package com.example.simul2d.Entities.Mold;
 
 
-import com.example.simul2d.grid.Cell;
-
 import java.util.List;
+
+import com.example.simul2d.grid.Cell;
 
 public class DividedMold1 extends ProximalMold {
     
+    private static final String BASE_COLOR = "#9B59B6";
 
     public DividedMold1() {
         super(0, 3, 100, 0.4); // Call the parent constructor with initial growth and growth rate and minimum growth value for propagation
@@ -15,6 +16,11 @@ public class DividedMold1 extends ProximalMold {
     @Override
     public List<CoorWeight> getPropagationDistributionList() {
         return distribution;
+    }
+
+    @Override
+    public String getColorHex() {
+        return adjustIntensity(BASE_COLOR, getGrowth());
     }
 
     @Override

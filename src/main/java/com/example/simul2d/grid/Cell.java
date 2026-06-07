@@ -136,14 +136,16 @@ public class Cell implements Serializable {
         }
     }
 
-
-    /**
-     * Returns the map of entities currently present in this cell.
-     *
-     * @return the map of entities (never {@code null})
-     */
-    public HashMap<Class<? extends Entity>, Entity> getEntities() {
-        return entities;
+    public String getColorHex() {
+        Entity largest = null;
+        double maxSize = -1;
+        for (Entity entity : entities.values()) {
+            if (entity.getSize() > maxSize) {
+                largest = entity;
+                maxSize = entity.getSize();
+            }
+        }
+        return largest != null ? largest.getColorHex() : material.getColorHex();
     }
 
     /**
@@ -156,6 +158,10 @@ public class Cell implements Serializable {
     public Entity getEntity(Class<? extends Entity> entity) {
 
         return entities.get(entity);
+    }
+
+    public HashMap<Class<? extends Entity>, Entity> getEntities() {
+        return entities;
     }
 
     /**

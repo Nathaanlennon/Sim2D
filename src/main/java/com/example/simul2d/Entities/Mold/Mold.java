@@ -1,10 +1,11 @@
 package com.example.simul2d.Entities.Mold;
+import java.util.Objects;
 
 import com.example.simul2d.Entities.Entity;
 import com.example.simul2d.Entities.Grow;
 import com.example.simul2d.Entities.Propagate;
 
-import java.util.Objects;
+import javafx.scene.paint.Color;
 
 /**
  * Base type for mold entities in the simulation. This abstract class provides
@@ -21,6 +22,9 @@ public abstract class Mold extends Entity implements Grow, Propagate {
     private int growthRate;
     private final int minGrowthValueToPropagate; // Minimum growth required for propagation
     private double PropagationProbability = 0.5; // Default propagation probability
+    protected static final int MAX_GROWTH = 100; // Maximum growth value for intensity adjustment
+
+
     /**
      * Constructs a Mold with the supplied initial growth and growth rate.
      *
@@ -126,6 +130,11 @@ public abstract class Mold extends Entity implements Grow, Propagate {
         return return_growed;
     }
 
+    @Override
+    public int getSize() {
+        return getGrowth(); // Size is determined by the current growth value
+    }
+
 
     /**
      * Determines if this mold is able to grow based on its growth rate and
@@ -163,6 +172,21 @@ public abstract class Mold extends Entity implements Grow, Propagate {
     public void resetGrowth() {
         this.growth = 0;
     }
+
+    protected static String adjustIntensity(String baseHex, double growth) {
+        Color base = Color.web(baseHex);
+        double ratio = Math.min(growth / MAX_GROWTH, 1.0);   
+        double factor = 1.0 - ratio * 0.6;                  
+        double r = base.getRed() * factor;
+        double g = base.getGreen() * factor;
+        double b = base.getBlue() * factor;
+        Color darker = Color.color(r, g, b);
+        return String.format("#%02X%02X%02X",
+                (int)(darker.getRed() * 255),
+                (int)(darker.getGreen() * 255),
+                (int)(darker.getBlue() * 255));
+    }
+
 
     @Override
     public boolean equals(Object other) {

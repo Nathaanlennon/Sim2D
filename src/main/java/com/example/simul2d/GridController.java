@@ -1,10 +1,10 @@
 package com.example.simul2d;
 
 import com.example.simul2d.Core.SimulationState;
-import com.example.simul2d.grid.Grid;
 import com.example.simul2d.grid.Cell;
+import com.example.simul2d.grid.Grid;
 import com.example.simul2d.grid.Material;
-import com.example.simul2d.render.Render;
+
 import javafx.fxml.FXML;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
@@ -15,6 +15,7 @@ public class GridController implements NeedsSimulationState {
     // Reference to the shared simulation state (injected by HelloApplication)
     private SimulationState state;
     private Grid grid= null;
+    private Rectangle[][] tiles; // 2D array to hold references to the grid cell rectangles
 
     @FXML
     private GridPane gridDisplay;
@@ -28,44 +29,44 @@ public class GridController implements NeedsSimulationState {
     public void setSimulationState(SimulationState state) {
         this.state = state;
         this.grid = state.getGrid();
+        initializeGridDisplay();
         refreshUI(); // Dessine la grille dès qu'on reçoit les données
     }
 
-    @Override
-    public void refreshUI() {
-
-        if (state == null || gridDisplay == null) {
+    private void initializeGridDisplay() {
+        if (grid == null) {
             return;
         }
+        gridDisplay.getChildren().clear();
 
-        gridDisplay.getChildren().clear();  // 1. On efface les carrés du tour précédent
+        int h = grid.getHeight();
+        int w = grid.getWidth();
+        tiles = new Rectangle[h][w];
+        for(int y = 0; y< grid.getHeight();y++){
+            for (int x = 0; x < grid.getWidth(); x++) {
+                Rectangle tile = new Rectangle(35, 35);
+                tile.setFill(Color.web("#FFFFFF"));
+                tile.setStroke(Color.web("#333333"));
+                tile.setStrokeWidth(1.0);
+                tiles[y][x] = tile; // Store reference for later updates
+                gridDisplay.add(tile, x, y);
+            }
+        }
+    }
 
+
+    public void refreshUI() {
 
         if (grid == null) {
             return;
         }
-// f
-   
-        for(int y = 0; y< grid.getHeight();y++){
+
+        for(int y = 0; y< grid.getHeight();y++) {
             for (int x = 0; x < grid.getWidth(); x++) {
-
-                // we recupe cell who corspond
                 Cell cell = grid.getCell(x, y);
+                String hex = cell != null ? cell.getColorHex() : Material.EMPTY.getColorHex();
+                tiles[y][x].setFill(Color.web(hex));
 
-                // Valeur de sécurité au cas où la cellule serait null
-                String hexColor = Material.EMPTY.getColorHex();
-
-                if (cell != null) {
-                    hexColor = cell.getMaterial().getColorHex();
-                }
-
-                // we create square graphique in jave fx
-                Rectangle tile = new Rectangle(35, 35);
-                tile.setFill(Color.web(hexColor));
-                tile.setStroke(Color.web("#333333"));
-                tile.setStrokeWidth(1.0);
-
-                gridDisplay.add(tile, x, y);
             }
         }
     }
