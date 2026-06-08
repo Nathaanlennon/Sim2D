@@ -37,7 +37,7 @@ public class SimulationState {
      * Creates a default simulation state.
      */
     public SimulationState(){
-        this(1.0,0.0,false,  new Grid(10,10,false)); //TODO: change that to real input size
+        this(1.0,0.0,false,  new Grid(30,30,false)); //TODO: change that to real input size
     }
     
     

@@ -49,6 +49,11 @@ public class ConsoleMain {
         // sample test setup (same as main)
         Grid grid = state.getGrid();
 
+        for (int x = 0; x < grid.getWidth(); x++) {
+            grid.getCell(x, 0).setMaterial(Material.WOOD);
+            grid.getCell(x, grid.getHeight() - 1).setMaterial(Material.CONCRETE);
+        }
+
         // start the console input reader
         new Thread(new InputReader(), "InputReader-Thread").start();
 

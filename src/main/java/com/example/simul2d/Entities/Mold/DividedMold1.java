@@ -20,18 +20,20 @@ public class DividedMold1 extends ProximalMold {
 
     @Override
     public String getColorHex() {
-        return adjustIntensity(BASE_COLOR, getGrowth());
+        return BASE_COLOR; // Return a fixed color for this mold variant
     }
 
     @Override
     public void propagateTo(Cell targetCell) {
-        // Create a new DividedMold with half the growth of the original mold and add it to the target cell
+        int halfGrowth = Math.max(1, this.getGrowth() / 2);
         DividedMold1 newMold = new DividedMold1();
-        newMold.setGrowth(this.getGrowth() / 2);
-        targetCell.addEntity(newMold);
-        this.setGrowth(this.getGrowth()/2); // Reduce the growth of the original mold by half to simulate division
-        
-        
+        newMold.setGrowth(halfGrowth);
+
+        int absorbed = targetCell.addEntity(newMold);
+        int surplus = halfGrowth - absorbed;
+
+        // Reduce the growth of the current mold by the amount propagated, accounting for any surplus that couldn't be absorbed by the target cell
+        this.setGrowth(this.getGrowth() - halfGrowth + surplus);
     }
 
     @Override

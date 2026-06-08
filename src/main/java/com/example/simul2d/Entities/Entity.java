@@ -16,11 +16,4 @@ import com.example.simul2d.grid.Cell;
 public abstract class Entity implements Serializable {
         // No fields or methods; serves as a common supertype for all entities
 
-        private int size;
-
-        public int getSize() {
-            return size;
-        }
-
-        public abstract String getColorHex();
 }

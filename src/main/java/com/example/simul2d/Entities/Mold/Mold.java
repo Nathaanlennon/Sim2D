@@ -1,11 +1,10 @@
 package com.example.simul2d.Entities.Mold;
 import java.util.Objects;
 
+import com.example.simul2d.Entities.Displayable;
 import com.example.simul2d.Entities.Entity;
 import com.example.simul2d.Entities.Grow;
 import com.example.simul2d.Entities.Propagate;
-
-import javafx.scene.paint.Color;
 
 /**
  * Base type for mold entities in the simulation. This abstract class provides
@@ -16,7 +15,7 @@ import javafx.scene.paint.Color;
  * override the default growth behavior and provide specific implementations of
  * the {@link #toString()} method for visualization purposes.
  */
-public abstract class Mold extends Entity implements Grow, Propagate {
+public abstract class Mold extends Entity implements Grow, Propagate, Displayable {
 //todo : sizemax
     private int growth;
     private int growthRate;
@@ -130,11 +129,19 @@ public abstract class Mold extends Entity implements Grow, Propagate {
         return return_growed;
     }
 
+
+
     @Override
-    public int getSize() {
-        return getGrowth(); // Size is determined by the current growth value
+    public double getDisplaySize() {
+        return getGrowth();
     }
 
+
+    @Override
+    public double getOpacity() {
+        // Implementation for getting the opacity based on growth
+        return Math.min(1.0, getGrowth() / (double) MAX_GROWTH);
+    }
 
     /**
      * Determines if this mold is able to grow based on its growth rate and
@@ -173,19 +180,6 @@ public abstract class Mold extends Entity implements Grow, Propagate {
         this.growth = 0;
     }
 
-    protected static String adjustIntensity(String baseHex, double growth) {
-        Color base = Color.web(baseHex);
-        double ratio = Math.min(growth / MAX_GROWTH, 1.0);   
-        double factor = 1.0 - ratio * 0.6;                  
-        double r = base.getRed() * factor;
-        double g = base.getGreen() * factor;
-        double b = base.getBlue() * factor;
-        Color darker = Color.color(r, g, b);
-        return String.format("#%02X%02X%02X",
-                (int)(darker.getRed() * 255),
-                (int)(darker.getGreen() * 255),
-                (int)(darker.getBlue() * 255));
-    }
 
 
     @Override

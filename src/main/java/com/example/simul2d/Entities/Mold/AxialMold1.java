@@ -19,7 +19,7 @@ public class AxialMold1 extends AxialMold {
 
     @Override
     public String getColorHex() {
-        return adjustIntensity(BASE_COLOR, getGrowth());
+        return BASE_COLOR; // Return a fixed color for this mold variant
     }
 
 
