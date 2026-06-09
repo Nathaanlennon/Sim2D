@@ -1,15 +1,16 @@
 package com.example.simul2d.JavaFX;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.example.simul2d.Core.SimulationLoop;
 import com.example.simul2d.Core.SimulationState;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class HelloApplication extends Application {
     private SimulationLoop simulationLoop;

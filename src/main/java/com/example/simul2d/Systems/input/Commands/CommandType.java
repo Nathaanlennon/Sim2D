@@ -12,6 +12,8 @@ public enum CommandType {
     SPEED2("2"),
     SPEED3("3"),
     INCREASE_SPEED("a"),
+    SAVE("save"),
+    LOAD("load"),
     DECREASE_SPEED("s");
     
     //TODO: add commands directty to the enum

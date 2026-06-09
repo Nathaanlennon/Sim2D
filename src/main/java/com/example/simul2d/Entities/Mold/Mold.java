@@ -1,8 +1,11 @@
 package com.example.simul2d.Entities.Mold;
+import java.util.Objects;
 
 import com.example.simul2d.Entities.*;
-
-import java.util.Objects;
+import com.example.simul2d.Entities.Displayable;
+import com.example.simul2d.Entities.Entity;
+import com.example.simul2d.Entities.Grow;
+import com.example.simul2d.Entities.Propagate;
 
 /**
  * Base type for mold entities in the simulation. This abstract class provides
@@ -13,12 +16,15 @@ import java.util.Objects;
  * override the default growth behavior and provide specific implementations of
  * the {@link #toString()} method for visualization purposes.
  */
-public abstract class Mold extends Entity implements CanGrow, CanPropagate {
+public abstract class Mold extends Entity implements CanGrow, CanPropagate, Displayable {
 //todo : sizemax
     private int growth;
     private int growthRate;
     private final int minGrowthValueToPropagate; // Minimum growth required for propagation
     private double PropagationProbability = 0.5; // Default propagation probability
+    protected static final int MAX_GROWTH = 100; // Maximum growth value for intensity adjustment
+
+
     /**
      * Constructs a Mold with the supplied initial growth and growth rate.
      *
@@ -85,7 +91,7 @@ public abstract class Mold extends Entity implements CanGrow, CanPropagate {
         return PropagationProbability;
     }
 
-    
+
 
     /**
      * Default growth behavior invoked each step.
@@ -125,6 +131,19 @@ public abstract class Mold extends Entity implements CanGrow, CanPropagate {
     }
 
 
+
+    @Override
+    public double getDisplaySize() {
+        return getGrowth();
+    }
+
+
+    @Override
+    public double getOpacity() {
+        // Implementation for getting the opacity based on growth
+        return Math.min(1.0, getGrowth() / (double) MAX_GROWTH);
+    }
+
     /**
      * Determines if this mold is able to grow based on its growth rate and
      * the current growth conditions of the containing cell.
@@ -161,6 +180,8 @@ public abstract class Mold extends Entity implements CanGrow, CanPropagate {
     public void resetGrowth() {
         this.growth = 0;
     }
+
+
 
     @Override
     public boolean equals(Object other) {

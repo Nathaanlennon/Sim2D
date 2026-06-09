@@ -1,7 +1,8 @@
 package com.example.simul2d.grid;
 
+import java.io.Serializable;
 
-public enum Material {
+public enum Material implements Serializable {
     WOOD(0.6, "#8B5A2B"),
     CONCRETE(0.1, "#808080"),
     PLASTER(0.4, "#F5F5DC"),

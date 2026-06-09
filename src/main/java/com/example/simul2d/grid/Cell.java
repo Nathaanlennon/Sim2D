@@ -1,10 +1,14 @@
 package com.example.simul2d.grid;
 
+import java.io.Serializable;
+import java.util.HashMap;
+
+import com.example.simul2d.Entities.Displayable;
 import com.example.simul2d.Entities.CanGrow;
 import com.example.simul2d.Entities.Entity;
 import com.example.simul2d.Entities.Mold.Mold;
 
-import java.util.HashMap;
+import javafx.scene.paint.Color;
 
 /**
  * A grid cell used by the simulation to represent a discrete location.
@@ -21,7 +25,7 @@ import java.util.HashMap;
  * @see Vec2
  * @see Entity
  */
-public class Cell {
+public class Cell implements Serializable {
 
     /** The position of the cell in the grid. */
     private Vec2 pos;
@@ -32,11 +36,10 @@ public class Cell {
      * once per cell.
      */
     private HashMap<Class<? extends Entity>, Entity> entities;
-    private HashMap<Class<? extends Entity>, Entity> combatEnabledEntities;
-    private int minGrowthValueToFight = 20;
+    
     /**
-     * Aggregated growth across all {@link CanGrow} entities in this cell.
-     * <p>Used by {@link #step()} and passed into {@link CanGrow#grow(int)} so
+     * Aggregated growth across all {@link Grow} entities in this cell.
+     * <p>Used by {@link #step()} and passed into {@link Grow#grow(int)} so
      * that individual growth behavior can depend on the cell-level total.
      */
     private int totalGrowthOnCell;
@@ -55,7 +58,6 @@ public class Cell {
         this.entities = new HashMap<>();
         this.totalGrowthOnCell = 0;
         this.material = Material.EMPTY;
-        
     }
 
     /**
@@ -109,6 +111,14 @@ public class Cell {
      * accordingly after each entity's growth step.
      */
     public void step() {
+
+        totalGrowthOnCell = 0;
+        for (Entity entity : entities.values()) {
+            if (entity instanceof Grow growable) {
+                totalGrowthOnCell += growable.getGrowth();
+            }
+        }
+
         int currentGrowth;
         for (Entity entity : entities.values()) {
             if (entity instanceof CanGrow growable) {
@@ -129,26 +139,67 @@ public class Cell {
      *
      * @param entity the entity to add (must not be {@code null})
      */
-    public void addEntity(Entity entity) {
-
+    public int addEntity(Entity entity) {
         if (entities.containsKey(entity.getClass())) {
-            return;
+            Entity existing = entities.get(entity.getClass());
+            if (existing instanceof Grow existingGrowable && entity instanceof Grow incomingGrowable) {
+                int available = 100 - totalGrowthOnCell;
+                int toAbsorb = Math.min(incomingGrowable.getGrowth(), available);
+                existingGrowable.setGrowth(existingGrowable.getGrowth() + toAbsorb);
+                totalGrowthOnCell += toAbsorb;
+                return toAbsorb;
+            }
+            return 0;
         }
 
-        entities.put(entity.getClass(), entity); // Add the entity to the map
+        entities.put(entity.getClass(), entity);
         if (entity instanceof CanGrow growable) {
-            totalGrowthOnCell += growable.getGrowth(); // Update total growth when adding a new entity
+            int available = 100 - totalGrowthOnCell;
+            int toAbsorb = Math.min(growable.getGrowth(), available);
+            growable.setGrowth(toAbsorb);
+            totalGrowthOnCell += toAbsorb;
+            return toAbsorb;
         }
+        return 0;
     }
 
+    public String getColorHex() {
+        // 1. Trouver l’entité affichable la plus grande
+        Displayable best = null;
+        double maxSize = Double.NEGATIVE_INFINITY;
+        for (Entity e : entities.values()) {
+            if (e instanceof Displayable d) {
+                double size = d.getDisplaySize();
+                if (size > maxSize) {
+                    maxSize = size;
+                    best = d;
+                }
+            }
+        }
+
+        // 2. Si aucune entité affichable, retourner le matériau seul
+        if (best == null) {
+            return material.getColorHex();
+        }
+        // 3. Mélanger la couleur de l’entité (avec son opacité) sur le fond du matériau
+        return blend(material.getColorHex(), best.getColorHex(), best.getOpacity());
+    }
 
     /**
-     * Returns the map of entities currently present in this cell.
-     *
-     * @return the map of entities (never {@code null})
+     * Mélange deux couleurs hexadécimales selon une opacité.
+     * @param bgHex   couleur de fond (matériau)
+     * @param fgHex   couleur de premier plan (entité)
+     * @param opacity opacité du premier plan (0.0 → transparent, 1.0 → opaque)
+     * @return la couleur résultante au format hexadécimal
      */
-    public HashMap<Class<? extends Entity>, Entity> getEntities() {
-        return entities;
+    private static String blend(String bgHex, String fgHex, double opacity) {
+        Color bg = Color.web(bgHex);
+        Color fg = Color.web(fgHex);
+        double r = fg.getRed()   * opacity + bg.getRed()   * (1 - opacity);
+        double g = fg.getGreen() * opacity + bg.getGreen() * (1 - opacity);
+        double b = fg.getBlue()  * opacity + bg.getBlue()  * (1 - opacity);
+        return String.format("#%02X%02X%02X",
+                (int)(r * 255), (int)(g * 255), (int)(b * 255));
     }
 
     /**
@@ -167,6 +218,7 @@ public class Cell {
         return combatEnabledEntities;
     }
 
+    
     /**
      * Returns the cell's {@link Vec2} position. The returned object is the
      * actual instance used by this cell; callers modifying it will change the

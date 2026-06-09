@@ -1,15 +1,16 @@
 package com.example.simul2d.Console;
 
 
-import com.example.simul2d.Core.*;
-import com.example.simul2d.grid.Grid;
+import com.example.simul2d.Core.SimulationLoop;
+import com.example.simul2d.Core.SimulationState;
 import com.example.simul2d.Entities.Mold.AxialMold1;
 import com.example.simul2d.Entities.Mold.CircMold1;
 import com.example.simul2d.Entities.Mold.DividedMold1;
-import com.example.simul2d.grid.*;
-import com.example.simul2d.Systems.input.InputHandler;
-import com.example.simul2d.Systems.input.InputReader;
-import com.example.simul2d.Systems.render.Render;
+import com.example.simul2d.grid.Grid;
+import com.example.simul2d.grid.Material;
+import com.example.simul2d.input.InputHandler;
+import com.example.simul2d.input.InputReader;
+import com.example.simul2d.render.Render;
 
 /**
  * Console-based entry point for running the simulation loop.
@@ -48,6 +49,11 @@ public class ConsoleMain {
         // sample test setup (same as main)
         Grid grid = state.getGrid();
 
+        for (int x = 0; x < grid.getWidth(); x++) {
+            grid.getCell(x, 0).setMaterial(Material.WOOD);
+            grid.getCell(x, grid.getHeight() - 1).setMaterial(Material.CONCRETE);
+        }
+
         // start the console input reader
         new Thread(new InputReader(), "InputReader-Thread").start();
 
@@ -78,7 +84,7 @@ public class ConsoleMain {
      * @throws InterruptedException if the simulation loop is interrupted while sleeping
      */
     public static void main(String[] args) throws InterruptedException {
-
+        
             startSimulation();
 
 
