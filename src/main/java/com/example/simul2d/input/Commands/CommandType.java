@@ -1,4 +1,4 @@
-package com.example.simul2d.input;
+package com.example.simul2d.input.Commands;
 
 /**
  * Enumeration of the supported input commands.
@@ -6,7 +6,7 @@ package com.example.simul2d.input;
  * <p>Each constant is associated with a keyboard key used by the console input
  * system.</p>
  */
-public enum Command {
+public enum CommandType {
     PAUSE("p"),
     SPEED1("1"),
     SPEED2("2"),
@@ -24,7 +24,7 @@ public enum Command {
      *
      * @param key the input key that triggers the command
      */
-    Command(String key) {
+    CommandType(String key) {
         this.key = key;
     }
 
@@ -44,16 +44,16 @@ public enum Command {
      * @param input the user input to parse
      * @return the matching command, or {@code null} if no command matches
      */
-    public static Command fromString(String input) {
+    public static CommandType fromString(String input) {
         if (input == null || input.isBlank()) {
             return null;
         }
 
         String normalizedInput = input.trim();
 
-        for (Command command : Command.values()) {
-            if (command.getKey().equalsIgnoreCase(normalizedInput)) {
-                return command;
+        for (CommandType commandType : CommandType.values()) {
+            if (commandType.getKey().equalsIgnoreCase(normalizedInput)) {
+                return commandType;
             }
         }
         return null;

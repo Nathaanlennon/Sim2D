@@ -1,7 +1,10 @@
 package com.example.simul2d.input;
 
 import com.example.simul2d.Core.SimulationState;
+import com.example.simul2d.input.Commands.*;
 
+
+ 
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 
@@ -15,7 +18,7 @@ public class InputHandler {
      */
     public static final ConcurrentLinkedQueue<String> queue =
             new ConcurrentLinkedQueue<>();  // it's the cue for the input system
-    public static final ConcurrentLinkedQueue<Command> commandQueue =
+    public static final ConcurrentLinkedQueue<Command> COMMAND_QUEUE =
             new ConcurrentLinkedQueue<>();  // it's the cue for the input system, but with commands instead of raw strings
     //constructor
 
@@ -38,12 +41,10 @@ public class InputHandler {
      */
     private void processCommand(Command command) {
         switch (command) {
-            case INCREASE_SPEED -> data.setSpeed(data.getSpeed() + 1);
-            case DECREASE_SPEED -> data.setSpeed(Math.max(0, data.getSpeed() - 1));
-            case SPEED1 -> data.setSpeed(1);
-            case SPEED2 -> data.setSpeed(2);
-            case SPEED3 -> data.setSpeed(3);
-            case PAUSE -> data.changePause();
+            case PauseCommand p -> data.changePause();
+            case SpeedCommand s -> data.setSpeed(s.speed());
+            case DecreaseSpeedCommand d-> data.setSpeed(Math.max(0, data.getSpeed() - 1));
+            case IncreaseSpeedCommand i -> data.setSpeed(data.getSpeed() + 1);
         }
     }
 //public methods
@@ -54,16 +55,17 @@ public class InputHandler {
     public void handleInput() {
         while (!queue.isEmpty()) {
             String rawInput = queue.poll();
-            Command command = Command.fromString(rawInput);
-
+            Command command = InputParser.parseInput(rawInput);
             if (command == null) {
                 continue;
             }
 
+          
+
             processCommand(command);
         }
-        while (!commandQueue.isEmpty()) {
-            Command command = commandQueue.poll();
+        while (!COMMAND_QUEUE.isEmpty()) {
+            Command command = COMMAND_QUEUE.poll();
             processCommand(command);
         }
     }

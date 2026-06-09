@@ -2,7 +2,7 @@ package com.example.simul2d;
 
 
 import com.example.simul2d.Core.SimulationState;
-import com.example.simul2d.input.CommandType;
+import com.example.simul2d.input.Commands.*;
 import com.example.simul2d.input.InputHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -55,31 +55,31 @@ public class TimeController implements NeedsSimulationState {
 
     @FXML
     public void handlePlayPause() {
-        InputHandler.COMMAND_TYPE_QUEUE.add(CommandType.PAUSE);
+        InputHandler.COMMAND_QUEUE.add(new PauseCommand());
     }
 
     @FXML
     public void handleSpeedUp() {
-        InputHandler.COMMAND_TYPE_QUEUE.add(CommandType.INCREASE_SPEED);
+        InputHandler.COMMAND_QUEUE.add(new IncreaseSpeedCommand());
     }
 
     @FXML
     public void handleSpeedDown() {
-        InputHandler.COMMAND_TYPE_QUEUE.add(CommandType.DECREASE_SPEED);
+        InputHandler.COMMAND_QUEUE.add(new DecreaseSpeedCommand());
     }
 
     @FXML
     public void handleSpeed1() {
-        InputHandler.COMMAND_TYPE_QUEUE.add(CommandType.SPEED1);
+        InputHandler.COMMAND_QUEUE.add(new SpeedCommand(1));
     }
 
     @FXML
     public void handleSpeed2() {
-        InputHandler.COMMAND_TYPE_QUEUE.add(CommandType.SPEED2);
+        InputHandler.COMMAND_QUEUE.add(new SpeedCommand(2));
     }
 
     @FXML
     public void handleSpeed3() {
-        InputHandler.COMMAND_TYPE_QUEUE.add(CommandType.SPEED3);
+        InputHandler.COMMAND_QUEUE.add(new SpeedCommand(3));
     }
 }
