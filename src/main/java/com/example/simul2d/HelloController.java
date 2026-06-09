@@ -11,17 +11,16 @@ import javafx.scene.paint.Color;
 
 public class HelloController implements NeedsSimulationState {
 
-    @FXML private Canvas simulationCanvas;
+    @FXML private Canvas simulationCanvas; // RENDERING AREA
+    @FXML private Slider densitySlider; // STOCHASTIC DENSITY
+    @FXML private Slider minPowerSlider; // MINIMUM INITIAL ENERGY
+    @FXML private Slider maxPowerSlider; // MAXIMUM INITIAL ENERGY
 
-    @FXML private Slider densitySlider;
-    @FXML private Slider minPowerSlider;
-    @FXML private Slider maxPowerSlider;
+    private GraphicsContext gc; // CANVAS DRAWING CONTEXT
+    private SimulationState simulationState; // SIMULATION CORE ACCESS
+    private final int CELL_SIZE = 20; // CONSTANT CELL DIMENSION
 
-    private GraphicsContext gc;
-    private SimulationState simulationState;
-    private final int CELL_SIZE = 20;
-
-    // STATES UNIFIÉS
+    // UI STATE MODES
     public enum ToolMode {
         CONCRETE, WOOD, PLASTER,
         CIRC_MOLD, AXIAL_MOLD, DIVIDED_MOLD,
@@ -32,26 +31,27 @@ public class HelloController implements NeedsSimulationState {
     public enum InputMode { CLICK, BRUSH, ZONE }
     private InputMode currentInputMode = InputMode.CLICK;
 
+    // ZONE SELECTION STATE
     private boolean isDraggingZone = false;
     private int startCellX = -1, startCellY = -1, currentCellX = -1, currentCellY = -1;
 
     @FXML
     public void initialize() {
-        gc = simulationCanvas.getGraphicsContext2D();
+        gc = simulationCanvas.getGraphicsContext2D(); // SETUP GRAPHICS
     }
 
     @Override
     public void setSimulationState(SimulationState state) {
-        this.simulationState = state;
-        drawGraphics();
+        this.simulationState = state; // BIND SIMULATION DATA
+        drawGraphics(); // INITIAL RENDER
     }
 
     @Override
     public void refreshUI() {
-        drawGraphics();
+        drawGraphics(); // UPDATE DISPLAY
     }
 
-    // --- UI EVENT HANDLERS ---
+    // UI EVENT HANDLERS
     @FXML protected void setModeClick() { currentInputMode = InputMode.CLICK; }
     @FXML protected void setModeBrush() { currentInputMode = InputMode.BRUSH; }
     @FXML protected void setModeZone() { currentInputMode = InputMode.ZONE; }
@@ -65,16 +65,16 @@ public class HelloController implements NeedsSimulationState {
     @FXML protected void setModeDivided() { currentTool = ToolMode.DIVIDED_MOLD; }
     @FXML protected void setModeErase() { currentTool = ToolMode.ERASE; }
 
-    // --- MOUSE INPUT LOGIC ---
+    // MOUSE INPUT LOGIC
     @FXML protected void handleMousePressed(MouseEvent event) {
         if (simulationState == null) return;
         int x = (int) (event.getX() / CELL_SIZE);
         int y = (int) (event.getY() / CELL_SIZE);
 
         if (currentInputMode == InputMode.CLICK || currentInputMode == InputMode.BRUSH) {
-            writeSingleCell(x, y);
+            writeSingleCell(x, y); // IMMEDIATE ACTION
         } else if (currentInputMode == InputMode.ZONE) {
-            isDraggingZone = true;
+            isDraggingZone = true; // START SELECTION
             startCellX = x; startCellY = y;
             currentCellX = x; currentCellY = y;
         }
@@ -86,22 +86,22 @@ public class HelloController implements NeedsSimulationState {
         int y = (int) (event.getY() / CELL_SIZE);
 
         if (currentInputMode == InputMode.BRUSH) {
-            writeSingleCell(x, y);
+            writeSingleCell(x, y); // CONTINUOUS PAINTING
         } else if (currentInputMode == InputMode.ZONE && isDraggingZone) {
-            currentCellX = x; currentCellY = y;
+            currentCellX = x; currentCellY = y; // UPDATE SELECTION BOUNDS
             drawGraphics();
         }
     }
 
     @FXML protected void handleMouseReleased(MouseEvent event) {
         if (currentInputMode == InputMode.ZONE && isDraggingZone) {
-            fillZone();
+            fillZone(); // EXECUTE MASS APPLY
             isDraggingZone = false;
             drawGraphics();
         }
     }
 
-    //  DATA WRITING
+    // DATA WRITING METHODS
     private void writeSingleCell(int x, int y) {
         int minD = (int) minPowerSlider.getValue();
         int maxD = (int) maxPowerSlider.getValue();
@@ -129,7 +129,7 @@ public class HelloController implements NeedsSimulationState {
 
         for (int x = minX; x <= maxX; x++) {
             for (int y = minY; y <= maxY; y++) {
-                if (Math.random() <= density) {
+                if (Math.random() <= density) { // APPLY DENSITY STOCHASTICS
                     Cell cell = simulationState.getGrid().getCell(x, y);
                     if (cell != null) {
                         applyToolToCell(cell, trueMin, trueMax);
@@ -141,11 +141,11 @@ public class HelloController implements NeedsSimulationState {
 
     private void applyToolToCell(Cell cell, int minPower, int maxPower) {
         if (currentTool == ToolMode.ERASE) {
-            cell.clearBiologicalState();
+            cell.clearBiologicalState(); // RESET CELL
             return;
         }
 
-        // LOGIQUE D'APPLICATION DES MATÉRIAUX
+        // APPLY MATERIAL PROPERTIES
         if (currentTool == ToolMode.CONCRETE) {
             cell.setMaterial(Material.CONCRETE);
             cell.clearBiologicalState();
@@ -162,7 +162,7 @@ public class HelloController implements NeedsSimulationState {
             return;
         }
 
-        // LOGIQUE D'APPLICATION DE LA BIOLOGIE
+        // APPLY BIOLOGICAL ENTITY
         int generatedGrowth = minPower + (int)(Math.random() * ((maxPower - minPower) + 1));
 
         Mold newMold = null;
@@ -178,7 +178,7 @@ public class HelloController implements NeedsSimulationState {
         }
     }
 
-    // --- RENDERING STRATEGY ---
+    // RENDERING STRATEGY
     private void drawGraphics() {
         if (simulationState == null) return;
         gc.clearRect(0, 0, simulationCanvas.getWidth(), simulationCanvas.getHeight());
@@ -189,7 +189,7 @@ public class HelloController implements NeedsSimulationState {
             for (int y = 0; y < grid.getHeight(); y++) {
                 Cell cell = grid.getCell(x, y);
 
-                // DESSINER LE MATÉRIAU
+                // RENDER CELL BACKGROUND
                 if (cell.getMaterial() != null) {
                     switch (cell.getMaterial()) {
                         case CONCRETE:  gc.setFill(Color.web("#556b7d")); break;
@@ -202,7 +202,7 @@ public class HelloController implements NeedsSimulationState {
                 }
                 gc.fillRect(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
 
-                // DESSINER LA MOISISSURE
+                // RENDER ENTITY OVERLAY
                 if (!cell.getEntities().isEmpty()) {
                     for (Entity entity : cell.getEntities().values()) {
                         if (entity instanceof Mold mold) {
@@ -220,13 +220,13 @@ public class HelloController implements NeedsSimulationState {
             }
         }
 
-        // Grille Vectorielle
+        // RENDER GRID LINES
         gc.setStroke(Color.web("#333333"));
         gc.setLineWidth(0.5);
         for (int x = 0; x <= grid.getWidth(); x++) { gc.strokeLine(x * CELL_SIZE, 0, x * CELL_SIZE, grid.getHeight() * CELL_SIZE); }
         for (int y = 0; y <= grid.getHeight(); y++) { gc.strokeLine(0, y * CELL_SIZE, grid.getWidth() * CELL_SIZE, y * CELL_SIZE); }
 
-        // Bounding Box Visuelle
+        // RENDER SELECTION BOX
         if (isDraggingZone) {
             int minX = Math.min(startCellX, currentCellX);
             int maxX = Math.max(startCellX, currentCellX);

@@ -71,6 +71,7 @@
         </Pane>
     </center>
 
+
     <bottom>
         <fx:include fx:id="timeControlPane" source="time-control-view.fxml"/>
     </bottom>

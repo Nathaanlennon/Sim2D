@@ -9,6 +9,7 @@ public enum Material {
 
     private final double vunerability;
 
+
     Material(double vunerability) {
         if (vunerability < 0 || vunerability > 1) {
             throw new IllegalArgumentException("Vulnerability must be between 0 and 1");
