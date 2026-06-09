@@ -1,6 +1,6 @@
 // Lien entre fichier xml et le java, donc en gros faut mettre les trucs dedans
 
-package com.example.simul2d;
+package com.example.simul2d.JavaFX;
 
 
 import javafx.fxml.FXML;

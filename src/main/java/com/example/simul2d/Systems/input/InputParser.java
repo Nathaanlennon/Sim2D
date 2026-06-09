@@ -1,6 +1,6 @@
-package com.example.simul2d.input;
+package com.example.simul2d.Systems.input;
 
-import com.example.simul2d.input.Commands.*;
+import com.example.simul2d.Systems.input.Commands.*;
 
 public class InputParser {
 

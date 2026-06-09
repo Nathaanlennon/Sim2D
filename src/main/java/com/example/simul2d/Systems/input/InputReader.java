@@ -1,4 +1,4 @@
-package com.example.simul2d.input;
+package com.example.simul2d.Systems.input;
 import java.util.Scanner;
 
 /**

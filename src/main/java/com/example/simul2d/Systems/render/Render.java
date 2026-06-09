@@ -1,4 +1,4 @@
-package com.example.simul2d.render;
+package com.example.simul2d.Systems.render;
 
 import com.example.simul2d.Core.SimulationState;
 

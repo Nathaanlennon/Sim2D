@@ -4,7 +4,7 @@
 
 <GridPane xmlns="http://javafx.com/javafx"
           xmlns:fx="http://javafx.com/fxml"
-          fx:controller="com.example.simul2d.GridController"
+          fx:controller="com.example.simul2d.JavaFX.GridController"
           fx:id="gridDisplay"
           alignment="CENTER"
           style="-fx-background-color: #e0e0e0; -fx-padding: 10;">

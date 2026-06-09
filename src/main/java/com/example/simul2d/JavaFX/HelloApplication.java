@@ -1,4 +1,4 @@
-package com.example.simul2d;
+package com.example.simul2d.JavaFX;
 
 import com.example.simul2d.Core.SimulationLoop;
 import com.example.simul2d.Core.SimulationState;
@@ -27,7 +27,7 @@ public class HelloApplication extends Application {
         SimulationState published = run.state();
         
         // FXMLLoader lit le fichier FXML et construit l'interface graphique.
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("/com/example/simul2d/hello-view.fxml"));
         // Scene = le contenu de la fenêtre. Load FXML and inject the shared state into controllers.
         Scene scene = new Scene(fxmlLoader.load(), 320, 240);
         stage.setTitle("Simul2D - JavaFX demo");

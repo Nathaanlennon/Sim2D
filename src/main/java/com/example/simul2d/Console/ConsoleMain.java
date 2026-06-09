@@ -7,9 +7,9 @@ import com.example.simul2d.Entities.Mold.AxialMold1;
 import com.example.simul2d.Entities.Mold.CircMold1;
 import com.example.simul2d.Entities.Mold.DividedMold1;
 import com.example.simul2d.grid.*;
-import com.example.simul2d.input.InputHandler;
-import com.example.simul2d.input.InputReader;
-import com.example.simul2d.render.Render;
+import com.example.simul2d.Systems.input.InputHandler;
+import com.example.simul2d.Systems.input.InputReader;
+import com.example.simul2d.Systems.render.Render;
 
 /**
  * Console-based entry point for running the simulation loop.

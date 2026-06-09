@@ -1,4 +1,4 @@
-package com.example.simul2d;
+package com.example.simul2d.JavaFX;
 
 import com.example.simul2d.Core.SimulationState;
 

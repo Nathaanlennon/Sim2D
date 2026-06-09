@@ -1,4 +1,4 @@
-package com.example.simul2d.input.Commands;
+package com.example.simul2d.Systems.input.Commands;
 
 public record IncreaseSpeedCommand() implements Command {
 }

@@ -1,6 +1,6 @@
 package com.example.simul2d.Console;
 
-import com.example.simul2d.render.Render;
+import com.example.simul2d.Systems.render.Render;
 
 /**
  * Small console program that demonstrates the terminal clearing behavior.

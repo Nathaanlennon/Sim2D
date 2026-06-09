@@ -1,10 +1,9 @@
-package com.example.simul2d;
+package com.example.simul2d.JavaFX;
 
 import com.example.simul2d.Core.SimulationState;
 import com.example.simul2d.grid.Grid;
 import com.example.simul2d.grid.Cell;
 import com.example.simul2d.grid.Material;
-import com.example.simul2d.render.Render;
 import javafx.fxml.FXML;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;

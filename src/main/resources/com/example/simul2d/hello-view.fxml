@@ -8,21 +8,24 @@
 <?import javafx.scene.layout.BorderPane?>
 <!-- Example: add borders inline -->
 <VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.example.simul2d.HelloController"
+      fx:controller="com.example.simul2d.JavaFX.HelloController"
       style="-fx-border-color: black; -fx-border-width: 2; -fx-border-radius: 4; -fx-padding: 8;">
     <BorderPane style="-fx-border-color: #666; -fx-border-width: 2; -fx-padding: 6;">
         <left>
             <BorderPane style="-fx-border-color: #999; -fx-border-width: 1; -fx-padding: 6;">
                 <top>
-                    <Label text="Haut" style="-fx-border-color: blue; -fx-border-width: 1; -fx-padding:4;"/>
+                    <fx:include source="drawing-view.fxml"/>
                 </top>
                 <center>
-                    <fx:include fx:id="gridPane" source="grid-view.fxml"/>
                 </center>
                 <bottom>
                     <fx:include fx:id="timeControlPane" source="time-control-view.fxml"/>
                 </bottom>
             </BorderPane>
         </left>
+        <center>
+            <fx:include fx:id="gridPane" source="grid-view.fxml"/>
+
+        </center>
     </BorderPane>
 </VBox>

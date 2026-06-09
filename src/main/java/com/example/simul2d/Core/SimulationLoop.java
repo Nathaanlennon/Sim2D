@@ -1,8 +1,8 @@
 package com.example.simul2d.Core;
 
 import com.example.simul2d.Systems.UpdateSimulationSystem;
-import com.example.simul2d.input.InputHandler;
-import com.example.simul2d.render.Render;
+import com.example.simul2d.Systems.input.InputHandler;
+import com.example.simul2d.Systems.render.Render;
 import javafx.application.Platform;
 
 import java.util.List;
