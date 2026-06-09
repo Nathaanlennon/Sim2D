@@ -1,11 +1,14 @@
-package com.example.simul2d.Systems.render;
+package com.example.simul2d.Systems;
 
 import com.example.simul2d.Core.SimulationState;
+import com.example.simul2d.Entities.Mold.CircMold1;
+
+import javax.swing.*;
 
 /**
  * Handles console rendering of the simulation state.
  */
-public class Render {
+public class ConsoleRenderSystem {
     private final SimulationState data;
     //constructors
     /**
@@ -13,7 +16,7 @@ public class Render {
      *
      * @param data the simulation state to display
      */
-    public Render(SimulationState data) {
+    public ConsoleRenderSystem(SimulationState data) {
         this.data=data;
     }
 //set methods
@@ -60,7 +63,8 @@ public class Render {
         clear();
 
         System.out.println(data.getGrid().toString());
-        
+
+        ConsoleRenderSystem.printSomething(data.getGrid().getCell(0,0).getEntity(CircMold1.class).getGrowth()+"");
         
         System.out.printf("time : %f, speed : %f \n", data.getTime(), data.getSpeed());
         System.out.flush();  // Flush the output to ensure it appears immediately

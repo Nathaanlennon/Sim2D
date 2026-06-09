@@ -20,13 +20,7 @@ public interface CanGrow {
      *                          use this to alter growth behavior
      */
     int grow(int totalGrowthOnCell);
-
-    /** Returns the current growth value. */
-    int getGrowth();
-
-    /** Sets the current growth value. */
-    void setGrowth(int growth);
-
+    
     /** Returns the configured growth rate (units per step). */
     int getGrowthRate();
 

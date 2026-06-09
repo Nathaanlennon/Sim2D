@@ -12,8 +12,9 @@ import com.example.simul2d.grid.Vec2;
 public class UpdateSimulationSystem {
     private final SimulationState data;
     private final PropagationSystem propagationSystem;
-    
-        //constructors
+    private final CombatSystem combatSystem = new CombatSystem();
+    //constructors
+
     /**
      * Creates an updater bound to a simulation state.
      *
@@ -30,6 +31,7 @@ public class UpdateSimulationSystem {
 //public methods
 
     //TODO: change that to real input size
+
     /**
      * Placeholder hook for content-driven updates.
      *
@@ -46,21 +48,26 @@ public class UpdateSimulationSystem {
     public void update() {
         data.addTime(1);
 
-        
+
         for (int y = 0; y < data.getGrid().getHeight(); y++) {
             for (int x = 0; x < data.getGrid().getWidth(); x++) {
                 Cell cell = data.getGrid().getCell(x, y);
                 Vec2 cellCoordinates = new Vec2(x, y);
                 cell.step();
+
                 cell.getEntities().values().forEach(entity -> {
-                    if (entity instanceof CanGrow){
-//                        Render.printSomething("Growing on cell (" + finalX + ", " + finalY + ") with growth " + ((CanGrow) entity).getGrowth());
+
+                    if (entity instanceof CanGrow) {
+//                        ConsoleRenderSystem.printSomething("Growing on cell (" + finalX + ", " + finalY + ") with growth " + ((CanGrow) entity).getGrowth());
                     }
-                    
+
                     if (entity instanceof CanPropagate && ((CanPropagate) entity).isAbleToPropagate()) {
-                        propagationSystem.propagation(cellCoordinates,(CanPropagate) entity);
+                        propagationSystem.propagation(cellCoordinates, (CanPropagate) entity);
                     }
+
+
                 });
+                combatSystem.inCellCombat(cell);
 
 
             }

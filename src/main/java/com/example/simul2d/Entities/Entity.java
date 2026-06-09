@@ -14,6 +14,21 @@ import com.example.simul2d.grid.Cell;
  * {@link CanGrow} and {@link CanPropagate}.
  */
 public abstract class Entity implements Serializable {
-        // No fields or methods; serves as a common supertype for all entities
+    protected int growth;
 
+    public Entity(int growth) {
+        this.growth = growth;
+    }
+
+    public Entity() {
+        this.growth = 0;
+    }
+
+    public int getGrowth() {
+        return growth;
+    }
+
+    public void setGrowth(int growth) {
+        this.growth = growth;
+    }
 }

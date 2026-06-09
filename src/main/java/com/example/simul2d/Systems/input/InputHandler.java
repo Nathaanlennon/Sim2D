@@ -3,7 +3,6 @@ package com.example.simul2d.Systems.input;
 import com.example.simul2d.Core.SimulationState;
 import com.example.simul2d.Systems.input.Commands.*;
 
-
  
 import java.util.concurrent.ConcurrentLinkedQueue;
 

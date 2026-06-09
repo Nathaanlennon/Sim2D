@@ -2,7 +2,7 @@ package com.example.simul2d.Core;
 
 import com.example.simul2d.Systems.UpdateSimulationSystem;
 import com.example.simul2d.Systems.input.InputHandler;
-import com.example.simul2d.Systems.render.Render;
+import com.example.simul2d.Systems.ConsoleRenderSystem;
 import javafx.application.Platform;
 
 import java.util.List;
@@ -59,7 +59,7 @@ public class SimulationLoop {
      * @param inputHandler the input handler used to consume queued commands
      * @throws InterruptedException if the loop sleep is interrupted
      */
-    public void runSimulation(Render render, InputHandler inputHandler) throws InterruptedException {
+    public void runSimulation(ConsoleRenderSystem render, InputHandler inputHandler) throws InterruptedException {
         while (running) {
             inputHandler.handleInput();
             if (!data.isPaused()) {

@@ -2,10 +2,7 @@ package com.example.simul2d.Entities.Mold;
 import java.util.Objects;
 
 import com.example.simul2d.Entities.*;
-import com.example.simul2d.Entities.Displayable;
-import com.example.simul2d.Entities.Entity;
-import com.example.simul2d.Entities.Grow;
-import com.example.simul2d.Entities.Propagate;
+
 
 /**
  * Base type for mold entities in the simulation. This abstract class provides
@@ -18,7 +15,6 @@ import com.example.simul2d.Entities.Propagate;
  */
 public abstract class Mold extends Entity implements CanGrow, CanPropagate, Displayable {
 //todo : sizemax
-    private int growth;
     private int growthRate;
     private final int minGrowthValueToPropagate; // Minimum growth required for propagation
     private double PropagationProbability = 0.5; // Default propagation probability
@@ -34,7 +30,7 @@ public abstract class Mold extends Entity implements CanGrow, CanPropagate, Disp
      * @param PropagationProbability the probability of successful propagation (0-1)
      */
     public Mold(int growth, int growthRate, int minGrowthValueToPropagate, double PropagationProbability) {
-        this.growth = growth;
+        super(growth);
         this.growthRate = growthRate;
         this.minGrowthValueToPropagate = minGrowthValueToPropagate;
         this.PropagationProbability = PropagationProbability;

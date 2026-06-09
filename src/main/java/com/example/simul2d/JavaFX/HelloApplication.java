@@ -12,6 +12,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import static java.lang.System.exit;
+
 public class HelloApplication extends Application {
     private SimulationLoop simulationLoop;
     private Thread simThread;
@@ -78,5 +80,7 @@ public class HelloApplication extends Application {
                 Thread.currentThread().interrupt();
             }
         }
+        
+        exit(0);
     }
 }

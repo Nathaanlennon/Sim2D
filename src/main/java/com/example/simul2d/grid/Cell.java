@@ -27,7 +27,9 @@ import javafx.scene.paint.Color;
  */
 public class Cell implements Serializable {
 
-    /** The position of the cell in the grid. */
+    /**
+     * The position of the cell in the grid.
+     */
     private Vec2 pos;
 
     /**
@@ -36,10 +38,14 @@ public class Cell implements Serializable {
      * once per cell.
      */
     private HashMap<Class<? extends Entity>, Entity> entities;
-    
+    private HashMap<Class<? extends Entity>, Entity> combatEnabledEntities;
+
+    private int minGrowthValueToFight = 20;
+    private int capacity = 100;
+
     /**
-     * Aggregated growth across all {@link Grow} entities in this cell.
-     * <p>Used by {@link #step()} and passed into {@link Grow#grow(int)} so
+     * Aggregated growth across all {@link CanGrow} entities in this cell.
+     * <p>Used by {@link #step()} and passed into {@link CanGrow#grow(int)} so
      * that individual growth behavior can depend on the cell-level total.
      */
     private int totalGrowthOnCell;
@@ -73,10 +79,11 @@ public class Cell implements Serializable {
         this.combatEnabledEntities = new HashMap<>();
         this.totalGrowthOnCell = 0;
         this.material = Material.EMPTY;
+
     }
 
     /**
-     * 
+     *
      * @return the material of the cell
      */
     public Material getMaterial() {
@@ -84,7 +91,7 @@ public class Cell implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param material the material to set for the cell
      */
     public void setMaterial(Material material) {
@@ -99,7 +106,7 @@ public class Cell implements Serializable {
     public int getTotalGrowthOnCell() {
         return totalGrowthOnCell;
     }
-    
+
     public int getMinGrowthValueToFight() {
         return minGrowthValueToFight;
     }
@@ -113,21 +120,15 @@ public class Cell implements Serializable {
     public void step() {
 
         totalGrowthOnCell = 0;
-        for (Entity entity : entities.values()) {
-            if (entity instanceof Grow growable) {
-                totalGrowthOnCell += growable.getGrowth();
-            }
-        }
 
-        int currentGrowth;
         for (Entity entity : entities.values()) {
+            totalGrowthOnCell += entity.getGrowth();
             if (entity instanceof CanGrow growable) {
-                if(!growable.isAbleToGrow(totalGrowthOnCell)) {
+                if (!growable.isAbleToGrow(totalGrowthOnCell)) {
                     continue; // Skip growth if the entity is not able to grow based on current conditions
                 }
-                currentGrowth = growable.grow(totalGrowthOnCell); 
-                totalGrowthOnCell += currentGrowth; // Update total growth after growth step
-                
+                totalGrowthOnCell += growable.grow(totalGrowthOnCell); // Update total growth after growth step
+
             }
         }
     }
@@ -140,26 +141,28 @@ public class Cell implements Serializable {
      * @param entity the entity to add (must not be {@code null})
      */
     public int addEntity(Entity entity) {
-        if (entities.containsKey(entity.getClass())) {
-            Entity existing = entities.get(entity.getClass());
-            if (existing instanceof Grow existingGrowable && entity instanceof Grow incomingGrowable) {
-                int available = 100 - totalGrowthOnCell;
-                int toAbsorb = Math.min(incomingGrowable.getGrowth(), available);
-                existingGrowable.setGrowth(existingGrowable.getGrowth() + toAbsorb);
-                totalGrowthOnCell += toAbsorb;
-                return toAbsorb;
-            }
-            return 0;
+//        if (entities.containsKey(entity.getClass())) {
+//            Entity existing = entities.get(entity.getClass());
+//            if (existing instanceof CanGrow existingGrowable && entity instanceof CanGrow incomingGrowable) {
+//                int available = 100 - totalGrowthOnCell;
+//                int toAbsorb = Math.min(incomingGrowable.getGrowth(), available);
+//                existingGrowable.setGrowth(existingGrowable.getGrowth() + toAbsorb);
+//                totalGrowthOnCell += toAbsorb;
+//                return toAbsorb;
+//            }
+//            return 0;
+//        }
+        if (!entities.containsKey(entity.getClass())) {
+            entities.put(entity.getClass(), entity);
+            
         }
-
-        entities.put(entity.getClass(), entity);
-        if (entity instanceof CanGrow growable) {
-            int available = 100 - totalGrowthOnCell;
-            int toAbsorb = Math.min(growable.getGrowth(), available);
-            growable.setGrowth(toAbsorb);
-            totalGrowthOnCell += toAbsorb;
-            return toAbsorb;
-        }
+//        if (entity instanceof CanGrow growable) {
+//            int available = capacity - totalGrowthOnCell;
+//            int toAbsorb = Math.min(growable.getGrowth(), available);
+//            growable.setGrowth(toAbsorb);
+//            totalGrowthOnCell += toAbsorb;
+//            return toAbsorb;
+//        }
         return 0;
     }
 
@@ -187,6 +190,7 @@ public class Cell implements Serializable {
 
     /**
      * Mélange deux couleurs hexadécimales selon une opacité.
+     *
      * @param bgHex   couleur de fond (matériau)
      * @param fgHex   couleur de premier plan (entité)
      * @param opacity opacité du premier plan (0.0 → transparent, 1.0 → opaque)
@@ -195,11 +199,11 @@ public class Cell implements Serializable {
     private static String blend(String bgHex, String fgHex, double opacity) {
         Color bg = Color.web(bgHex);
         Color fg = Color.web(fgHex);
-        double r = fg.getRed()   * opacity + bg.getRed()   * (1 - opacity);
+        double r = fg.getRed() * opacity + bg.getRed() * (1 - opacity);
         double g = fg.getGreen() * opacity + bg.getGreen() * (1 - opacity);
-        double b = fg.getBlue()  * opacity + bg.getBlue()  * (1 - opacity);
+        double b = fg.getBlue() * opacity + bg.getBlue() * (1 - opacity);
         return String.format("#%02X%02X%02X",
-                (int)(r * 255), (int)(g * 255), (int)(b * 255));
+                (int) (r * 255), (int) (g * 255), (int) (b * 255));
     }
 
     /**
@@ -207,7 +211,7 @@ public class Cell implements Serializable {
      *
      * @param entity the concrete class of the entity to retrieve
      * @return the entity instance if present, or {@code null} if no such entity
-     *         is stored in this cell
+     * is stored in this cell
      */
     public Entity getEntity(Class<? extends Entity> entity) {
 
@@ -218,7 +222,10 @@ public class Cell implements Serializable {
         return combatEnabledEntities;
     }
 
-    
+    public HashMap<Class<? extends Entity>, Entity> getEntities() {
+        return entities;
+    }
+
     /**
      * Returns the cell's {@link Vec2} position. The returned object is the
      * actual instance used by this cell; callers modifying it will change the
@@ -226,8 +233,8 @@ public class Cell implements Serializable {
      *
      * @return the position vector (never {@code null})
      */
-    public Vec2 getPos() { 
-        return pos; 
+    public Vec2 getPos() {
+        return pos;
     }
 
     /**
@@ -235,8 +242,8 @@ public class Cell implements Serializable {
      *
      * @param pos the new position
      */
-    public void setPos(Vec2 pos) { 
-        this.pos = pos; 
+    public void setPos(Vec2 pos) {
+        this.pos = pos;
     }
 
     @Override
