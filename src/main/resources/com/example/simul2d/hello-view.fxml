@@ -8,6 +8,7 @@
 <?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.Slider?>
 
 <BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.simul2d.HelloController" style="-fx-background-color: #1a1a1a;">
 
@@ -22,6 +23,19 @@
                 <RadioButton text="Point &amp; Click (1 case)" toggleGroup="$inputModeGroup" selected="true" onAction="#setModeClick" style="-fx-text-fill: #cccccc;"/>
                 <RadioButton text="Brush (Drag Paint)" toggleGroup="$inputModeGroup" onAction="#setModeBrush" style="-fx-text-fill: #cccccc;"/>
                 <RadioButton text="Zone Selection (Mass Spawn)" toggleGroup="$inputModeGroup" onAction="#setModeZone" style="-fx-text-fill: #cccccc;"/>
+            </VBox>
+
+            <VBox spacing="5" style="-fx-background-color: #1a1a1a; -fx-padding: 10; -fx-border-color: #333333; -fx-border-width: 1;">
+                <Label text="STOCHASTIC SETTINGS" style="-fx-text-fill: #555555; -fx-font-weight: bold;"/>
+
+                <Label text="Zone Density (%)" style="-fx-text-fill: #aaaaaa; -fx-font-size: 10px;"/>
+                <Slider fx:id="densitySlider" min="1" max="100" value="100" showTickLabels="true" showTickMarks="true" majorTickUnit="25"/>
+
+                <Label text="Initial Growth (Min)" style="-fx-text-fill: #aaaaaa; -fx-font-size: 10px;"/>
+                <Slider fx:id="minPowerSlider" min="0" max="100" value="100" showTickLabels="true" showTickMarks="true" majorTickUnit="25" snapToTicks="true"/>
+
+                <Label text="Initial Growth (Max)" style="-fx-text-fill: #aaaaaa; -fx-font-size: 10px;"/>
+                <Slider fx:id="maxPowerSlider" min="0" max="100" value="100" showTickLabels="true" showTickMarks="true" majorTickUnit="25" snapToTicks="true"/>
             </VBox>
 
             <VBox spacing="10">

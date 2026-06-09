@@ -5,12 +5,17 @@ import com.example.simul2d.grid.*;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Slider;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 
 public class HelloController implements NeedsSimulationState {
 
     @FXML private Canvas simulationCanvas;
+
+    @FXML private Slider densitySlider;
+    @FXML private Slider minPowerSlider;
+    @FXML private Slider maxPowerSlider;
 
     private GraphicsContext gc;
     private SimulationState simulationState;
@@ -98,9 +103,14 @@ public class HelloController implements NeedsSimulationState {
 
     //  DATA WRITING
     private void writeSingleCell(int x, int y) {
+        int minD = (int) minPowerSlider.getValue();
+        int maxD = (int) maxPowerSlider.getValue();
+        int trueMin = Math.min(minD, maxD);
+        int trueMax = Math.max(minD, maxD);
+
         Cell cell = simulationState.getGrid().getCell(x, y);
         if (cell != null) {
-            applyToolToCell(cell);
+            applyToolToCell(cell, trueMin, trueMax);
             drawGraphics();
         }
     }
@@ -111,17 +121,25 @@ public class HelloController implements NeedsSimulationState {
         int minY = Math.min(startCellY, currentCellY);
         int maxY = Math.max(startCellY, currentCellY);
 
+        double density = densitySlider.getValue() / 100.0;
+        int minD = (int) minPowerSlider.getValue();
+        int maxD = (int) maxPowerSlider.getValue();
+        int trueMin = Math.min(minD, maxD);
+        int trueMax = Math.max(minD, maxD);
+
         for (int x = minX; x <= maxX; x++) {
             for (int y = minY; y <= maxY; y++) {
-                Cell cell = simulationState.getGrid().getCell(x, y);
-                if (cell != null) {
-                    applyToolToCell(cell);
+                if (Math.random() <= density) {
+                    Cell cell = simulationState.getGrid().getCell(x, y);
+                    if (cell != null) {
+                        applyToolToCell(cell, trueMin, trueMax);
+                    }
                 }
             }
         }
     }
 
-    private void applyToolToCell(Cell cell) {
+    private void applyToolToCell(Cell cell, int minPower, int maxPower) {
         if (currentTool == ToolMode.ERASE) {
             cell.clearBiologicalState();
             return;
@@ -145,6 +163,8 @@ public class HelloController implements NeedsSimulationState {
         }
 
         // LOGIQUE D'APPLICATION DE LA BIOLOGIE
+        int generatedGrowth = minPower + (int)(Math.random() * ((maxPower - minPower) + 1));
+
         Mold newMold = null;
         switch (currentTool) {
             case CIRC_MOLD: newMold = new CircMold1(); break;
@@ -153,7 +173,7 @@ public class HelloController implements NeedsSimulationState {
         }
 
         if (newMold != null) {
-            newMold.setGrowth(100);
+            newMold.setGrowth(generatedGrowth);
             cell.addEntity(newMold);
         }
     }
@@ -175,6 +195,7 @@ public class HelloController implements NeedsSimulationState {
                         case CONCRETE:  gc.setFill(Color.web("#556b7d")); break;
                         case WOOD:      gc.setFill(Color.web("#8b5a2b")); break;
                         case PLASTER:   gc.setFill(Color.web("#e6e6e6")); break;
+                        case EMPTY:     gc.setFill(Color.web("#1e1e1e")); break;
                     }
                 } else {
                     gc.setFill(Color.web("#1e1e1e"));
