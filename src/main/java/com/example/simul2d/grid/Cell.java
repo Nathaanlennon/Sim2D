@@ -3,8 +3,8 @@ package com.example.simul2d.grid;
 import java.io.Serializable;
 import java.util.HashMap;
 
-import com.example.simul2d.Entities.Displayable;
 import com.example.simul2d.Entities.CanGrow;
+import com.example.simul2d.Entities.Displayable;
 import com.example.simul2d.Entities.Entity;
 import com.example.simul2d.Entities.Mold.Mold;
 
@@ -111,6 +111,21 @@ public class Cell implements Serializable {
         return minGrowthValueToFight;
     }
 
+    public int getCapacity() {
+        return capacity;
+    }
+
+    public int updateTotalGrowthOnCell() {
+        int total = 0;
+        for (Entity entity : entities.values()) {
+            if (entity instanceof CanGrow growable) {
+                total += entity.getGrowth();
+            }
+        }
+        this.totalGrowthOnCell = total;
+        return total;
+    }
+
     /**
      * Executes a simulation step for this cell, updating all contained entities
      * that implement {@link CanGrow}. Each growable entity's growth is updated
@@ -141,6 +156,13 @@ public class Cell implements Serializable {
      * @param entity the entity to add (must not be {@code null})
      */
     public int addEntity(Entity entity) {
+
+
+        if (!entities.containsKey(entity.getClass())) {
+            entities.put(entity.getClass(), entity);
+            
+        }
+
 //        if (entities.containsKey(entity.getClass())) {
 //            Entity existing = entities.get(entity.getClass());
 //            if (existing instanceof CanGrow existingGrowable && entity instanceof CanGrow incomingGrowable) {
@@ -152,10 +174,7 @@ public class Cell implements Serializable {
 //            }
 //            return 0;
 //        }
-        if (!entities.containsKey(entity.getClass())) {
-            entities.put(entity.getClass(), entity);
-            
-        }
+
 //        if (entity instanceof CanGrow growable) {
 //            int available = capacity - totalGrowthOnCell;
 //            int toAbsorb = Math.min(growable.getGrowth(), available);
@@ -225,6 +244,13 @@ public class Cell implements Serializable {
     public HashMap<Class<? extends Entity>, Entity> getEntities() {
         return entities;
     }
+    
+
+    public void removeEntity(Class<? extends Entity> entityClass) {
+        entities.remove(entityClass);
+    }
+
+    
 
     /**
      * Returns the cell's {@link Vec2} position. The returned object is the

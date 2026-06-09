@@ -29,5 +29,9 @@ public record Vec2(int x, int y) implements Serializable {
     public Vec2 subtract(Vec2 other) {
         return new Vec2(this.x - other.x, this.y - other.y);
     }
+
+    public Vec2 negate() {
+        return new Vec2(-this.x, -this.y);
+    }
 }
 

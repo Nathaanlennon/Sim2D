@@ -9,7 +9,7 @@ public class AxialMold1 extends AxialMold {
     private static final String BASE_COLOR = "#33A1FF";
 
     public AxialMold1() {
-        super(0, 3, 100, 0.4); // Call the parent constructor with initial growth and growth rate and minimum growth value for propagation
+        super(0, 2, 100, 0.4); // Call the parent constructor with initial growth and growth rate and minimum growth value for propagation
     }
 
     @Override

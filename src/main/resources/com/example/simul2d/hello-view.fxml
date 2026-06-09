@@ -39,6 +39,7 @@
         <VBox HBox.hgrow="ALWAYS"
               prefWidth="250"
               style="-fx-border-color: #aaa; -fx-padding: 6;">
+              <fx:include fx:id="graphView" source="graph-view.fxml"/>
             <!-- futur panel -->
         </VBox>
 

@@ -1,12 +1,12 @@
 package com.example.simul2d.Systems;
 
+import java.util.List;
+
 import com.example.simul2d.Core.SimulationState;
 import com.example.simul2d.Entities.CanPropagate;
 import com.example.simul2d.Entities.Mold.CoorWeight;
 import com.example.simul2d.grid.Cell;
 import com.example.simul2d.grid.Vec2;
-
-import java.util.List;
 //TODO: add growth to propagation probability calcul
 public class PropagationSystem {
     private final SimulationState data;
