@@ -10,7 +10,7 @@ import java.util.List;
  * locations. Implementations decide how propagation is performed and
  * whether the object is currently able to propagate.
  */
-public interface Propagate {
+public interface CanPropagate {
 
     /**
      * Indicates whether the object is currently able to propagate.
@@ -20,7 +20,7 @@ public interface Propagate {
     boolean isAbleToPropagate();
 
     /**
-     * Propagate the object to the specified target location. 
+     * CanPropagate the object to the specified target location. 
      * Assumption is that basic propagation is creating a new instance of the class
      *
      * @param target the cell where the object should propagate to.

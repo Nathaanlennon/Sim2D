@@ -1,8 +1,6 @@
 package com.example.simul2d.Entities.Mold;
 
-import com.example.simul2d.Entities.Entity;
-import com.example.simul2d.Entities.Grow;
-import com.example.simul2d.Entities.Propagate;
+import com.example.simul2d.Entities.*;
 
 import java.util.Objects;
 
@@ -15,7 +13,7 @@ import java.util.Objects;
  * override the default growth behavior and provide specific implementations of
  * the {@link #toString()} method for visualization purposes.
  */
-public abstract class Mold extends Entity implements Grow, Propagate {
+public abstract class Mold extends Entity implements CanGrow, CanPropagate {
 //todo : sizemax
     private int growth;
     private int growthRate;
@@ -87,7 +85,7 @@ public abstract class Mold extends Entity implements Grow, Propagate {
         return PropagationProbability;
     }
 
-
+    
 
     /**
      * Default growth behavior invoked each step.

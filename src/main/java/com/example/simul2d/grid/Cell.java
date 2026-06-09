@@ -1,7 +1,7 @@
 package com.example.simul2d.grid;
 
+import com.example.simul2d.Entities.CanGrow;
 import com.example.simul2d.Entities.Entity;
-import com.example.simul2d.Entities.Grow;
 import com.example.simul2d.Entities.Mold.Mold;
 
 import java.util.HashMap;
@@ -32,10 +32,11 @@ public class Cell {
      * once per cell.
      */
     private HashMap<Class<? extends Entity>, Entity> entities;
-    
+    private HashMap<Class<? extends Entity>, Entity> combatEnabledEntities;
+    private int minGrowthValueToFight = 20;
     /**
-     * Aggregated growth across all {@link Grow} entities in this cell.
-     * <p>Used by {@link #step()} and passed into {@link Grow#grow(int)} so
+     * Aggregated growth across all {@link CanGrow} entities in this cell.
+     * <p>Used by {@link #step()} and passed into {@link CanGrow#grow(int)} so
      * that individual growth behavior can depend on the cell-level total.
      */
     private int totalGrowthOnCell;
@@ -54,6 +55,7 @@ public class Cell {
         this.entities = new HashMap<>();
         this.totalGrowthOnCell = 0;
         this.material = Material.EMPTY;
+        
     }
 
     /**
@@ -66,6 +68,7 @@ public class Cell {
     public Cell(int x, int y) {
         this.pos = new Vec2(x, y);
         this.entities = new HashMap<>();
+        this.combatEnabledEntities = new HashMap<>();
         this.totalGrowthOnCell = 0;
         this.material = Material.EMPTY;
     }
@@ -87,30 +90,34 @@ public class Cell {
     }
 
     /**
-     * Returns the aggregated growth across all {@link Grow} entities in this cell.
+     * Returns the aggregated growth across all {@link CanGrow} entities in this cell.
      *
      * @return the total growth on the cell
      */
     public int getTotalGrowthOnCell() {
         return totalGrowthOnCell;
     }
-
+    
+    public int getMinGrowthValueToFight() {
+        return minGrowthValueToFight;
+    }
 
     /**
      * Executes a simulation step for this cell, updating all contained entities
-     * that implement {@link Grow}. Each growable entity's growth is updated
+     * that implement {@link CanGrow}. Each growable entity's growth is updated
      * based on the current total growth on the cell, and the total is updated
      * accordingly after each entity's growth step.
      */
     public void step() {
         int currentGrowth;
         for (Entity entity : entities.values()) {
-            if (entity instanceof Grow growable) {
+            if (entity instanceof CanGrow growable) {
                 if(!growable.isAbleToGrow(totalGrowthOnCell)) {
                     continue; // Skip growth if the entity is not able to grow based on current conditions
                 }
                 currentGrowth = growable.grow(totalGrowthOnCell); 
                 totalGrowthOnCell += currentGrowth; // Update total growth after growth step
+                
             }
         }
     }
@@ -129,7 +136,7 @@ public class Cell {
         }
 
         entities.put(entity.getClass(), entity); // Add the entity to the map
-        if (entity instanceof Grow growable) {
+        if (entity instanceof CanGrow growable) {
             totalGrowthOnCell += growable.getGrowth(); // Update total growth when adding a new entity
         }
     }
@@ -154,6 +161,10 @@ public class Cell {
     public Entity getEntity(Class<? extends Entity> entity) {
 
         return entities.get(entity);
+    }
+
+    public HashMap<Class<? extends Entity>, Entity> getCombatEnabledEntities() {
+        return combatEnabledEntities;
     }
 
     /**

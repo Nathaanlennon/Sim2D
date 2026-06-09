@@ -1,15 +1,15 @@
 package com.example.simul2d.Systems;
 
 import com.example.simul2d.Core.SimulationState;
+import com.example.simul2d.Entities.CanGrow;
+import com.example.simul2d.Entities.CanPropagate;
 import com.example.simul2d.grid.Cell;
-import com.example.simul2d.Entities.Grow;
-import com.example.simul2d.Entities.Propagate;
 import com.example.simul2d.grid.Vec2;
 
 /**
  * Applies one simulation step to the current state.
  */
-public class UpdateSimulation {
+public class UpdateSimulationSystem {
     private final SimulationState data;
     private final PropagationSystem propagationSystem;
     
@@ -19,7 +19,7 @@ public class UpdateSimulation {
      *
      * @param data the simulation state to update
      */
-    public UpdateSimulation(SimulationState data) {
+    public UpdateSimulationSystem(SimulationState data) {
         this.data = data;
         this.propagationSystem = new PropagationSystem(data);
     }
@@ -53,12 +53,12 @@ public class UpdateSimulation {
                 Vec2 cellCoordinates = new Vec2(x, y);
                 cell.step();
                 cell.getEntities().values().forEach(entity -> {
-                    if (entity instanceof Grow){
-//                        Render.printSomething("Growing on cell (" + finalX + ", " + finalY + ") with growth " + ((Grow) entity).getGrowth());
+                    if (entity instanceof CanGrow){
+//                        Render.printSomething("Growing on cell (" + finalX + ", " + finalY + ") with growth " + ((CanGrow) entity).getGrowth());
                     }
                     
-                    if (entity instanceof Propagate && ((Propagate) entity).isAbleToPropagate()) {
-                        propagationSystem.propagation(cellCoordinates,(Propagate) entity);
+                    if (entity instanceof CanPropagate && ((CanPropagate) entity).isAbleToPropagate()) {
+                        propagationSystem.propagation(cellCoordinates,(CanPropagate) entity);
                     }
                 });
 

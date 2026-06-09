@@ -1,6 +1,6 @@
 package com.example.simul2d.Core;
 
-import com.example.simul2d.Systems.UpdateSimulation;
+import com.example.simul2d.Systems.UpdateSimulationSystem;
 import com.example.simul2d.input.InputHandler;
 import com.example.simul2d.render.Render;
 import javafx.application.Platform;
@@ -14,7 +14,7 @@ import static java.lang.Thread.sleep;
  */
 public class SimulationLoop {
     private final SimulationState data;
-    private final UpdateSimulation updateSimulation;
+    private final UpdateSimulationSystem updateSimulationSystem;
     private volatile boolean running;
     private volatile List<Runnable> contentUpdateCallbacks;
 
@@ -23,7 +23,7 @@ public class SimulationLoop {
     public SimulationLoop(SimulationState data) {
         this.data = data;
         this.running = true;
-        this.updateSimulation = new UpdateSimulation(data);
+        this.updateSimulationSystem = new UpdateSimulationSystem(data);
     }
 
     /**
@@ -65,7 +65,7 @@ public class SimulationLoop {
             if (!data.isPaused()) {
 
 
-                updateSimulation.update();
+                updateSimulationSystem.update();
 
                 // update an atomic snapshot of the grid so the UI can read a stable
                 // pre-rendered string representation without locking.

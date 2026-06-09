@@ -9,7 +9,7 @@ import com.example.simul2d.grid.Cell;
  * <p>This abstract class acts as a lightweight marker and common supertype
  * for domain objects used by the simulation (for example, {@link Mold}).
  * Concrete entities provide behavior via additional interfaces such as
- * {@link Grow} and {@link Propagate}.
+ * {@link CanGrow} and {@link CanPropagate}.
  */
 public abstract class Entity {
         // No fields or methods; serves as a common supertype for all entities

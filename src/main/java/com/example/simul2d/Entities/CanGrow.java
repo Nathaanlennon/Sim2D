@@ -10,7 +10,7 @@ import com.example.simul2d.grid.Cell;
  * parameter allows growth behavior to depend on the aggregated
  * growth present in the containing {@link Cell}.
  */
-public interface Grow {
+public interface CanGrow {
 
     /**
      * Apply one growth step to the implementing object.
