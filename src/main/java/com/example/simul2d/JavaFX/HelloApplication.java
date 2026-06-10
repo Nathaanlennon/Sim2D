@@ -7,16 +7,19 @@ import java.util.List;
 import com.example.simul2d.Core.SimulationLoop;
 import com.example.simul2d.Core.SimulationState;
 
+import com.example.simul2d.Systems.ConsoleRenderSystem;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import static java.lang.System.exit;
+import static java.lang.Thread.sleep;
 
 public class HelloApplication extends Application {
     private SimulationLoop simulationLoop;
     private Thread simThread;
+    
     @Override
     public void init() {
         // Appelée une seule fois avant l'affichage de la fenêtre.
@@ -24,7 +27,7 @@ public class HelloApplication extends Application {
     }
 
     @Override
-    public void start(Stage stage) throws IOException {
+    public void start(Stage stage) throws IOException, InterruptedException {
         // Start the console simulation and obtain the running SimulationState and thread.
         com.example.simul2d.Console.ConsoleMain.SimulationRun run = com.example.simul2d.Console.ConsoleMain.startSimulation();
         SimulationState published = run.state();
@@ -39,12 +42,15 @@ public class HelloApplication extends Application {
         stage.show();
 
         List<Runnable> neededSimulationCallbacks = new ArrayList<>();
-        
+        UiState UiState = new UiState(1);
         // After loading, inject the published SimulationState into controllers
         Object controller = fxmlLoader.getController();
         if (controller instanceof NeedsSimulationState) {
             ((NeedsSimulationState) controller).setSimulationState(published);
             neededSimulationCallbacks.add(((NeedsSimulationState) controller)::refreshUI);
+        }
+        if (controller instanceof NeedsUiState) {
+            ((NeedsUiState) controller).setUiState(UiState);
         }
 
         // Also inject into included controllers (like TimeController)
@@ -53,6 +59,10 @@ public class HelloApplication extends Application {
             if (ctrl instanceof NeedsSimulationState) {
                 ((NeedsSimulationState) ctrl).setSimulationState(published);
                 neededSimulationCallbacks.add(((NeedsSimulationState) ctrl)::refreshUI);
+            }
+            
+            if (ctrl instanceof NeedsUiState) {
+                ((NeedsUiState) ctrl).setUiState(UiState);
             }
             
         }

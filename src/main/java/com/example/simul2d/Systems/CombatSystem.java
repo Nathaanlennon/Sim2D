@@ -15,7 +15,7 @@ public class CombatSystem {
 //public methods
     public void inCellCombat(Cell cell) {
         if (cell == null) return;
-
+        //todo: system broken, find alternative to permit entities dying
         int totalMass = 0;
         for (Entity entity : cell.getEntities().values()) {
             if (entity.getGrowth() >= cell.getMinGrowthValueToFight()) {

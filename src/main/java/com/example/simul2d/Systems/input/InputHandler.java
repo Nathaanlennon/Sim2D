@@ -1,9 +1,10 @@
 package com.example.simul2d.Systems.input;
 
 import com.example.simul2d.Core.SimulationState;
+import com.example.simul2d.Systems.ConsoleRenderSystem;
 import com.example.simul2d.Systems.input.Commands.*;
 
- 
+
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 
@@ -36,14 +37,20 @@ public class InputHandler {
 
     /**
      * Applies the effects of a command to the simulation state.
+     *
      * @param command the {@link Command} to process
      */
     private void processCommand(Command command) {
         switch (command) {
             case PauseCommand p -> data.changePause();
             case SpeedCommand s -> data.setSpeed(s.speed());
-            case DecreaseSpeedCommand d-> data.setSpeed(Math.max(0, data.getSpeed() - 1));
+            case DecreaseSpeedCommand d -> data.setSpeed(Math.max(0, data.getSpeed() - 1));
             case IncreaseSpeedCommand i -> data.setSpeed(data.getSpeed() + 1);
+            case SetMaterialCommand s -> data.getGrid().getCell(s.position()).setMaterial(s.material());
+            case AddEntityCommand a -> data.getGrid().getCell(a.position()).addEntity(a.entityType().createEntity());
+//            case RemoveEntityCommand r -> data.getGrid().getCell(r.position()).clearEntities();
+            default -> {
+            }
         }
     }
 //public methods
@@ -59,7 +66,6 @@ public class InputHandler {
                 continue;
             }
 
-          
 
             processCommand(command);
         }
@@ -69,8 +75,7 @@ public class InputHandler {
         }
     }
 
-  
-    
+
 //override methods
 
 }

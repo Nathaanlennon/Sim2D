@@ -249,6 +249,12 @@ public class Cell implements Serializable {
     public void removeEntity(Class<? extends Entity> entityClass) {
         entities.remove(entityClass);
     }
+    
+    
+    public void clearEntities() {
+        entities.clear();
+        totalGrowthOnCell = 0;
+    }
 
     
 
