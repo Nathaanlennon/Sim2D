@@ -17,6 +17,8 @@ public class TimeController implements NeedsSimulationState {
     private Label currentTime;
     @FXML
     private Label currentSpeed;
+    @FXML
+    private Label editingInfoLabel;
 
 
     //set methods
@@ -35,6 +37,7 @@ public class TimeController implements NeedsSimulationState {
     @FXML
     public void handlePlayPause() {
         InputHandler.COMMAND_QUEUE.add(new PauseCommand());
+        editingInfoLabel.setText("Editing mode: ON");
     }
 
     @FXML
@@ -81,6 +84,13 @@ public class TimeController implements NeedsSimulationState {
         if (state != null) {
             if (currentTime != null) currentTime.setText(String.format("Time: %.2f", state.getTime()));
             if (currentSpeed != null) currentSpeed.setText(String.format("Speed: %.2f", state.getSpeed()));
+        }
+
+        if (state.isPaused()){
+            editingInfoLabel.setText("Editing mode: ON");
+        }
+        else {
+            editingInfoLabel.setText("Simulation must be paused to edit");
         }
     }
 }

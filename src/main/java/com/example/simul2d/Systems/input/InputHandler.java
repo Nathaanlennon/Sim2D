@@ -48,7 +48,7 @@ public class InputHandler {
             case IncreaseSpeedCommand i -> data.setSpeed(data.getSpeed() + 1);
             case SetMaterialCommand s -> data.getGrid().getCell(s.position()).setMaterial(s.material());
             case AddEntityCommand a -> data.getGrid().getCell(a.position()).addEntity(a.entityType().createEntity());
-//            case RemoveEntityCommand r -> data.getGrid().getCell(r.position()).clearEntities();
+            case RemoveEntityCommand r -> data.getGrid().getCell(r.position()).clearEntities();
             default -> {
             }
         }

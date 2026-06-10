@@ -6,6 +6,7 @@ import com.example.simul2d.Systems.ConsoleRenderSystem;
 import com.example.simul2d.grid.Material;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 
 public class DrawingController implements NeedsUiState{
@@ -16,15 +17,19 @@ public class DrawingController implements NeedsUiState{
     private VBox buttonContainerMaterials;
     @FXML
     private VBox buttonContainerEntities;
+    @FXML
+    private Label currentToolLabel;
     
     //set methods
 //get methods
 //private methods
     public void handleEraseMaterials() {
         this.uiState.setActiveTool(ToolsType.ERASE_MATERIAL);
+        this.currentToolLabel.setText("Selected Tool: Erase Material");
     }
     public void handleEraseEntities() {
         this.uiState.setActiveTool(ToolsType.ERASE_ENTITY);
+        this.currentToolLabel.setText("Selected Tool: Erase Entity");
     }
 //public methods
     @FXML
@@ -35,6 +40,7 @@ public class DrawingController implements NeedsUiState{
             btn.setOnAction(e -> {
                 this.uiState.setSelectedMaterial(mat);
                 this.uiState.setActiveTool(ToolsType.MATERIALS);
+                this.currentToolLabel.setText("Selected Material: " + mat.name());
             });
             btn.setText(mat.name());
             buttonContainerMaterials.getChildren().add(btn);
@@ -44,6 +50,7 @@ public class DrawingController implements NeedsUiState{
             btn.setOnAction(e -> {
                 this.uiState.setSelectedEntity(ent);
                 this.uiState.setActiveTool(ToolsType.ENTITIES);
+                this.currentToolLabel.setText("Selected Entity: " + ent.name());
             });
             btn.setText(ent.name());
             buttonContainerEntities.getChildren().add(btn);

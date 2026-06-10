@@ -5,28 +5,28 @@
 <?import javafx.scene.layout.Priority?>
 <?import javafx.scene.control.ScrollPane?>
 
+<?import javafx.scene.control.Label?>
 <VBox alignment="CENTER" spacing="20.0"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.example.simul2d.JavaFX.HelloController"
       style="-fx-border-color: black; -fx-border-width: 2; -fx-border-radius: 4; -fx-padding: 8;">
 
     <!-- LAYOUT GLOBAL EN RATIO -->
-    <HBox style="-fx-border-color: #666; -fx-border-width: 2; -fx-padding: 6;">
+    <HBox fx:id="root" style="-fx-border-color: #666; -fx-border-width: 2; -fx-padding: 6;">
 
         <!-- LEFT (1/4) -->
-        <VBox HBox.hgrow="ALWAYS"
+        <VBox fx:id="leftPane" HBox.hgrow="ALWAYS"
               prefWidth="250"
               style="-fx-border-color: #999; -fx-border-width: 1; -fx-padding: 6;">
 
             <fx:include fx:id="drawingControl" source="drawing-view.fxml"/>
-
             <fx:include fx:id="timeControlPane"
                         source="time-control-view.fxml"/>
 
         </VBox>
 
         <!-- CENTER (2/4) -->
-        <ScrollPane HBox.hgrow="ALWAYS"
+        <ScrollPane fx:id="centerPane" HBox.hgrow="ALWAYS"
                     fitToWidth="true"
                     fitToHeight="true">
 
@@ -36,7 +36,7 @@
         </ScrollPane>
 
         <!-- RIGHT (1/4) -->
-        <VBox HBox.hgrow="ALWAYS"
+        <VBox fx:id="rightPane" HBox.hgrow="ALWAYS"
               prefWidth="250"
               style="-fx-border-color: #aaa; -fx-padding: 6;">
               <fx:include fx:id="graphView" source="graph-view.fxml"/>

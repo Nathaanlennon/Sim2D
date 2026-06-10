@@ -26,7 +26,7 @@ public class GridController implements NeedsSimulationState, NeedsUiState {
     
     
     private void clickOnCell(Vec2 position) {
-        if (uiState.getActiveTool() == null) return;
+        if (uiState.getActiveTool() == null || !state.isPaused()) return;
         switch (uiState.getActiveTool()) {
             case MATERIALS -> {
                 if (uiState.getSelectedMaterial()!=null) {
@@ -80,7 +80,14 @@ public class GridController implements NeedsSimulationState, NeedsUiState {
                 int cx = x;
                 int cy = y;
 
-                tile.setOnMouseClicked(event -> clickOnCell(new Vec2(cx, cy)));
+                tile.setOnMouseClicked(event -> {
+                    clickOnCell(new Vec2(cx, cy));
+                    if (uiState.getActiveTool() == ToolsType.MATERIALS && state.isPaused()){
+                        tile.setFill(Color.web(
+                                uiState.getSelectedMaterial().getColorHex()
+                        ));
+                    }
+                });
 
                 tiles[y][x] = tile;
                 gridDisplay.add(tile, x, y);

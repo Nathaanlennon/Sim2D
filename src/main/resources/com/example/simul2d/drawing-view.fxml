@@ -15,5 +15,6 @@
     
     <Button text="Erase Material" onAction="#handleEraseMaterials"/>
     <Button text="Erase Entity" onAction="#handleEraseEntities"/>
+    <Label fx:id="currentToolLabel" text="Current Tool: None"/>
 
 </VBox>
