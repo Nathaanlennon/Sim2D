@@ -1,6 +1,6 @@
 package com.example.simul2d.Console;
 
-import com.example.simul2d.render.Render;
+import com.example.simul2d.Systems.ConsoleRenderSystem;
 
 /**
  * Small console program that demonstrates the terminal clearing behavior.
@@ -22,7 +22,7 @@ public class ClearTest {
         System.out.println("\n=== En train d'appeler clear() ===\n");
         Thread.sleep(1000);
         
-        Render.clear();
+        ConsoleRenderSystem.clear();
         
         Thread.sleep(1000);
         System.out.println("Test 2: Après le clear() - ceci devrait être seul sur l'écran");

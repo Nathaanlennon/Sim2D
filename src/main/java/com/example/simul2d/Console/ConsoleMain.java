@@ -1,16 +1,16 @@
 package com.example.simul2d.Console;
 
 
-import com.example.simul2d.Core.*;
-import com.example.simul2d.Systems.UpdateSimulation;
+import com.example.simul2d.Core.SimulationLoop;
+import com.example.simul2d.Core.SimulationState;
+import com.example.simul2d.Entities.Mold.AxialMold1;
+import com.example.simul2d.Entities.Mold.CircMold1;
+import com.example.simul2d.Entities.Mold.DividedMold1;
+import com.example.simul2d.Systems.ConsoleRenderSystem;
 import com.example.simul2d.grid.Grid;
-import com.example.simul2d.grid.AxialMold1;
-import com.example.simul2d.grid.CircMold1;
-import com.example.simul2d.grid.CircularMold;
-import com.example.simul2d.grid.DividedMold1;
-import com.example.simul2d.input.InputHandler;
-import com.example.simul2d.input.InputReader;
-import com.example.simul2d.render.Render;
+import com.example.simul2d.grid.Material;
+import com.example.simul2d.Systems.input.InputHandler;
+import com.example.simul2d.Systems.input.InputReader;
 
 /**
  * Console-based entry point for running the simulation loop.
@@ -43,11 +43,13 @@ public class ConsoleMain {
         
         // create loop and helpers
         SimulationLoop loop = new SimulationLoop(state);
-        Render renderer = new Render(state);
-        InputHandler inputHandler = new InputHandler(state);
+        ConsoleRenderSystem renderer = new ConsoleRenderSystem(state);
+        InputHandler InputHandler = new InputHandler(state);
 
         // sample test setup (same as main)
         Grid grid = state.getGrid();
+
+        
 
         // start the console input reader
         new Thread(new InputReader(), "InputReader-Thread").start();
@@ -55,12 +57,24 @@ public class ConsoleMain {
         // start the simulation loop in its own thread
         Thread t = new Thread(() -> {
             try {
-                loop.runSimulation(renderer, inputHandler);
+                loop.runSimulation(renderer, InputHandler);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
         }, "ConsoleMain-Thread");
         t.start();
+
+        // for test purposes for now
+        for (int x = 0; x < grid.getWidth(); x++) {
+            grid.getCell(x, 0).setMaterial(Material.WOOD);
+            grid.getCell(x, grid.getHeight() - 1).setMaterial(Material.CONCRETE);
+        }
+        
+        grid.getCell(0,0).addEntity(new CircMold1());
+        grid.getCell(0,0).setMaterial(Material.WOOD);
+  
+        grid.getCell(grid.getWidth()-1, grid.getHeight()-1).addEntity(new DividedMold1());
+        grid.getCell(0, grid.getHeight()-1).addEntity(new AxialMold1());
 
         return new SimulationRun(t, state, loop);
     }
@@ -72,29 +86,11 @@ public class ConsoleMain {
      * @throws InterruptedException if the simulation loop is interrupted while sleeping
      */
     public static void main(String[] args) throws InterruptedException {
+        
+            startSimulation();
 
-        SimulationState state = new SimulationState();
 
-        // publish the state so other code (for example a JavaFX launcher) can
-        // obtain the instance and bind UI to it.
-        publishedState = state;
 
-        SimulationLoop loop = new SimulationLoop(state);
-        Render renderer = new Render(state);
-        InputHandler inputHandler = new InputHandler(state);
-        
-        // for test purposes for now
-        Grid grid = state.getGrid();
-        grid.getCell(0,0).addEntity(new CircMold1());
-        grid.getCell(grid.getWidth()-1, grid.getHeight()-1).addEntity(new DividedMold1());
-        grid.getCell(0, grid.getHeight()-1).addEntity(new AxialMold1());
-
-        
-        new Thread(new InputReader()).start();
-        loop.runSimulation(renderer, inputHandler);
-        
-        
-        
     }
 
 }

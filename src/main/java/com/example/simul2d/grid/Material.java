@@ -1,22 +1,31 @@
 package com.example.simul2d.grid;
 
+import java.io.Serializable;
 
-public enum Material {
-    WOOD(0.6),
-    CONCRETE(0.1),
-    PLASTER(0.4),
-    EMPTY(0);
+public enum Material implements Serializable {
+    WOOD(0.6, "#8B5A2B"),
+    CONCRETE(0.1, "#808080"),
+    PLASTER(0.4, "#F5F5DC"),
+    GOODSTUFF(1.5, "#00FF00"),
+    EMPTY(0.5, "#FFFFFF");
 
     private final double vunerability;
+    private final String colorHex;
 
-    Material(double vunerability) {
-        if (vunerability < 0 || vunerability > 1) {
-            throw new IllegalArgumentException("Vulnerability must be between 0 and 1");
+    Material(double vunerability, String colorHex) {
+        if (vunerability < 0) {
+            throw new IllegalArgumentException("Vulnerability must be non-negative");
         }
         this.vunerability = vunerability;
+        this.colorHex = colorHex;
     }
 
     public double getVulnerability() {
         return vunerability;
     }
+
+    public String getColorHex() {
+        return colorHex;
+    }
 }
+

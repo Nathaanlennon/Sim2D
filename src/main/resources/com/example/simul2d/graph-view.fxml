@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.example.simul2d.JavaFX.GraphController"
+      spacing="10"
+      style="-fx-padding: 8; -fx-border-color: #aaa; -fx-border-width: 1;">
+
+    <LineChart fx:id="populationChart"
+               title="Population des moisissures"
+               animated="false"
+               createSymbols="false">
+        <xAxis>
+            <NumberAxis label="Temps (pas)" forceZeroInRange="false"/>
+        </xAxis>
+        <yAxis>
+            <NumberAxis label="Nombre d’individus" forceZeroInRange="false"/>
+        </yAxis>
+    </LineChart>
+</VBox>

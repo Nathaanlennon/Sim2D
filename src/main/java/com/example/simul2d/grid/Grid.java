@@ -1,10 +1,10 @@
 package com.example.simul2d.grid;
-
+import java.io.Serializable;
 /**
  * Represents a 2D grid composed of cells for a simulation.
  * The grid can optionally be configured as a toric grid (where edges wrap around).
  */
-public class Grid {
+public class Grid implements Serializable {
 
         /** The number of rows in the grid. */
         private int rows;
@@ -102,6 +102,9 @@ public class Grid {
 
                 return null;
 
+        }
+        public Cell getCell(Vec2 pos) {
+                return getCell(pos.x(), pos.y());
         }
 
         /**
