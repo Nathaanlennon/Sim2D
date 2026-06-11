@@ -28,6 +28,13 @@ public class SaveController implements NeedsSimulationState {
             return;
         }
 
+        // Ensure we save a stable grid: pause the simulation if it's running,
+        // then resume it afterwards only if we paused it here.
+        boolean wasPaused = simulationState.isPaused();
+        if (!wasPaused) {
+            simulationState.changePause();
+        }
+
         FileChooser chooser = new FileChooser();
         chooser.setTitle("Save simulation");
         chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Sim2D files", "*.sim"));
@@ -40,6 +47,10 @@ public class SaveController implements NeedsSimulationState {
             showAlert(AlertType.INFORMATION, "Saved", "Saved simulation to " + file.getName());
         } catch (IOException e) {
             showAlert(AlertType.ERROR, "Save failed", e.getMessage());
+        } finally {
+            if (!wasPaused) {
+                simulationState.changePause();
+            }
         }
     }
 
@@ -51,6 +62,12 @@ public class SaveController implements NeedsSimulationState {
         File file = chooser.showOpenDialog(root == null || root.getScene() == null ? null : root.getScene().getWindow());
         if (file == null) return;
 
+        // Pause simulation while replacing the grid to avoid races
+        boolean wasPaused = simulationState == null || simulationState.isPaused();
+        if (simulationState != null && !wasPaused) {
+            simulationState.changePause();
+        }
+
         try {
             Grid loaded = SaveSystem.loadSystem(file.getAbsolutePath());
             if (simulationState != null) {
@@ -61,6 +78,10 @@ public class SaveController implements NeedsSimulationState {
             showAlert(AlertType.INFORMATION, "Loaded", "Loaded simulation from " + file.getName());
         } catch (IOException | ClassNotFoundException e) {
             showAlert(AlertType.ERROR, "Load failed", e.getMessage());
+        } finally {
+            if (simulationState != null && !wasPaused) {
+                simulationState.changePause();
+            }
         }
     }
 
