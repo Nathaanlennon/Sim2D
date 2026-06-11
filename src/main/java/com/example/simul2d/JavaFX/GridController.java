@@ -28,7 +28,7 @@ public class GridController implements NeedsSimulationState, NeedsUiState {
     private void clickOnCell(Vec2 position) {
         if (uiState.getActiveTool() == null || !state.isPaused()) return;
         switch (uiState.getActiveTool()) {
-            case MATERIALS -> {
+            case DRAW_MATERIAL -> {
                 if (uiState.getSelectedMaterial()!=null) {
                     Command command = new SetMaterialCommand(position, uiState.getSelectedMaterial());
                     InputHandler.COMMAND_QUEUE.add(command);
@@ -37,11 +37,26 @@ public class GridController implements NeedsSimulationState, NeedsUiState {
             case ERASE_MATERIAL -> {
                 InputHandler.COMMAND_QUEUE.add(new SetMaterialCommand(position, Material.EMPTY));
             }
-            case ENTITIES -> {
+            case DRAW_ENTITY -> {
                 if(uiState.getSelectedEntity()!=null) InputHandler.COMMAND_QUEUE.add(new AddEntityCommand(position, uiState.getSelectedEntity()));
             }
             case ERASE_ENTITY -> {
                 InputHandler.COMMAND_QUEUE.add(new RemoveEntityCommand(position, uiState.getSelectedEntity()));
+            }
+            case RECTANGLE -> {
+                if (uiState.getFirstClickPos() == null) {
+                    uiState.setFirstClickPos(position);
+                } else {
+                    Vec2 start = uiState.getFirstClickPos();
+                    Vec2 end = position;
+                    if (uiState.getSelectedMaterial() != null) {
+                        InputHandler.COMMAND_QUEUE.add(new RectangleMaterialCommand(start, end, uiState.getSelectedMaterial()));
+                    }
+                    else if (uiState.getSelectedEntity() != null) {
+                        InputHandler.COMMAND_QUEUE.add(new RectangleEntityCommand(start, end, uiState.getSelectedEntity()));
+                    }
+                    uiState.setFirstClickPos(null);
+                }
             }
             default -> {}
         }
@@ -82,7 +97,7 @@ public class GridController implements NeedsSimulationState, NeedsUiState {
 
                 tile.setOnMouseClicked(event -> {
                     clickOnCell(new Vec2(cx, cy));
-                    if (uiState.getActiveTool() == ToolsType.MATERIALS && state.isPaused()){
+                    if (uiState.getActiveTool() == ToolsType.DRAW_MATERIAL && state.isPaused()){
                         tile.setFill(Color.web(
                                 uiState.getSelectedMaterial().getColorHex()
                         ));

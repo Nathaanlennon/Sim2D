@@ -49,6 +49,20 @@ public class InputHandler {
             case SetMaterialCommand s -> data.getGrid().getCell(s.position()).setMaterial(s.material());
             case AddEntityCommand a -> data.getGrid().getCell(a.position()).addEntity(a.entityType().createEntity());
             case RemoveEntityCommand r -> data.getGrid().getCell(r.position()).clearEntities();
+            case RectangleMaterialCommand r -> {
+                for (int y = r.start().y(); y <= r.end().y(); y++) {
+                    for (int x = r.start().x(); x <= r.end().x(); x++) {
+                        data.getGrid().getCell(x, y).setMaterial(r.material());
+                    }
+                }
+            }
+            case RectangleEntityCommand r -> {
+                for (int y = r.start().y(); y <= r.end().y(); y++) {
+                    for (int x = r.start().x(); x <= r.end().x(); x++) {
+                        data.getGrid().getCell(x, y).addEntity(r.entityType().createEntity());
+                    }
+                }
+            }
             default -> {
             }
         }

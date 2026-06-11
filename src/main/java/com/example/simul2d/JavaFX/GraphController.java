@@ -15,7 +15,7 @@ import javafx.scene.chart.XYChart;
 //TODO faire les bouttons sauvegarde et load
 
 
-public class GraphController {
+public class GraphController  {
 
     @FXML
     private LineChart<Number, Number> populationChart;

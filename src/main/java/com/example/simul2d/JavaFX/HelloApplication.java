@@ -42,7 +42,7 @@ public class HelloApplication extends Application {
         stage.show();
 
         List<Runnable> neededSimulationCallbacks = new ArrayList<>();
-        UiState UiState = new UiState(1);
+        UiState UiState = new UiState();
         // After loading, inject the published SimulationState into controllers
         Object controller = fxmlLoader.getController();
         if (controller instanceof NeedsSimulationState) {

@@ -2,6 +2,7 @@ package com.example.simul2d.JavaFX;
 
 import com.example.simul2d.Entities.Entities;
 import com.example.simul2d.grid.Material;
+import com.example.simul2d.grid.Vec2;
 
 public class UiState {
 
@@ -10,13 +11,8 @@ public class UiState {
     private ToolsType activeTool;
     private Material selectedMaterial;
     private Entities selectedEntity;
+    private Vec2 firstClickPos = null;
     
-    private int caca;
-    
-    public UiState(int caca) {
-        this.caca = caca;
-        
-    }
     public ToolsType getActiveTool() {
         return activeTool;
     }
@@ -31,6 +27,13 @@ public class UiState {
 
     public void setSelectedMaterial(Material selectedMaterial) {
         this.selectedMaterial = selectedMaterial;
+    }
+    public Vec2 getFirstClickPos() {
+        return firstClickPos;
+    }
+
+    public void setFirstClickPos(Vec2 firstClickPos) {
+        this.firstClickPos = firstClickPos;
     }
 
     public Entities getSelectedEntity() {
