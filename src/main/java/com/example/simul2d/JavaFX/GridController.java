@@ -1,14 +1,18 @@
 package com.example.simul2d.JavaFX;
 
 import com.example.simul2d.Core.SimulationState;
-import com.example.simul2d.Systems.ConsoleRenderSystem;
-import com.example.simul2d.Systems.input.Commands.*;
+import com.example.simul2d.Systems.input.Commands.AddEntityCommand;
+import com.example.simul2d.Systems.input.Commands.Command;
+import com.example.simul2d.Systems.input.Commands.RectangleEntityCommand;
+import com.example.simul2d.Systems.input.Commands.RectangleMaterialCommand;
+import com.example.simul2d.Systems.input.Commands.RemoveEntityCommand;
+import com.example.simul2d.Systems.input.Commands.SetMaterialCommand;
 import com.example.simul2d.Systems.input.InputHandler;
 import com.example.simul2d.grid.Cell;
 import com.example.simul2d.grid.Grid;
 import com.example.simul2d.grid.Material;
-
 import com.example.simul2d.grid.Vec2;
+
 import javafx.fxml.FXML;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
@@ -121,16 +125,28 @@ public class GridController implements NeedsSimulationState, NeedsUiState {
     @Override
     public void refreshUI() {
 
-        if (grid == null) {
+        // Always read the current grid from the shared SimulationState so we don't
+        // keep a stale reference when the grid is replaced (e.g., after loading).
+        Grid current = (state == null) ? null : state.getGrid();
+        if (current == null) {
             return;
         }
 
-        for(int y = 0; y< grid.getHeight();y++) {
-            for (int x = 0; x < grid.getWidth(); x++) {
+        // If the grid instance changed (load), reinitialize the display to match dimensions.
+        if (this.grid != current) {
+            this.grid = current;
+            initializeGridDisplay();
+        }
+
+        if (tiles == null) return;
+
+        int h = grid.getHeight();
+        int w = grid.getWidth();
+        for (int y = 0; y < h; y++) {
+            for (int x = 0; x < w; x++) {
                 Cell cell = grid.getCell(x, y);
                 String hex = cell != null ? cell.getColorHex() : Material.EMPTY.getColorHex();
                 tiles[y][x].setFill(Color.web(hex));
-
             }
         }
     }

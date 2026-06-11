@@ -1,9 +1,9 @@
 package com.example.simul2d.JavaFX;
 
-import com.example.simul2d.Core.SimulationState;
 import com.example.simul2d.Entities.Entities;
 import com.example.simul2d.Systems.ConsoleRenderSystem;
 import com.example.simul2d.grid.Material;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
