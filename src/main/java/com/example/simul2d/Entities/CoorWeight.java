@@ -1,4 +1,4 @@
-package com.example.simul2d.Entities.Mold;
+package com.example.simul2d.Entities;
 
 
 import com.example.simul2d.grid.Vec2;

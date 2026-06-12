@@ -29,8 +29,8 @@ public abstract class Mold extends Entity implements CanGrow, CanPropagate, Disp
      * @param minGrowthValueToPropagate minimum growth required for propagation
      * @param PropagationProbability the probability of successful propagation (0-1)
      */
-    public Mold(int growth, int growthRate, int minGrowthValueToPropagate, double PropagationProbability) {
-        super(growth);
+    public Mold(int growth, int growthRate, int minGrowthValueToPropagate, double PropagationProbability, Entities entityType) {
+        super(growth, entityType);
         this.growthRate = growthRate;
         this.minGrowthValueToPropagate = minGrowthValueToPropagate;
         this.PropagationProbability = PropagationProbability;

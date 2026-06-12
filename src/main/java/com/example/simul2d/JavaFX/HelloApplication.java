@@ -7,7 +7,6 @@ import java.util.List;
 import com.example.simul2d.Core.SimulationLoop;
 import com.example.simul2d.Core.SimulationState;
 
-import com.example.simul2d.Systems.ConsoleRenderSystem;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -42,6 +41,7 @@ public class HelloApplication extends Application {
         stage.show();
 
         List<Runnable> neededSimulationCallbacks = new ArrayList<>();
+        List<NeedsGraphValues> neededGraphCallbacks = new ArrayList<>();
         UiState UiState = new UiState();
         // After loading, inject the published SimulationState into controllers
         Object controller = fxmlLoader.getController();
@@ -64,12 +64,17 @@ public class HelloApplication extends Application {
             if (ctrl instanceof NeedsUiState) {
                 ((NeedsUiState) ctrl).setUiState(UiState);
             }
+            if (ctrl instanceof NeedsGraphValues){
+                neededGraphCallbacks.add((timeStep, populations) -> ((NeedsGraphValues) ctrl).addDataPoint(timeStep, populations));
+            }
             
         }
+        
 
         // keep loop/thread for shutdown
         this.simulationLoop = run.loop();
         this.simulationLoop.setContentUpdateCallbacks(neededSimulationCallbacks);
+        this.simulationLoop.getUpdateSimulationSystem().setGraphicsUpdateCallbacks(neededGraphCallbacks);
         this.simThread = run.thread();
         
         

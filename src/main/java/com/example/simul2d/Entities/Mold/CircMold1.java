@@ -1,4 +1,5 @@
 package com.example.simul2d.Entities.Mold;
+import com.example.simul2d.Entities.Entities;
 import com.example.simul2d.grid.Cell;
 
 
@@ -12,7 +13,7 @@ public class CircMold1 extends CircularMold {
     private static final String BASE_COLOR = "#FF5733";
 
     public CircMold1() {
-        super(0, 2, 50, 0.5); // Call the parent constructor with initial growth and growth rate and minimum growth value for propagation
+        super(0, 2, 50, 0.5, Entities.CIRC_MOLD1); // Call the parent constructor with initial growth and growth rate and minimum growth value for propagation
     }
 
     @Override

@@ -1,13 +1,17 @@
 package com.example.simul2d.JavaFX;
 
+import java.io.Console;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.example.simul2d.Entities.Entities;
+import com.example.simul2d.Systems.ConsoleRenderSystem;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 
+import javax.swing.*;
 
 
 //TODO faire une fonction refreshUI qui va etre appellé à chaque étape de la simulation et qui va mettre à jour le graphique en appelant addDataPoint avec les nouvelles données de population
@@ -15,7 +19,7 @@ import javafx.scene.chart.XYChart;
 //TODO faire les bouttons sauvegarde et load
 
 
-public class GraphController  {
+public class GraphController implements NeedsGraphValues {
 
     @FXML
     private LineChart<Number, Number> populationChart;
@@ -31,13 +35,23 @@ public class GraphController  {
     }
 
     /**
+     * Réinitialise le graphique (utile pour une nouvelle simulation).
+     */
+    public void clear() {
+        populationChart.getData().clear();
+        seriesMap.clear();
+    }
+
+    /**
      * Ajoute un point de données pour tous les types de moisissures.
      * @param timeStep      le numéro du pas de temps
      * @param populations   une map associant le nom du type de moule → sa population
      */
-    public void addDataPoint(int timeStep, Map<String, Integer> populations) {
-        for (Map.Entry<String, Integer> entry : populations.entrySet()) {
-            String moldType = entry.getKey();
+    @Override
+    public void addDataPoint(double timeStep, Map<Entities, Integer> populations) {
+        System.out.println("Adding data point at time " + timeStep + ": " + populations.toString());
+        for (Map.Entry<Entities, Integer> entry : populations.entrySet()) {
+            String moldType = entry.getKey().toString();
             int count = entry.getValue();
 
             XYChart.Series<Number, Number> series = seriesMap.get(moldType);
@@ -49,13 +63,5 @@ public class GraphController  {
             }
             series.getData().add(new XYChart.Data<>(timeStep, count));
         }
-    }
-
-    /**
-     * Réinitialise le graphique (utile pour une nouvelle simulation).
-     */
-    public void clear() {
-        populationChart.getData().clear();
-        seriesMap.clear();
     }
 }

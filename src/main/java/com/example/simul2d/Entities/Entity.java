@@ -15,9 +15,19 @@ import com.example.simul2d.grid.Cell;
  */
 public abstract class Entity implements Serializable {
     protected int growth;
+    private Entities entityType;
 
-    public Entity(int growth) {
-        this.growth = growth;
+    public Entity(int growth, Entities entityType) {
+        this.growth = getGrowth(growth);
+        this.entityType = entityType;
+    }
+
+    private static int getGrowth(int growth) {
+        return growth;
+    }
+
+    public Entities getEntityType() {
+        return entityType;
     }
 
     public Entity() {
