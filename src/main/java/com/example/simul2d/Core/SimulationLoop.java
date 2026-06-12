@@ -39,6 +39,9 @@ public class SimulationLoop {
         this.contentUpdateCallbacks = callbacks;
     }
 //get methods
+    public UpdateSimulationSystem getUpdateSimulationSystem() {
+        return updateSimulationSystem;
+    }
 
     /**
      * Returns whether the loop is still running.

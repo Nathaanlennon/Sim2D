@@ -4,6 +4,8 @@ package com.example.simul2d.Entities.Mold;
 import java.util.List;
 import java.util.Objects;
 
+import com.example.simul2d.Entities.CoorWeight;
+import com.example.simul2d.Entities.Entities;
 import com.example.simul2d.grid.Cell;
 
 public class DividedMold1 extends ProximalMold {
@@ -11,7 +13,7 @@ public class DividedMold1 extends ProximalMold {
     private static final String BASE_COLOR = "#9B59B6";
     private static final int MAX_ABSORPTION = 100; // Maximum growth units that can be absorbed during propagation
     public DividedMold1() {
-        super(0, 3, 100, 0.4); // Call the parent constructor with initial growth and growth rate and minimum growth value for propagation
+        super(0, 3, 100, 0.4, Entities.DIVIDED_MOLD1); // Call the parent constructor with initial growth and growth rate and minimum growth value for propagation
     }
 
     @Override
