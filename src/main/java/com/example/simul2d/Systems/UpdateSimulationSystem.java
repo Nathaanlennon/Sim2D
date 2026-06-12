@@ -1,18 +1,18 @@
 package com.example.simul2d.Systems;
 
-import com.example.simul2d.Core.SimulationState;
-import com.example.simul2d.Entities.CanGrow;
-import com.example.simul2d.Entities.CanPropagate;
-import com.example.simul2d.Entities.Entities;
-import com.example.simul2d.Entities.Entity;
-import com.example.simul2d.JavaFX.NeedsGraphValues;
-import com.example.simul2d.grid.Cell;
-import com.example.simul2d.grid.Vec2;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.example.simul2d.Core.SimulationState;
+import com.example.simul2d.Entities.CanGrow;
+import com.example.simul2d.Entities.CanPropagate;
+import com.example.simul2d.Entities.Entities;
+import com.example.simul2d.JavaFX.NeedsGraphValues;
+import com.example.simul2d.grid.Cell;
+import com.example.simul2d.grid.Vec2;
+
+import javafx.application.Platform;
 /**
  * Applies one simulation step to the current state.
  */
@@ -101,11 +101,11 @@ public class UpdateSimulationSystem {
 
             }
         }
-        if (data.getTime() % timeBetweenGraphicsUpdates == 0 && graphicsUpdateCallbacks != null) {
-            for (NeedsGraphValues callback : graphicsUpdateCallbacks) {
-                callback.addDataPoint(data.getTime(), entitiesGrowthCount);
-            }
-        }
+        if (data.getTime() % timeBetweenGraphicsUpdates == 0 && graphicsUpdateCallbacks != null && entitiesGrowthCount != null) {
+                    for (NeedsGraphValues callback : graphicsUpdateCallbacks) {
+                        Platform.runLater(() -> callback.addDataPoint(data.getTime(), new HashMap<>(entitiesGrowthCount)));
+                    }
+                }
 //override methods
 
     }
