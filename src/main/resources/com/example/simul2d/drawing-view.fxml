@@ -9,14 +9,29 @@
 <VBox xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.example.simul2d.JavaFX.DrawingController"
-            prefHeight="400.0" prefWidth="600.0">
-    <VBox fx:id="buttonContainerMaterials"/>
-    <VBox fx:id="buttonContainerEntities"/>
-    
-    <Button text="Erase Material" onAction="#handleEraseMaterials"/>
-    <Button text="Erase Entity" onAction="#handleEraseEntities"/>
-    <Button text="Clear entities" onAction="#handleClearEntities"/>
-    <Button text="Rectangle Tool" onAction="#handleRectangleTool"/>
+            prefHeight="400.0" prefWidth="220.0" spacing="8" alignment="TOP_CENTER" style="-fx-padding:8;">
+
+    <!-- Materials block (placed on top) -->
+    <VBox spacing="6" alignment="CENTER" style="-fx-padding:6; -fx-border-color: transparent; -fx-border-width:0;" >
+        <Label text="Materials" style="-fx-font-weight: bold;"/>
+        <VBox fx:id="buttonContainerMaterials" spacing="6" prefWidth="140" alignment="CENTER"/>
+    </VBox>
+    <Separator />
+
+    <!-- Entities block -->
+    <VBox spacing="6" alignment="CENTER" style="-fx-padding:6;">
+        <Label text="Entities" style="-fx-font-weight: bold;"/>
+        <VBox fx:id="buttonContainerEntities" spacing="6" prefWidth="140" alignment="CENTER"/>
+    </VBox>
+    <Separator />
+
+    <!-- Tools -->
+    <VBox spacing="6" alignment="CENTER">
+        <Button text="Erase Material" onAction="#handleEraseMaterials" prefWidth="140" maxWidth="140"/>
+        <Button text="Erase Entity" onAction="#handleEraseEntities" prefWidth="140" maxWidth="140"/>
+        <Button text="Clear entities" onAction="#handleClearEntities"/>
+    <Button text="Rectangle Tool" onAction="#handleRectangleTool" prefWidth="140" maxWidth="140"/>
+    </VBox>
     <Label fx:id="currentToolLabel" text="Current Tool: None"/>
     <Label fx:id="selected" text="Selected: None"/>
 

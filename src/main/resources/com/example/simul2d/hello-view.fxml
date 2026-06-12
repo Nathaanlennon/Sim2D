@@ -4,6 +4,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Priority?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
 
 <?import javafx.scene.control.Label?>
 <VBox alignment="CENTER" spacing="20.0"
@@ -17,15 +18,21 @@
         <!-- LEFT (1/4) -->
         <VBox fx:id="leftPane" HBox.hgrow="ALWAYS"
               prefWidth="250"
-              style="-fx-border-color: #999; -fx-border-width: 1; -fx-padding: 6;">
+              spacing="12"
+              alignment="TOP_CENTER"
+              style="-fx-border-color: #999; -fx-border-width: 1; -fx-padding: 12;">
 
-            <fx:include fx:id="drawingControl" source="drawing-view.fxml"/>
-            <fx:include fx:id="timeControlPane"
-                        source="time-control-view.fxml"/>
-            <fx:include fx:id="saveControl" source="save-control-view.fxml"/>
-                        
-
-
+            <VBox alignment="CENTER" maxWidth="220">
+              <fx:include fx:id="drawingControl" source="drawing-view.fxml" VBox.vgrow="NEVER"/>
+            </VBox>
+            <Separator />
+            <VBox alignment="CENTER" maxWidth="220">
+              <fx:include fx:id="timeControlPane" source="time-control-view.fxml" VBox.vgrow="NEVER"/>
+            </VBox>
+            <Separator />
+            <VBox alignment="CENTER" maxWidth="220">
+              <fx:include fx:id="saveControl" source="save-control-view.fxml" VBox.vgrow="NEVER"/>
+            </VBox>
 
         </VBox>
 

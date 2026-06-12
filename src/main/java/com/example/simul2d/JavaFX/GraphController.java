@@ -6,11 +6,10 @@ import java.util.Map;
 import com.example.simul2d.Entities.Entities;
 
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
-
-
 //TODO faire une fonction refreshUI qui va etre appellé à chaque étape de la simulation et qui va mettre à jour le graphique en appelant addDataPoint avec les nouvelles données de population
 //TODO on va prendre une hashmap des valeurs de tot growth pour chaque type de mold
 //TODO faire les bouttons sauvegarde et load
@@ -28,6 +27,7 @@ public class GraphController implements NeedsGraphValues {
     public void initialize() {
         // Configuration facultative de l'axe X (pas forcément nécessaire)
         NumberAxis xAxis = (NumberAxis) populationChart.getXAxis();
+        populationChart.setLegendVisible(false);
         xAxis.setForceZeroInRange(false);
     }
 
@@ -56,6 +56,16 @@ public class GraphController implements NeedsGraphValues {
                 series = new XYChart.Series<>();
                 series.setName(moldType);
                 populationChart.getData().add(series);
+
+
+                
+                // Forcer création des nodes puis appliquer le style si disponible
+                populationChart.applyCss();
+                populationChart.layout();
+                Node sNode = series.getNode();
+                if (sNode != null) {
+                    sNode.setStyle("-fx-stroke: " + entry.getKey().getColorHex() + ";");
+                }
                 seriesMap.put(moldType, series);
                 
             }
