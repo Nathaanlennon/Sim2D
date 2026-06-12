@@ -26,4 +26,17 @@ public enum Entities {
             case DIVIDED_MOLD1 -> new DividedMold1();
         };
     }
+
+    public static Entities fromString(String text) {
+        if (text == null) return null;
+
+        String t = text.trim();
+
+        for (Entities e : values()) {
+            if (e.name().equalsIgnoreCase(t)) {
+                return e;
+            }
+        }
+        return null;
+    }
 }

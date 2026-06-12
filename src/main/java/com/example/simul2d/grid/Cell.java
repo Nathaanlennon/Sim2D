@@ -234,7 +234,6 @@ public class Cell implements Serializable {
      * is stored in this cell
      */
     public Entity getEntity(Entities entity) {
-
         return entities.get(entity);
     }
 

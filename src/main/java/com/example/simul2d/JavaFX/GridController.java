@@ -1,12 +1,7 @@
 package com.example.simul2d.JavaFX;
 
 import com.example.simul2d.Core.SimulationState;
-import com.example.simul2d.Systems.input.Commands.AddEntityCommand;
-import com.example.simul2d.Systems.input.Commands.Command;
-import com.example.simul2d.Systems.input.Commands.RectangleEntityCommand;
-import com.example.simul2d.Systems.input.Commands.RectangleMaterialCommand;
-import com.example.simul2d.Systems.input.Commands.RemoveEntityCommand;
-import com.example.simul2d.Systems.input.Commands.SetMaterialCommand;
+import com.example.simul2d.Systems.input.Commands.*;
 import com.example.simul2d.Systems.input.InputHandler;
 import com.example.simul2d.grid.Cell;
 import com.example.simul2d.grid.Grid;
@@ -43,6 +38,9 @@ public class GridController implements NeedsSimulationState, NeedsUiState {
             }
             case DRAW_ENTITY -> {
                 if(uiState.getSelectedEntity()!=null) InputHandler.COMMAND_QUEUE.add(new AddEntityCommand(position, uiState.getSelectedEntity()));
+            }
+            case CLEAR_ENTITIES -> {
+                InputHandler.COMMAND_QUEUE.add(new ClearEntitiesCommand(position));
             }
             case ERASE_ENTITY -> {
                 InputHandler.COMMAND_QUEUE.add(new RemoveEntityCommand(position, uiState.getSelectedEntity()));

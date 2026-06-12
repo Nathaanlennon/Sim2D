@@ -15,6 +15,7 @@
     
     <Button text="Erase Material" onAction="#handleEraseMaterials"/>
     <Button text="Erase Entity" onAction="#handleEraseEntities"/>
+    <Button text="Clear entities" onAction="#handleClearEntities"/>
     <Button text="Rectangle Tool" onAction="#handleRectangleTool"/>
     <Label fx:id="currentToolLabel" text="Current Tool: None"/>
     <Label fx:id="selected" text="Selected: None"/>

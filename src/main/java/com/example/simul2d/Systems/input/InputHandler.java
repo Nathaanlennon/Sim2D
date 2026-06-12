@@ -2,6 +2,7 @@ package com.example.simul2d.Systems.input;
 
 import com.example.simul2d.Core.SimulationState;
 import com.example.simul2d.Systems.ConsoleRenderSystem;
+import com.example.simul2d.Systems.SaveSystem;
 import com.example.simul2d.Systems.input.Commands.*;
 
 
@@ -48,7 +49,8 @@ public class InputHandler {
             case IncreaseSpeedCommand i -> data.setSpeed(data.getSpeed() + 1);
             case SetMaterialCommand s -> data.getGrid().getCell(s.position()).setMaterial(s.material());
             case AddEntityCommand a -> data.getGrid().getCell(a.position()).addEntity(a.entityType().createEntity());
-            case RemoveEntityCommand r -> data.getGrid().getCell(r.position()).clearEntities();
+            case RemoveEntityCommand r -> data.getGrid().getCell(r.position()).removeEntity(r.entityType());
+            case ClearEntitiesCommand c -> data.getGrid().getCell(c.position()).clearEntities();
             case RectangleMaterialCommand r -> {
                 for (int y = r.start().y(); y <= r.end().y(); y++) {
                     for (int x = r.start().x(); x <= r.end().x(); x++) {
@@ -62,6 +64,21 @@ public class InputHandler {
                         data.getGrid().getCell(x, y).addEntity(r.entityType().createEntity());
                     }
                 }
+            }
+            case SaveCommand s -> {
+                try {
+                    SaveSystem.saveSystem(data.getGrid(), s.filePath());
+                } catch (Exception e) {
+                    ConsoleRenderSystem.printSomething("Failed to save: " + e.getMessage());
+                }
+            }
+            case LoadCommand l -> {
+                try {
+                    data.setGrid(SaveSystem.loadSystem(l.filePath()));
+                } catch (Exception e) {
+                    ConsoleRenderSystem.printSomething("Failed to load: " + e.getMessage());
+                }
+                data.changePause(false); //TODO: problems while loading, needs lock unlock reading writting 
             }
             default -> {
             }

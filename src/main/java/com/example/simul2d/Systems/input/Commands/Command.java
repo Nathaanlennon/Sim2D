@@ -9,5 +9,10 @@ public sealed interface Command
         AddEntityCommand,
         RemoveEntityCommand,
         RectangleMaterialCommand,
-        RectangleEntityCommand {
+        RectangleEntityCommand,
+        SaveCommand,
+        LoadCommand,
+        ClearEntitiesCommand
+{
+         
 }

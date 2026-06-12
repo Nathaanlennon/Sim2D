@@ -8,6 +8,7 @@ import com.example.simul2d.Entities.Entity;
 import com.example.simul2d.JavaFX.NeedsGraphValues;
 import com.example.simul2d.grid.Cell;
 import com.example.simul2d.grid.Vec2;
+import javafx.application.Platform;
 
 import java.util.HashMap;
 import java.util.List;
@@ -21,7 +22,7 @@ public class UpdateSimulationSystem {
     private final PropagationSystem propagationSystem;
     private final CombatSystem combatSystem = new CombatSystem();
     private volatile List<NeedsGraphValues> graphicsUpdateCallbacks;
-    private int timeBetweenGraphicsUpdates = 5; // Update graphics every 5 simulation steps
+    private double timeBetweenGraphicsUpdates; // Update graphics every 5 simulation steps
 
     //constructors
 
@@ -33,6 +34,8 @@ public class UpdateSimulationSystem {
     public UpdateSimulationSystem(SimulationState data) {
         this.data = data;
         this.propagationSystem = new PropagationSystem(data);
+        this.timeBetweenGraphicsUpdates = 5 * data.getSpeed();
+        
     }
 
     //set methods
@@ -59,6 +62,7 @@ public class UpdateSimulationSystem {
      * Advances the simulation by one update tick.
      */
     public void update() {
+        this.timeBetweenGraphicsUpdates = 5 * data.getSpeed();
         data.addTime(1);
         Map<Entities, Integer> entitiesGrowthCount;
 
@@ -101,9 +105,9 @@ public class UpdateSimulationSystem {
 
             }
         }
-        if (data.getTime() % timeBetweenGraphicsUpdates == 0 && graphicsUpdateCallbacks != null) {
+        if (data.getTime() % timeBetweenGraphicsUpdates == 0 && graphicsUpdateCallbacks != null && entitiesGrowthCount != null) {
             for (NeedsGraphValues callback : graphicsUpdateCallbacks) {
-                callback.addDataPoint(data.getTime(), entitiesGrowthCount);
+                Platform.runLater(() -> callback.addDataPoint(data.getTime(), new HashMap<>(entitiesGrowthCount)));
             }
         }
 //override methods

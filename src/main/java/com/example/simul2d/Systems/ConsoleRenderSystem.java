@@ -2,7 +2,9 @@ package com.example.simul2d.Systems;
 
 import com.example.simul2d.Core.SimulationState;
 import com.example.simul2d.Entities.Entities;
+import com.example.simul2d.Entities.Entity;
 import com.example.simul2d.Entities.Mold.CircMold1;
+import com.example.simul2d.grid.Cell;
 
 import javax.swing.*;
 
@@ -64,8 +66,9 @@ public class ConsoleRenderSystem {
         clear();
 
         System.out.println(data.getGrid().toString());
-
-        ConsoleRenderSystem.printSomething(data.getGrid().getCell(0,0).getEntity(Entities.CIRC_MOLD1).getGrowth()+"");
+        Cell cell = data.getGrid().getCell(0,0);
+        Entity entity = cell.getEntity(Entities.CIRC_MOLD1);
+        ConsoleRenderSystem.printSomething(entity.getGrowth()+"");
         
         System.out.printf("time : %f, speed : %f \n", data.getTime(), data.getSpeed());
         System.out.flush();  // Flush the output to ensure it appears immediately

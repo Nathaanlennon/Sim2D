@@ -72,7 +72,7 @@ public class SimulationLoop {
 
                 // update an atomic snapshot of the grid so the UI can read a stable
                 // pre-rendered string representation without locking.
-                data.updateGridSnapshot();
+//                data.updateGridSnapshot();
 
                 render.printSimulation();
                 if (contentUpdateCallbacks != null) {

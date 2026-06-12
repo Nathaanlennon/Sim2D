@@ -49,7 +49,9 @@ public class SimulationState {
     public void changePause() {
         boolean copyPaused = this.paused;
         this.paused = !copyPaused;
-        
+    }
+    public void changePause(boolean paused) {
+        this.paused = paused;
     }
     
     /**

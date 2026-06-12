@@ -57,6 +57,7 @@ public class GraphController implements NeedsGraphValues {
                 series.setName(moldType);
                 populationChart.getData().add(series);
                 seriesMap.put(moldType, series);
+                
             }
             series.getData().add(new XYChart.Data<>(timeStep, count));
         }

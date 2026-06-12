@@ -5,5 +5,6 @@ public enum ToolsType {
     DRAW_ENTITY,
     ERASE_MATERIAL,
     ERASE_ENTITY,
+    CLEAR_ENTITIES,
     RECTANGLE,
 }

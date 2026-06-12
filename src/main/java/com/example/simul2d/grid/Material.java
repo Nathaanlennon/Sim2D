@@ -20,6 +20,19 @@ public enum Material implements Serializable {
         this.colorHex = colorHex;
     }
 
+    public static Material fromString(String text) {
+        if (text == null) return null;
+
+        String t = text.trim();
+
+        for (Material m : values()) {
+            if (m.name().equalsIgnoreCase(t)) {
+                return m;
+            }
+        }
+        return null;
+    }
+
     public double getVulnerability() {
         return vunerability;
     }

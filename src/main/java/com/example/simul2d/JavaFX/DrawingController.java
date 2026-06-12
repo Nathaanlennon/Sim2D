@@ -41,6 +41,12 @@ public class DrawingController implements NeedsUiState{
         this.uiState.setActiveTool(ToolsType.RECTANGLE);
         this.currentToolLabel.setText("Selected Tool: Rectangle");
     }
+    public void handleClearEntities() {
+        this.uiState.setActiveTool(ToolsType.CLEAR_ENTITIES);
+        this.currentToolLabel.setText("Selected Tool: Clear Entities");
+        this.uiState.setSelectedMaterial(null);
+        this.uiState.setSelectedEntity(null);
+    }
 //public methods
     @FXML
     public void initialize() {

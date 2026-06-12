@@ -6,6 +6,9 @@ import java.io.IOException;
 import com.example.simul2d.Core.SimulationState;
 import com.example.simul2d.Systems.ConsoleRenderSystem;
 import com.example.simul2d.Systems.SaveSystem;
+import com.example.simul2d.Systems.input.Commands.LoadCommand;
+import com.example.simul2d.Systems.input.Commands.SaveCommand;
+import com.example.simul2d.Systems.input.InputHandler;
 import com.example.simul2d.grid.Grid;
 
 import javafx.fxml.FXML;
@@ -29,7 +32,7 @@ public class SaveController implements NeedsSimulationState {
         }
 
         // Ensure we save a stable grid: pause the simulation if it's running,
-        // then resume it afterwards only if we paused it here.
+        // then resume it afterward only if we paused it here.
         boolean wasPaused = simulationState.isPaused();
         if (!wasPaused) {
             simulationState.changePause();
@@ -41,17 +44,9 @@ public class SaveController implements NeedsSimulationState {
         File file = chooser.showSaveDialog(root == null || root.getScene() == null ? null : root.getScene().getWindow());
         if (file == null) return;
 
-        try {
-            SaveSystem.saveSystem(simulationState.getGrid(), file.getAbsolutePath());
-            ConsoleRenderSystem.printSomething("Saved simulation to: " + file.getAbsolutePath());
-            showAlert(AlertType.INFORMATION, "Saved", "Saved simulation to " + file.getName());
-        } catch (IOException e) {
-            showAlert(AlertType.ERROR, "Save failed", e.getMessage());
-        } finally {
-            if (!wasPaused) {
-                simulationState.changePause();
-            }
-        }
+
+        InputHandler.COMMAND_QUEUE.add(new SaveCommand(file.getAbsolutePath()));
+
     }
 
     @FXML
@@ -67,22 +62,10 @@ public class SaveController implements NeedsSimulationState {
         if (simulationState != null && !wasPaused) {
             simulationState.changePause();
         }
-
-        try {
-            Grid loaded = SaveSystem.loadSystem(file.getAbsolutePath());
-            if (simulationState != null) {
-                simulationState.setGrid(loaded);
-                simulationState.updateGridSnapshot();
-            }
-            ConsoleRenderSystem.printSomething("Loaded simulation from: " + file.getAbsolutePath());
-            showAlert(AlertType.INFORMATION, "Loaded", "Loaded simulation from " + file.getName());
-        } catch (IOException | ClassNotFoundException e) {
-            showAlert(AlertType.ERROR, "Load failed", e.getMessage());
-        } finally {
-            if (simulationState != null && !wasPaused) {
-                simulationState.changePause();
-            }
-        }
+        
+        
+        InputHandler.COMMAND_QUEUE.add(new LoadCommand(file.getAbsolutePath()));
+        
     }
 
     private void showAlert(AlertType type, String title, String text) {
