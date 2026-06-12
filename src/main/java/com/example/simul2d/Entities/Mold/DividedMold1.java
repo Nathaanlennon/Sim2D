@@ -29,13 +29,13 @@ public class DividedMold1 extends ProximalMold {
     public void propagateTo(Cell targetCell) {
         Objects.requireNonNull(targetCell, "targetCell must not be null");
 
-        if (targetCell.getEntities().containsKey(this.getClass())) {
+        if (targetCell.getEntities().containsKey(this.getEntityType())) {
             int available = Math.max(0, targetCell.getCapacity() - targetCell.getTotalGrowthOnCell());
             int toAbsorb = Math.min(this.getGrowth(), Math.min(available, MAX_ABSORPTION)); // Absorb up to 50 units of growth, or as much as available
 
             this.setGrowth(this.getGrowth() - toAbsorb);
             if (toAbsorb > 0) {
-                DividedMold1 existing = (DividedMold1) targetCell.getEntities().get(this.getClass());
+                DividedMold1 existing = (DividedMold1) targetCell.getEntities().get(this.getEntityType());
                 existing.setGrowth(existing.getGrowth() + toAbsorb);
                 targetCell.updateTotalGrowthOnCell();
             }
