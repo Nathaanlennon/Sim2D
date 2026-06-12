@@ -10,8 +10,6 @@ import com.example.simul2d.grid.Cell;
  */
 public class CircMold1 extends CircularMold {
 
-    private static final String BASE_COLOR = "#FF5733";
-
     public CircMold1() {
         super(0, 2, 50, 0.5, Entities.CIRC_MOLD1); // Call the parent constructor with initial growth and growth rate and minimum growth value for propagation
     }
@@ -23,7 +21,7 @@ public class CircMold1 extends CircularMold {
     
     @Override
     public String getColorHex() {
-        return BASE_COLOR; // Return a fixed color for this mold variant
+        return getEntityType().getColorHex();
     }
 
 

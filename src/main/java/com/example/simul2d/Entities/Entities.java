@@ -5,11 +5,20 @@ import com.example.simul2d.Entities.Mold.CircMold1;
 import com.example.simul2d.Entities.Mold.DividedMold1;
 
 public enum Entities {
-    AXIAL_MOLD1,
-    CIRC_MOLD1,
-    DIVIDED_MOLD1;
-    
-    
+    AXIAL_MOLD1("#33A1FF"),
+    CIRC_MOLD1("#FF5733"),
+    DIVIDED_MOLD1("#9B59B6");
+
+    private final String colorHex;
+
+    Entities(String colorHex) {
+        this.colorHex = colorHex;
+    }
+
+    public String getColorHex() {
+        return colorHex;
+    }
+
     public Entity createEntity() {
         return switch (this) {
             case AXIAL_MOLD1 -> new AxialMold1();

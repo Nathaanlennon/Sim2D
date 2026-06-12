@@ -1,17 +1,14 @@
 package com.example.simul2d.JavaFX;
 
-import java.io.Console;
 import java.util.HashMap;
 import java.util.Map;
 
 import com.example.simul2d.Entities.Entities;
-import com.example.simul2d.Systems.ConsoleRenderSystem;
+
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
-
-import javax.swing.*;
 
 
 //TODO faire une fonction refreshUI qui va etre appellé à chaque étape de la simulation et qui va mettre à jour le graphique en appelant addDataPoint avec les nouvelles données de population
