@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.HBox?>
+
+<HBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.simul2d.JavaFX.SaveController" spacing="10" style="-fx-padding: 10;">
+    <Button text="Save" prefWidth="100" onAction="#handleSave"/>
+    <Button text="Load" prefWidth="100" onAction="#handleLoad"/>
+</HBox>

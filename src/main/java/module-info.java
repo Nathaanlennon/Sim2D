@@ -9,7 +9,7 @@ module com.example.simul2d {
     // `opens` autorise JavaFX FXML à accéder aux champs/méthodes annotés @FXML.
     opens com.example.simul2d to javafx.fxml;
     // `exports` rend le package visible aux autres modules.
-    exports com.example.simul2d;
+    //exports com.example.simul2d;
     exports com.example.simul2d.JavaFX;
     opens com.example.simul2d.JavaFX to javafx.fxml;
 }

@@ -22,6 +22,10 @@
             <fx:include fx:id="drawingControl" source="drawing-view.fxml"/>
             <fx:include fx:id="timeControlPane"
                         source="time-control-view.fxml"/>
+            <fx:include fx:id="saveControl" source="save-control-view.fxml"/>
+                        
+
+
 
         </VBox>
 
