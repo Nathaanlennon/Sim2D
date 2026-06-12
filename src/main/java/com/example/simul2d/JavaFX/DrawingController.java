@@ -5,8 +5,11 @@ import com.example.simul2d.Systems.ConsoleRenderSystem;
 import com.example.simul2d.grid.Material;
 
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
 public class DrawingController implements NeedsUiState{
@@ -55,7 +58,18 @@ public class DrawingController implements NeedsUiState{
                 this.selected.setText(mat.name());
             });
             btn.setText(mat.name());
-            buttonContainerMaterials.getChildren().add(btn);
+            btn.setPrefWidth(110);
+            btn.setMaxWidth(110);
+
+            Region colorBox = new Region();
+            colorBox.setPrefSize(16, 16);
+            colorBox.setStyle("-fx-background-color: " + mat.getColorHex() + "; -fx-border-radius: 3; -fx-background-radius: 3;");
+
+            HBox item = new HBox(8, colorBox, btn);
+            item.setMaxWidth(140);
+            item.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
+            VBox.setMargin(item, new Insets(4,0,4,0));
+            buttonContainerMaterials.getChildren().add(item);
         }
         for (Entities ent : Entities.values()) {
             Button btn = new Button(ent.name());
@@ -67,7 +81,18 @@ public class DrawingController implements NeedsUiState{
                 this.selected.setText(ent.name());
             });
             btn.setText(ent.name());
-            buttonContainerEntities.getChildren().add(btn);
+            btn.setPrefWidth(110);
+            btn.setMaxWidth(110);
+
+            Region colorBox = new Region();
+            colorBox.setPrefSize(16, 16);
+            colorBox.setStyle("-fx-background-color: " + ent.getColorHex() + "; -fx-border-radius: 3; -fx-background-radius: 3;");
+
+            HBox item = new HBox(8, colorBox, btn);
+            item.setMaxWidth(140);
+            item.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
+            VBox.setMargin(item, new Insets(4,0,4,0));
+            buttonContainerEntities.getChildren().add(item);
         }
     }
 //override methods
