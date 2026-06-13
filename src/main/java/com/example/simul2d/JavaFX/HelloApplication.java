@@ -8,6 +8,7 @@ import java.util.List;
 import com.example.simul2d.Core.SimulationLoop;
 import com.example.simul2d.Core.SimulationState;
 
+import com.example.simul2d.Entities.Entities;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -72,7 +73,7 @@ public class HelloApplication extends Application {
                             ((NeedsUiState) ctrl).setUiState(UiState);
                         }
                         if (ctrl instanceof NeedsGraphValues){
-                            neededGraphCallbacks.add((timeStep, populations) -> ((NeedsGraphValues) ctrl).addDataPoint(timeStep, populations));
+                            neededGraphCallbacks.add((timeStep, populations,infectedCells) -> ((NeedsGraphValues) ctrl).graphStep(timeStep, populations, infectedCells));
                         }
                     }
 
