@@ -17,12 +17,14 @@ import javafx.scene.control.TextField;
  * Controller for the time control panel of the simulation UI.
  * <p>
  * Provides buttons and displays for:
+ * </p>
  * <ul>
  *   <li>Play / pause toggle</li>
  *   <li>Speed increase / decrease</li>
  *   <li>Direct speed setting (1×, 2×, 3×)</li>
  *   <li>Manual step execution with a configurable number of steps</li>
  * </ul>
+ * <p>
  * This controller implements {@link NeedsSimulationState} so it can be
  * injected with the shared {@link SimulationState} and refresh its UI
  * accordingly.
