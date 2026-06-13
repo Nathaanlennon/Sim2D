@@ -29,17 +29,19 @@ public class GridController implements NeedsSimulationState, NeedsUiState {
     private Rectangle[][] tiles; // 2D array to hold references to the grid cell rectangles
 
 
-    private void clickOnCell(Vec2 position) {
+    private void clickOnCell(Vec2 position, Rectangle cell) {
         if (uiState.getActiveTool() == null) return;
         switch (uiState.getActiveTool()) {
             case DRAW -> {
                 if (uiState.getMode() == ToolsType.ENTITY_MODE) {
                     if (uiState.getSelectedEntity() != null) {
                         InputHandler.COMMAND_QUEUE.add(new AddEntityCommand(position, uiState.getSelectedEntity()));
+                        cell.setFill(Color.web(uiState.getSelectedEntity().getColorHex()));
                     }
                 } else if (uiState.getMode() == ToolsType.MATERIAL_MODE) {
                     if (uiState.getSelectedMaterial() != null) {
                         InputHandler.COMMAND_QUEUE.add(new SetMaterialCommand(position, uiState.getSelectedMaterial()));
+                        cell.setFill(Color.web(uiState.getSelectedMaterial().getColorHex()));
                     }
                 }
             }
@@ -54,13 +56,16 @@ public class GridController implements NeedsSimulationState, NeedsUiState {
                         InputHandler.COMMAND_QUEUE.add(new SetMaterialCommand(position, Material.EMPTY));
                     }
                 }
+                cell.setFill(Color.web(Material.EMPTY.getColorHex()));
             }
             case CLEAR_ENTITIES -> {
                 InputHandler.COMMAND_QUEUE.add(new ClearEntitiesCommand(position));
+                cell.setFill(Color.web(Material.EMPTY.getColorHex()));
             }
             case RECTANGLE -> {
                 if (uiState.getFirstClickPos() == null) {
                     uiState.setFirstClickPos(position);
+                    cell.setFill(Color.web("#000000"));
                 } else {
                     Vec2 start = uiState.getFirstClickPos();
                     Vec2 end = position;
@@ -117,7 +122,11 @@ public class GridController implements NeedsSimulationState, NeedsUiState {
         });
     }
 
+
+
     private void initializeGridDisplay() {
+
+
         if (grid == null) {
             return;
         }
@@ -143,12 +152,7 @@ public class GridController implements NeedsSimulationState, NeedsUiState {
 
                 tile.setOnMouseEntered(event -> {
                     if (uiState.isHoldClick()) {
-                        clickOnCell(new Vec2(cx, cy));
-                        if (uiState.getMode() == ToolsType.MATERIAL_MODE && uiState.getActiveTool() == ToolsType.DRAW) {
-                            tile.setFill(Color.web(
-                                    uiState.getSelectedMaterial().getColorHex()
-                            ));
-                        }
+                        clickOnCell(new Vec2(cx, cy), tile);
                     }
                 });
 
@@ -157,12 +161,8 @@ public class GridController implements NeedsSimulationState, NeedsUiState {
                     if (event.getButton() == MouseButton.SECONDARY){
                         uiState.changeHoldClick();
                     }
-                    clickOnCell(new Vec2(cx, cy));
-                    if (uiState.getMode() == ToolsType.MATERIAL_MODE && uiState.getActiveTool() == ToolsType.DRAW) {
-                        tile.setFill(Color.web(
-                                uiState.getSelectedMaterial().getColorHex()
-                        ));
-                    }
+                    clickOnCell(new Vec2(cx, cy), tile);
+
                 });
 
                 tiles[y][x] = tile;

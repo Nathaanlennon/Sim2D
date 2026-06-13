@@ -5,6 +5,6 @@ import com.example.simul2d.Entities.Entities;
 import java.util.Map;
 
 public interface NeedsGraphValues {
-    void addDataPoint(double timeStep, Map<Entities, Integer> populations);
+    void graphStep(double timeStep, Map<Entities, Integer> populationsWeight, Map<Entities, Integer> infectedCells);
 
 }

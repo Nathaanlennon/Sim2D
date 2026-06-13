@@ -39,13 +39,17 @@ public class GraphController implements NeedsGraphValues {
         seriesMap.clear();
     }
 
+    @Override
+    public void graphStep(double timeStep, Map<Entities, Integer> populationsWeight, Map<Entities, Integer> infectedCells){
+        addDataPoint(timeStep, populationsWeight);
+    }
     /**
      * Ajoute un point de données pour tous les types de moisissures.
      * @param timeStep      le numéro du pas de temps
      * @param populations   une map associant le nom du type de moule → sa population
      */
-    @Override
-    public void addDataPoint(double timeStep, Map<Entities, Integer> populations) {
+
+    private void addDataPoint(double timeStep, Map<Entities, Integer> populations) {
         System.out.println("Adding data point at time " + timeStep + ": " + populations.toString());
         for (Map.Entry<Entities, Integer> entry : populations.entrySet()) {
             String moldType = entry.getKey().toString();

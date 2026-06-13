@@ -65,6 +65,7 @@ public class UpdateSimulationSystem {
         this.timeBetweenGraphicsUpdates = 5 * data.getSpeed();
         data.addTime(1);
         Map<Entities, Integer> entitiesGrowthCount;
+        Map<Entities, Integer> infectedCells = new HashMap<>();
 
         if (data.getTime() % timeBetweenGraphicsUpdates == 0) {
             entitiesGrowthCount = new HashMap<>();
@@ -87,6 +88,8 @@ public class UpdateSimulationSystem {
                         if (entitiesGrowthCount != null) {
                             entitiesGrowthCount.put(entity.getEntityType(), entitiesGrowthCount.getOrDefault(entity.getEntityType(), 0) + entity.getGrowth()); // Update the growth count for this entity type if it exists
                         }
+                        // if entity is in infectedCell, add +1 or just add the entity to the map :
+                        infectedCells.put(entity.getEntityType(), infectedCells.getOrDefault(entity.getEntityType(), 0) + 1);
                     }
 
                     if (entity instanceof CanGrow) {
@@ -96,7 +99,6 @@ public class UpdateSimulationSystem {
                     if (entity instanceof CanPropagate && ((CanPropagate) entity).isAbleToPropagate()) {
                         propagationSystem.propagation(cellCoordinates, (CanPropagate) entity);
                     }
-
 
                 });
                 
@@ -109,7 +111,7 @@ public class UpdateSimulationSystem {
         }
         if (data.getTime() % timeBetweenGraphicsUpdates == 0 && graphicsUpdateCallbacks != null && entitiesGrowthCount != null) {
             for (NeedsGraphValues callback : graphicsUpdateCallbacks) {
-                Platform.runLater(() -> callback.addDataPoint(data.getTime(), new HashMap<>(entitiesGrowthCount)));
+                Platform.runLater(() -> callback.graphStep(data.getTime(), new HashMap<>(entitiesGrowthCount), new HashMap<>(infectedCells)));
             }
         }
 //override methods
