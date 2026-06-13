@@ -11,7 +11,8 @@ import com.example.simul2d.grid.Cell;
 public class CircMold1 extends CircularMold {
 
     public CircMold1() {
-        super(0, 2, 50, 0.5, Entities.CIRC_MOLD1); // Call the parent constructor with initial growth and growth rate and minimum growth value for propagation
+        // Slower ageing for circular mold (tuned down)
+        super(0, 2, 50, 0.5, Entities.CIRC_MOLD1, 0.00012, 0.45);
     }
 
     @Override

@@ -134,19 +134,40 @@ public class Cell implements Serializable {
      * accordingly after each entity's growth step.
      */
     public void step() {
-
         totalGrowthOnCell = 0;
 
-        for (Entity entity : entities.values()) {
-            totalGrowthOnCell += entity.getGrowth();
-            if (entity instanceof CanGrow growable) {
-                if (!growable.isAbleToGrow(totalGrowthOnCell)) {
-                    continue; // Skip growth if the entity is not able to grow based on current conditions
-                }
-                totalGrowthOnCell += growable.grow(totalGrowthOnCell); // Update total growth after growth step
+        // Single pass: for each entity, update total growth, apply growth if possible,
+        // then age the entity and mark it for removal if it died.
+        java.util.List<Entities> toRemove = new java.util.ArrayList<>();
+        for (java.util.Map.Entry<Entities, Entity> entry : entities.entrySet()) {
+            Entity entity = entry.getValue();
 
+            // account current stored growth
+            totalGrowthOnCell += entity.getGrowth();
+
+            // growth phase for growable entities
+            if (entity instanceof CanGrow growable) {
+                if (growable.isAbleToGrow(totalGrowthOnCell)) {
+                    totalGrowthOnCell += growable.grow(totalGrowthOnCell);
+                }
+            }
+
+            // aging phase for ageable entities
+            if (entity instanceof com.example.simul2d.Entities.CanAge ager) {
+                boolean dead = ager.ageOneStep();
+                if (dead || ager.isDead()) {
+                    toRemove.add(entry.getKey());
+                }
             }
         }
+
+        // remove dead entities after the pass
+        for (Entities key : toRemove) {
+            entities.remove(key);
+        }
+
+        // Recompute total growth to reflect removals and ensure consistency
+        updateTotalGrowthOnCell();
     }
 
     /**
@@ -164,25 +185,6 @@ public class Cell implements Serializable {
             
         }
 
-//        if (entities.containsKey(entity.getClass())) {
-//            Entity existing = entities.get(entity.getClass());
-//            if (existing instanceof CanGrow existingGrowable && entity instanceof CanGrow incomingGrowable) {
-//                int available = 100 - totalGrowthOnCell;
-//                int toAbsorb = Math.min(incomingGrowable.getGrowth(), available);
-//                existingGrowable.setGrowth(existingGrowable.getGrowth() + toAbsorb);
-//                totalGrowthOnCell += toAbsorb;
-//                return toAbsorb;
-//            }
-//            return 0;
-//        }
-
-//        if (entity instanceof CanGrow growable) {
-//            int available = capacity - totalGrowthOnCell;
-//            int toAbsorb = Math.min(growable.getGrowth(), available);
-//            growable.setGrowth(toAbsorb);
-//            totalGrowthOnCell += toAbsorb;
-//            return toAbsorb;
-//        }
         return 0;
     }
 
