@@ -9,6 +9,7 @@ import com.example.simul2d.Systems.input.Commands.SpeedCommand;
 import com.example.simul2d.Systems.input.InputHandler;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
 
@@ -22,7 +23,7 @@ public class TimeController implements NeedsSimulationState {
     @FXML
     private Label currentSpeed;
     @FXML
-    private Label editingInfoLabel;
+    private Button playPauseButton;
 
 
     //set methods
@@ -41,7 +42,7 @@ public class TimeController implements NeedsSimulationState {
     @FXML
     public void handlePlayPause() {
         InputHandler.COMMAND_QUEUE.add(new PauseCommand());
-        editingInfoLabel.setText("Editing mode: ON");
+        playPauseButton.setText("Play");
     }
 
     @FXML
@@ -91,10 +92,10 @@ public class TimeController implements NeedsSimulationState {
         }
 
         if (state.isPaused()){
-            editingInfoLabel.setText("Editing mode: ON");
+            playPauseButton.setText("Play");
         }
         else {
-            editingInfoLabel.setText("Simulation must be paused to edit");
+            playPauseButton.setText("Pause");
         }
     }
 }

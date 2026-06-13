@@ -10,13 +10,12 @@
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.example.simul2d.JavaFX.TimeController"
             prefHeight="50.0" prefWidth="220.0" spacing="8" alignment="TOP_CENTER" style="-fx-padding:8;">
-    <Label fx:id="editingInfoLabel" text="Simulation must be paused to edit the grid."/>
     <Label fx:id="currentTime" text="Time : 0" />
     <Label fx:id="currentSpeed" text="Speed : 1x" />
-    <Button fx:id="playPauseButton" text="Play" onAction="#handlePlayPause" prefWidth="140" maxWidth="140"/>
+    <Button fx:id="playPauseButton" text="Play/Pause" onAction="#handlePlayPause" prefWidth="140" maxWidth="140"/>
     <HBox spacing="8" alignment="CENTER">
-        <Button fx:id="speedUpButton" text="Speed Up" onAction="#handleSpeedUp" prefWidth="68"/>
-        <Button fx:id="slowDownButton" text="Slow Down" onAction="#handleSpeedDown" prefWidth="68"/>
+        <Button fx:id="slowDownButton" text="-1" onAction="#handleSpeedDown" prefWidth="68"/>
+        <Button fx:id="speedUpButton" text="+1" onAction="#handleSpeedUp" prefWidth="68"/>
     </HBox>
     <HBox spacing="6" alignment="CENTER">
         <Button fx:id="speed1xButton" text="1x" onAction="#handleSpeed1" prefWidth="40"/>
