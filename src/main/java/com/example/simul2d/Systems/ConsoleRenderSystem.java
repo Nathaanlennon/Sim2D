@@ -1,9 +1,7 @@
 package com.example.simul2d.Systems;
 
 import com.example.simul2d.Core.SimulationState;
-import com.example.simul2d.Entities.Mold.CircMold1;
-
-import javax.swing.*;
+import com.example.simul2d.Entities.Entities;
 
 /**
  * Handles console rendering of the simulation state.
@@ -64,7 +62,13 @@ public class ConsoleRenderSystem {
 
         System.out.println(data.getGrid().toString());
 
-        ConsoleRenderSystem.printSomething(data.getGrid().getCell(0,0).getEntity(CircMold1.class).getGrowth()+"");
+        var cell = data.getGrid().getCell(0, 0);
+        var ent = cell.getEntity(Entities.CIRC_MOLD1);
+        if (ent != null) {
+            ConsoleRenderSystem.printSomething(ent.getGrowth() + "");
+        } else {
+            ConsoleRenderSystem.printSomething("no entity CIRC_MOLD1 at (0,0)");
+        }
         
         System.out.printf("time : %f, speed : %f \n", data.getTime(), data.getSpeed());
         System.out.flush();  // Flush the output to ensure it appears immediately

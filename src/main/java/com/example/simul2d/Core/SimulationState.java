@@ -1,6 +1,8 @@
 package com.example.simul2d.Core;
 
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import com.example.simul2d.grid.Grid;
 
@@ -15,7 +17,8 @@ public class SimulationState {
     // A thread-safe pre-rendered snapshot of the grid for UI consumption.
     // The simulation thread should call updateGridSnapshot() after it mutates the grid.
     private final AtomicReference<String> gridSnapshot = new AtomicReference<>("");
-    
+
+    private final ReadWriteLock lock = new ReentrantReadWriteLock();
 
     //constructors
     /**
@@ -49,7 +52,9 @@ public class SimulationState {
     public void changePause() {
         boolean copyPaused = this.paused;
         this.paused = !copyPaused;
-        
+    }
+    public void changePause(boolean paused) {
+        this.paused = paused;
     }
     
     /**
@@ -68,6 +73,9 @@ public class SimulationState {
     }
 
     //get methods
+    public ReadWriteLock getLock() {
+        return lock;
+    }
 
     public Grid getGrid() {
         return grid;

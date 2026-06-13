@@ -1,8 +1,10 @@
 package com.example.simul2d.JavaFX;
 
 public enum ToolsType {
-    ERASE_MATERIAL,
-    ERASE_ENTITY,
-    MATERIALS,
-    ENTITIES
+    MATERIAL_MODE,
+    ENTITY_MODE,
+    ERASE,
+    CLEAR_ENTITIES,
+    RECTANGLE,
+    DRAW
 }

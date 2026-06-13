@@ -6,6 +6,9 @@ package com.example.simul2d.JavaFX;
 import javafx.fxml.FXML;
 import com.example.simul2d.Core.SimulationState;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 
 public class HelloController implements NeedsSimulationState{
     @FXML
@@ -14,17 +17,21 @@ public class HelloController implements NeedsSimulationState{
     @FXML
     private Label infoText;
 
-    
+    @FXML private HBox root;
+
+    @FXML private VBox leftPane;
+    @FXML private ScrollPane centerPane;
+    @FXML private VBox rightPane;
+    @FXML private Label editingInfoLabel;
     // Shared simulation state injected by the application
     private com.example.simul2d.Core.SimulationState simulationState;
 
 
     @FXML
-    private void initialize() {
-        // Cette méthode est appelée automatiquement après le chargement du FXML.
-        
-       
-       
+    public void initialize() {
+        leftPane.prefWidthProperty().bind(root.widthProperty().multiply(0.15));
+        centerPane.prefWidthProperty().bind(root.widthProperty().multiply(0.5));
+        rightPane.prefWidthProperty().bind(root.widthProperty().multiply(0.35));
     }
 
     @FXML

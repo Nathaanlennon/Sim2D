@@ -2,9 +2,14 @@ package com.example.simul2d.JavaFX;
 
 
 import com.example.simul2d.Core.SimulationState;
-import com.example.simul2d.Systems.input.Commands.*;
+import com.example.simul2d.Systems.input.Commands.DecreaseSpeedCommand;
+import com.example.simul2d.Systems.input.Commands.IncreaseSpeedCommand;
+import com.example.simul2d.Systems.input.Commands.PauseCommand;
+import com.example.simul2d.Systems.input.Commands.SpeedCommand;
 import com.example.simul2d.Systems.input.InputHandler;
+
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
 
@@ -17,6 +22,8 @@ public class TimeController implements NeedsSimulationState {
     private Label currentTime;
     @FXML
     private Label currentSpeed;
+    @FXML
+    private Button playPauseButton;
 
 
     //set methods
@@ -35,6 +42,7 @@ public class TimeController implements NeedsSimulationState {
     @FXML
     public void handlePlayPause() {
         InputHandler.COMMAND_QUEUE.add(new PauseCommand());
+        playPauseButton.setText("Play");
     }
 
     @FXML
@@ -81,6 +89,13 @@ public class TimeController implements NeedsSimulationState {
         if (state != null) {
             if (currentTime != null) currentTime.setText(String.format("Time: %.2f", state.getTime()));
             if (currentSpeed != null) currentSpeed.setText(String.format("Speed: %.2f", state.getSpeed()));
+        }
+
+        if (state.isPaused()){
+            playPauseButton.setText("Play");
+        }
+        else {
+            playPauseButton.setText("Pause");
         }
     }
 }

@@ -39,6 +39,9 @@ public class SimulationLoop {
         this.contentUpdateCallbacks = callbacks;
     }
 //get methods
+    public UpdateSimulationSystem getUpdateSimulationSystem() {
+        return updateSimulationSystem;
+    }
 
     /**
      * Returns whether the loop is still running.
@@ -64,19 +67,30 @@ public class SimulationLoop {
             inputHandler.handleInput();
             if (!data.isPaused()) {
 
-
-                updateSimulationSystem.update();
-
+                data.getLock().writeLock().lock();
+                try{
+                    updateSimulationSystem.update();
+                }
+                finally{
+                    data.getLock().writeLock().unlock();
+                }
                 // update an atomic snapshot of the grid so the UI can read a stable
                 // pre-rendered string representation without locking.
-                data.updateGridSnapshot();
+//                data.updateGridSnapshot();
+                data.getLock().readLock().lock();
+                try {
+                    render.printSimulation();
+                    if (contentUpdateCallbacks != null) {
 
-                render.printSimulation();
-                if (contentUpdateCallbacks != null) {
-                    for (Runnable callback : contentUpdateCallbacks) {
-                        Platform.runLater(callback);
+                        for (Runnable callback : contentUpdateCallbacks) {
+                            Platform.runLater(callback);
+                        }
                     }
                 }
+                finally{
+                    data.getLock().readLock().unlock();
+                }
+
                 sleep((long) (1000 / data.getSpeed()));
             }
         }

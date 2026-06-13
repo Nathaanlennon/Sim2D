@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import com.example.simul2d.Entities.CanGrow;
 import com.example.simul2d.Entities.Displayable;
+import com.example.simul2d.Entities.Entities;
 import com.example.simul2d.Entities.Entity;
 import com.example.simul2d.Entities.Mold.Mold;
 
@@ -37,8 +38,8 @@ public class Cell implements Serializable {
      * class. This allows a single concrete entity type to be stored at most
      * once per cell.
      */
-    private HashMap<Class<? extends Entity>, Entity> entities;
-    private HashMap<Class<? extends Entity>, Entity> combatEnabledEntities;
+    private HashMap<Entities, Entity> entities;
+    private HashMap<Entities, Entity> combatEnabledEntities;
 
     private int minGrowthValueToFight = 20;
     private int capacity = 100;
@@ -158,8 +159,8 @@ public class Cell implements Serializable {
     public int addEntity(Entity entity) {
 
 
-        if (!entities.containsKey(entity.getClass())) {
-            entities.put(entity.getClass(), entity);
+        if (!entities.containsKey(entity.getEntityType())) {
+            entities.put(entity.getEntityType(), entity);
             
         }
 
@@ -232,21 +233,20 @@ public class Cell implements Serializable {
      * @return the entity instance if present, or {@code null} if no such entity
      * is stored in this cell
      */
-    public Entity getEntity(Class<? extends Entity> entity) {
-
+    public Entity getEntity(Entities entity) {
         return entities.get(entity);
     }
 
-    public HashMap<Class<? extends Entity>, Entity> getCombatEnabledEntities() {
+    public HashMap<Entities, Entity> getCombatEnabledEntities() {
         return combatEnabledEntities;
     }
 
-    public HashMap<Class<? extends Entity>, Entity> getEntities() {
+    public HashMap<Entities, Entity> getEntities() {
         return entities;
     }
     
 
-    public void removeEntity(Class<? extends Entity> entityClass) {
+    public void removeEntity(Entities entityClass) {
         entities.remove(entityClass);
     }
     

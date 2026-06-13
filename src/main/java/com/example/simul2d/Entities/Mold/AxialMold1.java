@@ -1,15 +1,15 @@
 package com.example.simul2d.Entities.Mold;
 import java.util.List;
 
+import com.example.simul2d.Entities.CoorWeight;
+import com.example.simul2d.Entities.Entities;
 import com.example.simul2d.grid.Cell;
 
 
 public class AxialMold1 extends AxialMold {
     
-    private static final String BASE_COLOR = "#33A1FF";
-
     public AxialMold1() {
-        super(0, 3, 100, 0.4); // Call the parent constructor with initial growth and growth rate and minimum growth value for propagation
+        super(0, 3, 100, 0.4, Entities.AXIAL_MOLD1); // Call the parent constructor with initial growth and growth rate and minimum growth value for propagation
     }
 
     @Override
@@ -19,7 +19,7 @@ public class AxialMold1 extends AxialMold {
 
     @Override
     public String getColorHex() {
-        return BASE_COLOR; // Return a fixed color for this mold variant
+        return getEntityType().getColorHex();
     }
 
 

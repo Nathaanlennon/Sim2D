@@ -1,6 +1,5 @@
 package com.example.simul2d.Entities;
 import com.example.simul2d.grid.Cell;
-import com.example.simul2d.Entities.Mold.CoorWeight;
 
 import java.util.List;
 

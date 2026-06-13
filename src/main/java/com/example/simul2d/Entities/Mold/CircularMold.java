@@ -1,4 +1,6 @@
 package com.example.simul2d.Entities.Mold;
+import com.example.simul2d.Entities.CoorWeight;
+import com.example.simul2d.Entities.Entities;
 import com.example.simul2d.grid.Vec2;
 
 import java.util.ArrayList;
@@ -15,6 +17,15 @@ public abstract class CircularMold extends Mold {
 
     public static final List<CoorWeight> distribution = createCircularDistribution();
 
+
+
+    /**
+     * Constructs a CircularMold with an initial growth of 0 and a growth rate
+     * of 2 units per growth step.
+     */
+    public CircularMold(int initialGrowth, int growthRate, int minimumGrowth, double propagationRate, Entities entityType) {
+        super(initialGrowth, growthRate, minimumGrowth, propagationRate, entityType); // Call the parent constructor with initial growth and growth rate and minimum growth value for propagation
+    }
 
     private static List<CoorWeight> createCircularDistribution() {
 
@@ -35,15 +46,6 @@ public abstract class CircularMold extends Mold {
         }
         targets.sort((a, b) -> Integer.compare(b.weight(), a.weight()));
         return Collections.unmodifiableList(targets);
-    }
-
-
-    /**
-     * Constructs a CircularMold with an initial growth of 0 and a growth rate
-     * of 2 units per growth step.
-     */
-    public CircularMold(int initialGrowth, int growthRate, int minimumGrowth, double propagationRate) {
-        super(initialGrowth, growthRate, minimumGrowth, propagationRate); // Call the parent constructor with initial growth and growth rate and minimum growth value for propagation
     }
 
 

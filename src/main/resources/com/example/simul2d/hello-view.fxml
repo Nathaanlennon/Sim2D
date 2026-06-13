@@ -2,31 +2,69 @@
 
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Priority?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
 
 <VBox alignment="CENTER" spacing="20.0"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.example.simul2d.JavaFX.HelloController"
       style="-fx-border-color: black; -fx-border-width: 2; -fx-border-radius: 4; -fx-padding: 8;">
 
-    <!-- LAYOUT GLOBAL EN RATIO -->
-    <HBox style="-fx-border-color: #666; -fx-border-width: 2; -fx-padding: 6;">
+    <HBox fx:id="root"
+          style="-fx-border-color: #666; -fx-border-width: 2; -fx-padding: 6;">
 
-        <!-- LEFT (1/4) -->
-        <VBox HBox.hgrow="ALWAYS"
+        <!-- LEFT -->
+        <VBox fx:id="leftPane"
+              HBox.hgrow="ALWAYS"
               prefWidth="250"
-              style="-fx-border-color: #999; -fx-border-width: 1; -fx-padding: 6;">
+              spacing="12"
+              alignment="TOP_CENTER"
+              style="-fx-border-color: #999; -fx-border-width: 1; -fx-padding: 12;">
 
-            <fx:include fx:id="drawingControl" source="drawing-view.fxml"/>
+            <!-- ZONE SCROLLABLE (édition uniquement) -->
+            <ScrollPane fx:id="LeftPane"
+                        fitToWidth="true"
+                        fitToHeight="true"
+                        HBox.hgrow="ALWAYS">
 
-            <fx:include fx:id="timeControlPane"
-                        source="time-control-view.fxml"/>
+                <VBox spacing="12"
+                      alignment="TOP_CENTER">
+
+                    <VBox alignment="CENTER" maxWidth="220">
+                        <fx:include fx:id="drawingControl"
+                                    source="drawing-view.fxml"/>
+                    </VBox>
+
+                    <Separator/>
+
+                    <VBox alignment="CENTER" maxWidth="220">
+                        <fx:include fx:id="randomControl"
+                                    source="random-view.fxml"/>
+                    </VBox>
+
+                </VBox>
+
+            </ScrollPane>
+
+
+            <!-- TOUJOURS VISIBLE -->
+            <VBox alignment="CENTER" maxWidth="220">
+                <fx:include fx:id="timeControlPane"
+                            source="time-control-view.fxml"/>
+            </VBox>
+
+            <Separator/>
+
+            <VBox alignment="CENTER" maxWidth="220">
+                <fx:include fx:id="saveControl"
+                            source="save-control-view.fxml"/>
+            </VBox>
 
         </VBox>
 
-        <!-- CENTER (2/4) -->
-        <ScrollPane HBox.hgrow="ALWAYS"
+        <!-- CENTER -->
+        <ScrollPane fx:id="centerPane"
+                    HBox.hgrow="ALWAYS"
                     fitToWidth="true"
                     fitToHeight="true">
 
@@ -35,12 +73,15 @@
 
         </ScrollPane>
 
-        <!-- RIGHT (1/4) -->
-        <VBox HBox.hgrow="ALWAYS"
+        <!-- RIGHT -->
+        <VBox fx:id="rightPane"
+              HBox.hgrow="ALWAYS"
               prefWidth="250"
               style="-fx-border-color: #aaa; -fx-padding: 6;">
-              <fx:include fx:id="graphView" source="graph-view.fxml"/>
-            <!-- futur panel -->
+
+            <fx:include fx:id="graphView"
+                        source="graph-view.fxml"/>
+
         </VBox>
 
     </HBox>
