@@ -1,4 +1,6 @@
-package com.example.simul2d.JavaFX;
+package com.example.sim2d.JavaFX;
+
+import java.util.Map;
 
 import com.example.simul2d.Entities.Entities;
 
