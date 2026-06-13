@@ -13,6 +13,17 @@ public class UiState {
     private Entities selectedEntity;
     private Vec2 firstClickPos = null;
     private ToolsType mode; // entity or material
+    private boolean holdClick =  false;
+
+    public boolean isHoldClick() {
+        return holdClick;
+    }
+    public void changeHoldClick(boolean holdClick) {
+        this.holdClick = holdClick;
+    }
+    public void changeHoldClick() {
+        this.holdClick = !this.holdClick;
+    }
 
     public ToolsType getMode() {
         return mode;

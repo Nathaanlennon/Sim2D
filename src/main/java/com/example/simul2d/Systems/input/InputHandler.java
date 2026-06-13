@@ -1,5 +1,6 @@
 package com.example.simul2d.Systems.input;
 
+import com.example.simul2d.Core.SimulationLoop;
 import com.example.simul2d.Core.SimulationState;
 import com.example.simul2d.Systems.ConsoleRenderSystem;
 import com.example.simul2d.Systems.SaveSystem;
@@ -74,11 +75,19 @@ public class InputHandler {
             }
             case LoadCommand l -> {
                 try {
+//                    data.resetSimulation();
                     data.setGrid(SaveSystem.loadSystem(l.filePath()));
                 } catch (Exception e) {
                     ConsoleRenderSystem.printSomething("Failed to load: " + e.getMessage());
                 }
                 data.changePause(false); //TODO: problems while loading, needs lock unlock reading writting 
+            }
+            case StepCommand sp -> {
+                for (int i = 0; i < sp.StepsNumber();i++){
+                    SimulationLoop.self.update();
+                }
+                SimulationLoop.self.render();
+
             }
             default -> {
             }

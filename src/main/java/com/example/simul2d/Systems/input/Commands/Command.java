@@ -12,7 +12,8 @@ public sealed interface Command
         RectangleEntityCommand,
         SaveCommand,
         LoadCommand,
-        ClearEntitiesCommand
+        ClearEntitiesCommand,
+        StepCommand
 {
          
 }

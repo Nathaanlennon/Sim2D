@@ -80,7 +80,9 @@ public class UpdateSimulationSystem {
                 cell.step();
 
 
+
                 cell.getEntities().values().forEach(entity -> {
+
                     if (data.getTime() % timeBetweenGraphicsUpdates == 0) {
                         if (entitiesGrowthCount != null) {
                             entitiesGrowthCount.put(entity.getEntityType(), entitiesGrowthCount.getOrDefault(entity.getEntityType(), 0) + entity.getGrowth()); // Update the growth count for this entity type if it exists

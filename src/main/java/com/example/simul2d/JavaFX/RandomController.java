@@ -36,7 +36,7 @@ public class RandomController implements NeedsUiState {
     }
 
     @FXML
-    protected void onRandomClicked() {
+    private void onRandomClicked() {
         String txt = countField.getText().trim();
         int v;
         try {

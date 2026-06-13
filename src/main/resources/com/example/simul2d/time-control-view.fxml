@@ -13,6 +13,11 @@
     <Label fx:id="currentTime" text="Time : 0" />
     <Label fx:id="currentSpeed" text="Speed : 1x" />
     <Button fx:id="playPauseButton" text="Play/Pause" onAction="#handlePlayPause" prefWidth="140" maxWidth="140"/>
+    <HBox spacing="6" alignment="CENTER">
+        <TextField fx:id="countField" prefWidth="65" />
+        <Button fx:id="stepButton" text="Step" onAction="#handleStep" prefWidth="65" maxWidth="140"/>
+    </HBox>
+    <Label fx:id="statusLabel" style="-fx-text-fill: red;" />
     <HBox spacing="8" alignment="CENTER">
         <Button fx:id="slowDownButton" text="-1" onAction="#handleSpeedDown" prefWidth="68"/>
         <Button fx:id="speedUpButton" text="+1" onAction="#handleSpeedUp" prefWidth="68"/>

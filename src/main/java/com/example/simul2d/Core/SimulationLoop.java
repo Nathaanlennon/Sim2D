@@ -13,10 +13,13 @@ import static java.lang.Thread.sleep;
  * Runs the update-render-input loop for the simulation.
  */
 public class SimulationLoop {
+    public static SimulationLoop self;
     private final SimulationState data;
     private final UpdateSimulationSystem updateSimulationSystem;
     private volatile boolean running;
     private volatile List<Runnable> contentUpdateCallbacks;
+    private ConsoleRenderSystem consoleRenderSystem = null;
+    private InputHandler inputHandler = null;
 
 
     //constructors
@@ -24,6 +27,7 @@ public class SimulationLoop {
         this.data = data;
         this.running = true;
         this.updateSimulationSystem = new UpdateSimulationSystem(data);
+        self = this;
     }
 
     /**
@@ -38,7 +42,8 @@ public class SimulationLoop {
     public void setContentUpdateCallbacks(List<Runnable> callbacks) {
         this.contentUpdateCallbacks = callbacks;
     }
-//get methods
+
+    //get methods
     public UpdateSimulationSystem getUpdateSimulationSystem() {
         return updateSimulationSystem;
     }
@@ -53,7 +58,36 @@ public class SimulationLoop {
     }
 
     //private methods
-//public methods
+
+
+    //public methods
+    public void update() {
+        data.getLock().writeLock().lock();
+        try {
+            updateSimulationSystem.update();
+        } finally {
+            data.getLock().writeLock().unlock();
+        }
+        // update an atomic snapshot of the grid so the UI can read a stable
+        // pre-rendered string representation without locking.
+//                data.updateGridSnapshot();
+
+    }
+
+    public void render() {
+        data.getLock().readLock().lock();
+        try {
+            consoleRenderSystem.printSimulation();
+            if (contentUpdateCallbacks != null) {
+
+                for (Runnable callback : contentUpdateCallbacks) {
+                    Platform.runLater(callback);
+                }
+            }
+        } finally {
+            data.getLock().readLock().unlock();
+        }
+    }
 
     /**
      * Executes the main simulation loop until {@code running} becomes false.
@@ -63,33 +97,15 @@ public class SimulationLoop {
      * @throws InterruptedException if the loop sleep is interrupted
      */
     public void runSimulation(ConsoleRenderSystem render, InputHandler inputHandler) throws InterruptedException {
+        if (this.consoleRenderSystem == null) this.consoleRenderSystem = render;
+        if (this.inputHandler == null) this.inputHandler = inputHandler;
         while (running) {
             inputHandler.handleInput();
             if (!data.isPaused()) {
+                update();
+                // render part
+                render();
 
-                data.getLock().writeLock().lock();
-                try{
-                    updateSimulationSystem.update();
-                }
-                finally{
-                    data.getLock().writeLock().unlock();
-                }
-                // update an atomic snapshot of the grid so the UI can read a stable
-                // pre-rendered string representation without locking.
-//                data.updateGridSnapshot();
-                data.getLock().readLock().lock();
-                try {
-                    render.printSimulation();
-                    if (contentUpdateCallbacks != null) {
-
-                        for (Runnable callback : contentUpdateCallbacks) {
-                            Platform.runLater(callback);
-                        }
-                    }
-                }
-                finally{
-                    data.getLock().readLock().unlock();
-                }
 
                 sleep((long) (1000 / data.getSpeed()));
             }

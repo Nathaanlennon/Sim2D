@@ -128,6 +128,12 @@ public class SimulationState {
 
     //private methods
 //public methods
+
+    public void resetSimulation(){
+        setSpeed(1.0);
+        time = 0.0;
+        grid = new Grid(30,30,false);
+    }
     
     
     /**

@@ -10,6 +10,7 @@ import com.example.simul2d.grid.Vec2;
 import com.example.simul2d.JavaFX.ToolsType;
 
 import javafx.fxml.FXML;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -111,7 +112,22 @@ public class GridController implements NeedsSimulationState, NeedsUiState {
                 int cx = x;
                 int cy = y;
 
+                tile.setOnMouseEntered(event -> {
+                    if (uiState.isHoldClick()) {
+                        clickOnCell(new Vec2(cx, cy));
+                        if (uiState.getMode() == ToolsType.MATERIAL_MODE && uiState.getActiveTool() == ToolsType.DRAW) {
+                            tile.setFill(Color.web(
+                                    uiState.getSelectedMaterial().getColorHex()
+                            ));
+                        }
+                    }
+                });
+
+
                 tile.setOnMouseClicked(event -> {
+                    if (event.getButton() == MouseButton.SECONDARY){
+                        uiState.changeHoldClick();
+                    }
                     clickOnCell(new Vec2(cx, cy));
                     if (uiState.getMode() == ToolsType.MATERIAL_MODE && uiState.getActiveTool() == ToolsType.DRAW) {
                         tile.setFill(Color.web(

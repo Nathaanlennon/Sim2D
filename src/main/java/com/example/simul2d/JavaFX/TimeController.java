@@ -2,15 +2,13 @@ package com.example.simul2d.JavaFX;
 
 
 import com.example.simul2d.Core.SimulationState;
-import com.example.simul2d.Systems.input.Commands.DecreaseSpeedCommand;
-import com.example.simul2d.Systems.input.Commands.IncreaseSpeedCommand;
-import com.example.simul2d.Systems.input.Commands.PauseCommand;
-import com.example.simul2d.Systems.input.Commands.SpeedCommand;
+import com.example.simul2d.Systems.input.Commands.*;
 import com.example.simul2d.Systems.input.InputHandler;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 
 
 public class TimeController implements NeedsSimulationState {
@@ -24,6 +22,9 @@ public class TimeController implements NeedsSimulationState {
     private Label currentSpeed;
     @FXML
     private Button playPauseButton;
+    @FXML private TextField countField;
+    @FXML private Label statusLabel;
+
 
 
     //set methods
@@ -69,6 +70,19 @@ public class TimeController implements NeedsSimulationState {
     public void handleSpeed3() {
         InputHandler.COMMAND_QUEUE.add(new SpeedCommand(3));
     }
+
+    @FXML
+    public void handleStep() {
+        String txt = countField.getText().trim();
+        int v;
+        try {
+            v = Integer.parseInt(txt);
+            if (v <= 0) throw new NumberFormatException();
+        } catch (NumberFormatException ex) {
+            statusLabel.setText("Enter a positive integer.");
+            return;
+        }
+        InputHandler.COMMAND_QUEUE.add(new StepCommand(v)); }
 
     //override methods
 
