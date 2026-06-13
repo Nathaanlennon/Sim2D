@@ -46,6 +46,8 @@ public class HelloApplication extends Application {
                     Scene scene = new Scene(fxmlLoader.load(), 800, 600);
                     stage.setTitle("Simul2D - JavaFX demo");
                     stage.setScene(scene);
+                    // maximize windowed mode (keep title bar)
+                    stage.setMaximized(true);
 
                     List<Runnable> neededSimulationCallbacks = new ArrayList<>();
                     List<NeedsGraphValues> neededGraphCallbacks = new ArrayList<>();

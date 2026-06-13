@@ -25,6 +25,12 @@
             <VBox alignment="CENTER" maxWidth="220">
               <fx:include fx:id="drawingControl" source="drawing-view.fxml" VBox.vgrow="NEVER"/>
             </VBox>
+
+            <Separator />
+            <VBox alignment="CENTER" maxWidth="220">
+              <fx:include fx:id="randomControl" source="random-view.fxml" VBox.vgrow="NEVER"/>
+            </VBox>
+            
             <Separator />
             <VBox alignment="CENTER" maxWidth="220">
               <fx:include fx:id="timeControlPane" source="time-control-view.fxml" VBox.vgrow="NEVER"/>
@@ -33,6 +39,8 @@
             <VBox alignment="CENTER" maxWidth="220">
               <fx:include fx:id="saveControl" source="save-control-view.fxml" VBox.vgrow="NEVER"/>
             </VBox>
+
+
 
         </VBox>
 
