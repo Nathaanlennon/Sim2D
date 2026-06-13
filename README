@@ -1,0 +1,4 @@
+Windows:
+.\mvnw clean javafx:run
+.\mvnw clean javadoc:javadoc
+

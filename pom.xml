@@ -49,9 +49,7 @@
                 <configuration>
                     <source>21</source>
                     <target>21</target>
-                    <sourceFileExcludes>
-                        <sourceFileExclude>**/module-info.java</sourceFileExclude>
-                    </sourceFileExcludes>
+                    <automaticModuleName>com.example.simul2d</automaticModuleName>
                 </configuration>
             </plugin>
             <plugin>
