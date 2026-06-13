@@ -1,3 +1,5 @@
+Java21
+
 Windows:
 .\mvnw clean
 .\mvnw javafx:run
