@@ -49,7 +49,6 @@
                 <configuration>
                     <source>21</source>
                     <target>21</target>
-                    <automaticModuleName>com.example.simul2d</automaticModuleName>
                 </configuration>
             </plugin>
             <plugin>
