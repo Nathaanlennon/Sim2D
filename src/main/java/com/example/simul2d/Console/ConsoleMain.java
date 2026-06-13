@@ -58,17 +58,9 @@ public class ConsoleMain {
         // sample test setup (same as main)
         Grid grid = state.getGrid();
 
-        // for test purposes for now
-        for (int x = 0; x < grid.getWidth(); x++) {
-            grid.getCell(x, 0).setMaterial(Material.WOOD);
-            grid.getCell(x, grid.getHeight() - 1).setMaterial(Material.CONCRETE);
-        }
+        //for test purposes
 
-        grid.getCell(0, 0).addEntity(new CircMold1());
-        grid.getCell(0, 0).setMaterial(Material.WOOD);
 
-        grid.getCell(grid.getWidth() - 1, grid.getHeight() - 1).addEntity(new DividedMold1());
-        grid.getCell(0, grid.getHeight() - 1).addEntity(new AxialMold1());
 
         // start the console input reader
         new Thread(new InputReader(), "InputReader-Thread").start();
@@ -117,16 +109,8 @@ public class ConsoleMain {
 
         Grid grid = state.getGrid();
 
-        for (int x = 0; x < grid.getWidth(); x++) {
-            grid.getCell(x, 0).setMaterial(Material.WOOD);
-            grid.getCell(x, grid.getHeight() - 1).setMaterial(Material.CONCRETE);
-        }
 
-        grid.getCell(0, 0).addEntity(new CircMold1());
-        grid.getCell(0, 0).setMaterial(Material.WOOD);
 
-        grid.getCell(grid.getWidth() - 1, grid.getHeight() - 1).addEntity(new DividedMold1());
-        grid.getCell(0, grid.getHeight() - 1).addEntity(new AxialMold1());
 
         return new SimulationRun(t, state, loop);
     }
