@@ -3,6 +3,8 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
 
 <VBox xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.example.simul2d.JavaFX.GraphController"
@@ -10,14 +12,29 @@
       style="-fx-padding: 8; -fx-border-color: #aaa; -fx-border-width: 1;">
 
     <LineChart fx:id="populationChart"
-               title="Population des moisissures"
+               title="Population of molds"
                animated="false"
                createSymbols="false">
         <xAxis>
-            <NumberAxis label="Temps (pas)" forceZeroInRange="false"/>
+            <NumberAxis label="Time (steps)" forceZeroInRange="false"/>
         </xAxis>
         <yAxis>
-            <NumberAxis label="Nombre d’individus" forceZeroInRange="false"/>
+            <NumberAxis label="Cell count" forceZeroInRange="false"/>
         </yAxis>
     </LineChart>
+    <Label fx:id="populationLabel" text="Population: 0" />
+    <HBox fx:id="populationSeriesBox" spacing="8" />
+    <LineChart fx:id="infectedChart"
+               title="Infected cells"
+               animated="false"
+               createSymbols="false">
+        <xAxis>
+            <NumberAxis label="Time (steps)" forceZeroInRange="false"/>
+        </xAxis>
+        <yAxis>
+            <NumberAxis label="Infected cells" forceZeroInRange="false"/>
+        </yAxis>
+    </LineChart>
+    <Label fx:id="infectedLabel" text="Infected: 0" />
+    <HBox fx:id="infectedSeriesBox" spacing="8" />
 </VBox>

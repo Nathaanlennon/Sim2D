@@ -6,10 +6,14 @@ import java.util.Map;
 import com.example.simul2d.Entities.Entities;
 
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 //TODO faire une fonction refreshUI qui va etre appellé à chaque étape de la simulation et qui va mettre à jour le graphique en appelant addDataPoint avec les nouvelles données de population
 //TODO on va prendre une hashmap des valeurs de tot growth pour chaque type de mold
 //TODO faire les bouttons sauvegarde et load
@@ -20,8 +24,27 @@ public class GraphController implements NeedsGraphValues {
     @FXML
     private LineChart<Number, Number> populationChart;
 
+    @FXML
+    private LineChart<Number, Number> infectedChart;
+
+    @FXML
+    private Label populationLabel;
+
+    @FXML
+    private Label infectedLabel;
+
+    @FXML
+    private HBox populationSeriesBox;
+
+    @FXML
+    private HBox infectedSeriesBox;
+
+    private final Map<String, Label> populationSeriesLabels = new HashMap<>();
+    private final Map<String, Label> infectedSeriesLabels = new HashMap<>();
+
     // Pour retrouver une série par son nom (le type de moisissure)
     private final Map<String, XYChart.Series<Number, Number>> seriesMap = new HashMap<>();
+    private final Map<String, XYChart.Series<Number, Number>> seriesMapInfected = new HashMap<>();
 
     @FXML
     public void initialize() {
@@ -29,19 +52,35 @@ public class GraphController implements NeedsGraphValues {
         NumberAxis xAxis = (NumberAxis) populationChart.getXAxis();
         populationChart.setLegendVisible(false);
         xAxis.setForceZeroInRange(false);
+        if (infectedChart != null) {
+            infectedChart.setLegendVisible(false);
+            NumberAxis xAxis2 = (NumberAxis) infectedChart.getXAxis();
+            xAxis2.setForceZeroInRange(false);
+        }
+        if (populationLabel != null) populationLabel.setText("Population: 0");
+        if (infectedLabel != null) infectedLabel.setText("Infected: 0");
+        if (populationSeriesBox != null) populationSeriesBox.getChildren().clear();
+        if (infectedSeriesBox != null) infectedSeriesBox.getChildren().clear();
     }
 
     /**
      * Réinitialise le graphique (utile pour une nouvelle simulation).
      */
-    public void clear() {
-        populationChart.getData().clear();
-        seriesMap.clear();
-    }
+    
 
     @Override
     public void graphStep(double timeStep, Map<Entities, Integer> populationsWeight, Map<Entities, Integer> infectedCells){
         addDataPoint(timeStep, populationsWeight);
+        addInfectedDataPoint(timeStep, infectedCells);
+        // Mettre à jour les labels de totaux
+        if (populationLabel != null && populationsWeight != null) {
+            int total = populationsWeight.values().stream().mapToInt(Integer::intValue).sum();
+            populationLabel.setText("Population: " + total);
+        }
+        if (infectedLabel != null && infectedCells != null) {
+            int totalInf = infectedCells.values().stream().mapToInt(Integer::intValue).sum();
+            infectedLabel.setText("Infected: " + totalInf);
+        }
     }
     /**
      * Ajoute un point de données pour tous les types de moisissures.
@@ -50,30 +89,77 @@ public class GraphController implements NeedsGraphValues {
      */
 
     private void addDataPoint(double timeStep, Map<Entities, Integer> populations) {
-        System.out.println("Adding data point at time " + timeStep + ": " + populations.toString());
-        for (Map.Entry<Entities, Integer> entry : populations.entrySet()) {
+        addDataPointToChart(populationChart, seriesMap, timeStep, populations);
+    }
+
+    private void addInfectedDataPoint(double timeStep, Map<Entities, Integer> infected) {
+        addDataPointToChart(infectedChart, seriesMapInfected, timeStep, infected);
+    }
+
+    private void addDataPointToChart(LineChart<Number, Number> chart,
+                                     Map<String, XYChart.Series<Number, Number>> map,
+                                     double timeStep,
+                                     Map<Entities, Integer> data) {
+        if (chart == null || data == null) return;
+        System.out.println("Adding data point to chart at time " + timeStep + ": " + data.toString());
+        for (Map.Entry<Entities, Integer> entry : data.entrySet()) {
             String moldType = entry.getKey().toString();
             int count = entry.getValue();
 
-            XYChart.Series<Number, Number> series = seriesMap.get(moldType);
+            XYChart.Series<Number, Number> series = map.get(moldType);
             if (series == null) {
                 series = new XYChart.Series<>();
                 series.setName(moldType);
-                populationChart.getData().add(series);
+                chart.getData().add(series);
 
-
-                
-                // Forcer création des nodes puis appliquer le style si disponible
-                populationChart.applyCss();
-                populationChart.layout();
+                chart.applyCss();
+                chart.layout();
                 Node sNode = series.getNode();
                 if (sNode != null) {
                     sNode.setStyle("-fx-stroke: " + entry.getKey().getColorHex() + ";");
                 }
-                seriesMap.put(moldType, series);
-                
+                map.put(moldType, series);
+
+                // create a label for this series and add to appropriate HBox
+                Label lbl = new Label(moldType + ": " + count);
+                lbl.setMaxWidth(Double.MAX_VALUE);
+                lbl.setAlignment(Pos.CENTER);
+                HBox.setHgrow(lbl, Priority.ALWAYS);
+                if (chart == populationChart) {
+                    populationSeriesLabels.put(moldType, lbl);
+                    if (populationSeriesBox != null) populationSeriesBox.getChildren().add(lbl);
+                } else if (chart == infectedChart) {
+                    infectedSeriesLabels.put(moldType, lbl);
+                    if (infectedSeriesBox != null) infectedSeriesBox.getChildren().add(lbl);
+                }
+            } else {
+                // update corresponding label
+                Label lbl = null;
+                if (chart == populationChart) lbl = populationSeriesLabels.get(moldType);
+                else if (chart == infectedChart) lbl = infectedSeriesLabels.get(moldType);
+                if (lbl != null) {
+                    lbl.setText(moldType + ": " + count);
+                    lbl.setMaxWidth(Double.MAX_VALUE);
+                    lbl.setAlignment(Pos.CENTER);
+                    HBox.setHgrow(lbl, Priority.ALWAYS);
+                }
             }
             series.getData().add(new XYChart.Data<>(timeStep, count));
         }
+    }
+
+    public void clear() {
+        populationChart.getData().clear();
+        seriesMap.clear();
+        if (infectedChart != null) {
+            infectedChart.getData().clear();
+            seriesMapInfected.clear();
+        }
+        if (populationLabel != null) populationLabel.setText("Population: 0");
+        if (infectedLabel != null) infectedLabel.setText("Infected: 0");
+        if (populationSeriesBox != null) populationSeriesBox.getChildren().clear();
+        if (infectedSeriesBox != null) infectedSeriesBox.getChildren().clear();
+        populationSeriesLabels.clear();
+        infectedSeriesLabels.clear();
     }
 }
