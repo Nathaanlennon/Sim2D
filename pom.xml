@@ -49,7 +49,6 @@
                 <configuration>
                     <source>21</source>
                     <target>21</target>
-                    <aggregate>false</aggregate>
                 </configuration>
             </plugin>
             <plugin>
