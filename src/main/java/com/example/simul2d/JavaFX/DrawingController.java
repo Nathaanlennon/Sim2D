@@ -24,22 +24,25 @@ public class DrawingController implements NeedsUiState{
     private Label currentToolLabel;
     @FXML
     private Label selected;
+    @FXML
+    private Label mode;
 
     //set methods
 //get methods
 //private methods
-    public void handleEraseMaterials() {
-        this.uiState.setActiveTool(ToolsType.ERASE_MATERIAL);
-        this.currentToolLabel.setText("Selected Tool: Erase Material");
-        this.uiState.setSelectedMaterial(null); 
-        this.uiState.setSelectedEntity(null);
+    public void handleMaterialMode(){
+        uiState.setMode(ToolsType.MATERIAL_MODE);
+        mode.setText("Material");
     }
-    public void handleEraseEntities() {
-        this.uiState.setActiveTool(ToolsType.ERASE_ENTITY);
-        this.currentToolLabel.setText("Selected Tool: Erase Entity");
-        this.uiState.setSelectedMaterial(null);
-        this.uiState.setSelectedEntity(null);
+    public void handleEntityMode(){
+        uiState.setMode(ToolsType.ENTITY_MODE);
+        mode.setText("Entity");
     }
+    public void handleErase() {
+        this.uiState.setActiveTool(ToolsType.ERASE);
+        this.currentToolLabel.setText("Selected Tool: Erase");
+    }
+
     public void handleRectangleTool() {
         this.uiState.setActiveTool(ToolsType.RECTANGLE);
         this.currentToolLabel.setText("Selected Tool: Rectangle");
@@ -47,8 +50,10 @@ public class DrawingController implements NeedsUiState{
     public void handleClearEntities() {
         this.uiState.setActiveTool(ToolsType.CLEAR_ENTITIES);
         this.currentToolLabel.setText("Selected Tool: Clear Entities");
-        this.uiState.setSelectedMaterial(null);
-        this.uiState.setSelectedEntity(null);
+    }
+    public void handleDrawTool() {
+        this.uiState.setActiveTool(ToolsType.DRAW);
+        this.currentToolLabel.setText("Selected Tool: Draw");
     }
 //public methods
     @FXML
@@ -58,9 +63,8 @@ public class DrawingController implements NeedsUiState{
             Button btn = new Button(mat.name());
             btn.setOnAction(e -> {
                 this.uiState.setSelectedMaterial(mat);
-                this.uiState.setActiveTool(ToolsType.DRAW_MATERIAL);
-                this.currentToolLabel.setText("Selected tool : draw material" );
-                this.uiState.setSelectedEntity(null); // Clear selected entity when selecting a material
+                this.uiState.setMode(ToolsType.MATERIAL_MODE);
+                this.mode.setText("Material");
                 this.selected.setText(mat.name());
             });
             btn.setText(mat.name());
@@ -81,9 +85,8 @@ public class DrawingController implements NeedsUiState{
             Button btn = new Button(ent.name());
             btn.setOnAction(e -> {
                 this.uiState.setSelectedEntity(ent);
-                this.uiState.setActiveTool(ToolsType.DRAW_ENTITY);
-                this.currentToolLabel.setText("Selected tool : Draw entity" );
-                this.uiState.setSelectedMaterial(null); // Clear selected material when selecting an entity
+                this.uiState.setMode(ToolsType.ENTITY_MODE);
+                this.mode.setText("Entity");
                 this.selected.setText(ent.name());
             });
             btn.setText(ent.name());

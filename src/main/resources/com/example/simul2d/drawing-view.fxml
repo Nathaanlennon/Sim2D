@@ -27,11 +27,15 @@
 
     <!-- Tools -->
     <VBox spacing="6" alignment="CENTER">
-        <Button text="Erase Material" onAction="#handleEraseMaterials" prefWidth="140" maxWidth="140"/>
-        <Button text="Erase Entity" onAction="#handleEraseEntities" prefWidth="140" maxWidth="140"/>
+        <Button text="Material Mode" onAction="#handleMaterialMode" prefWidth="140" maxWidth="140"/>
+        <Button text="Entity Mode" onAction="#handleEntityMode" prefWidth="140" maxWidth="140"/>
+        <Separator />
+        <Button text="Erase" onAction="#handleErase" prefWidth="140" maxWidth="140"/>
         <Button text="Clear entities" onAction="#handleClearEntities"/>
-    <Button text="Rectangle Tool" onAction="#handleRectangleTool" prefWidth="140" maxWidth="140"/>
+        <Button text="Rectangle Tool" onAction="#handleRectangleTool" prefWidth="140" maxWidth="140"/>
+        <Button text="Draw Tool" onAction="#handleDrawTool" prefWidth="140" maxWidth="140"/>
     </VBox>
+    <Label fx:id="mode" text="Mode: None"/>
     <Label fx:id="currentToolLabel" text="Current Tool: None"/>
     <Label fx:id="selected" text="Selected: None"/>
 

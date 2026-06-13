@@ -7,6 +7,7 @@ import com.example.simul2d.grid.Cell;
 import com.example.simul2d.grid.Grid;
 import com.example.simul2d.grid.Material;
 import com.example.simul2d.grid.Vec2;
+import com.example.simul2d.JavaFX.ToolsType;
 
 import javafx.fxml.FXML;
 import javafx.scene.layout.GridPane;
@@ -19,31 +20,38 @@ public class GridController implements NeedsSimulationState, NeedsUiState {
     // Reference to the shared simulation state (injected by HelloApplication)
     private SimulationState state;
     private UiState uiState;
-    private Grid grid= null;
+    private Grid grid = null;
     private Rectangle[][] tiles; // 2D array to hold references to the grid cell rectangles
 
-    
-    
+
     private void clickOnCell(Vec2 position) {
-        if (uiState.getActiveTool() == null || !state.isPaused()) return;
+        if (uiState.getActiveTool() == null) return;
         switch (uiState.getActiveTool()) {
-            case DRAW_MATERIAL -> {
-                if (uiState.getSelectedMaterial()!=null) {
-                    Command command = new SetMaterialCommand(position, uiState.getSelectedMaterial());
-                    InputHandler.COMMAND_QUEUE.add(command);
+            case DRAW -> {
+                if (uiState.getMode() == ToolsType.ENTITY_MODE) {
+                    if (uiState.getSelectedEntity() != null) {
+                        InputHandler.COMMAND_QUEUE.add(new AddEntityCommand(position, uiState.getSelectedEntity()));
+                    }
+                } else if (uiState.getMode() == ToolsType.MATERIAL_MODE) {
+                    if (uiState.getSelectedMaterial() != null) {
+                        InputHandler.COMMAND_QUEUE.add(new SetMaterialCommand(position, uiState.getSelectedMaterial()));
+                    }
                 }
             }
-            case ERASE_MATERIAL -> {
-                InputHandler.COMMAND_QUEUE.add(new SetMaterialCommand(position, Material.EMPTY));
-            }
-            case DRAW_ENTITY -> {
-                if(uiState.getSelectedEntity()!=null) InputHandler.COMMAND_QUEUE.add(new AddEntityCommand(position, uiState.getSelectedEntity()));
+            case ERASE -> {
+                if (uiState.getMode() == ToolsType.ENTITY_MODE) {
+                    if (uiState.getSelectedEntity() != null) {
+                        InputHandler.COMMAND_QUEUE.add(new RemoveEntityCommand(position, uiState.getSelectedEntity()));
+                    }
+                }
+                else if (uiState.getMode() == ToolsType.MATERIAL_MODE) {
+                    if (uiState.getSelectedMaterial() != null) {
+                        InputHandler.COMMAND_QUEUE.add(new SetMaterialCommand(position, Material.EMPTY));
+                    }
+                }
             }
             case CLEAR_ENTITIES -> {
                 InputHandler.COMMAND_QUEUE.add(new ClearEntitiesCommand(position));
-            }
-            case ERASE_ENTITY -> {
-                InputHandler.COMMAND_QUEUE.add(new RemoveEntityCommand(position, uiState.getSelectedEntity()));
             }
             case RECTANGLE -> {
                 if (uiState.getFirstClickPos() == null) {
@@ -51,23 +59,29 @@ public class GridController implements NeedsSimulationState, NeedsUiState {
                 } else {
                     Vec2 start = uiState.getFirstClickPos();
                     Vec2 end = position;
-                    if (uiState.getSelectedMaterial() != null) {
-                        InputHandler.COMMAND_QUEUE.add(new RectangleMaterialCommand(start, end, uiState.getSelectedMaterial()));
+                    if (uiState.getMode() == ToolsType.MATERIAL_MODE) {
+                        if (uiState.getSelectedMaterial() != null) {
+                            InputHandler.COMMAND_QUEUE.add(new RectangleMaterialCommand(start, end, uiState.getSelectedMaterial()));
+                        }
                     }
-                    else if (uiState.getSelectedEntity() != null) {
-                        InputHandler.COMMAND_QUEUE.add(new RectangleEntityCommand(start, end, uiState.getSelectedEntity()));
+                    else if (uiState.getMode() == ToolsType.ENTITY_MODE) {
+                        if (uiState.getSelectedEntity() != null) {
+                            InputHandler.COMMAND_QUEUE.add(new RectangleEntityCommand(start, end, uiState.getSelectedEntity()));
+                        }
                     }
                     uiState.setFirstClickPos(null);
                 }
             }
-            default -> {}
+            default -> {
+            }
         }
-        
+
     }
-    
+
     @FXML
     private GridPane gridDisplay;
-//
+
+    //
     @FXML
     private void initialize() {
         System.out.println("GridController initialized");
@@ -99,7 +113,7 @@ public class GridController implements NeedsSimulationState, NeedsUiState {
 
                 tile.setOnMouseClicked(event -> {
                     clickOnCell(new Vec2(cx, cy));
-                    if (uiState.getActiveTool() == ToolsType.DRAW_MATERIAL && state.isPaused()){
+                    if (uiState.getMode() == ToolsType.MATERIAL_MODE && uiState.getActiveTool() == ToolsType.DRAW) {
                         tile.setFill(Color.web(
                                 uiState.getSelectedMaterial().getColorHex()
                         ));
@@ -119,7 +133,7 @@ public class GridController implements NeedsSimulationState, NeedsUiState {
         initializeGridDisplay();
         refreshUI(); // Dessine la grille dès qu'on reçoit les données
     }
-    
+
     @Override
     public void refreshUI() {
 
@@ -148,7 +162,7 @@ public class GridController implements NeedsSimulationState, NeedsUiState {
             }
         }
     }
-    
+
     @Override
     public void setUiState(UiState uiState) {
         this.uiState = uiState;

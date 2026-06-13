@@ -12,7 +12,15 @@ public class UiState {
     private Material selectedMaterial;
     private Entities selectedEntity;
     private Vec2 firstClickPos = null;
-    
+    private ToolsType mode; // entity or material
+
+    public ToolsType getMode() {
+        return mode;
+    }
+    public void setMode(ToolsType mode) {
+        this.mode = mode;
+    }
+
     public ToolsType getActiveTool() {
         return activeTool;
     }
