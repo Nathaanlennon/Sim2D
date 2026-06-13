@@ -17,6 +17,12 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
 
+/**
+ * Controller providing save/load UI actions for the simulation.
+ *
+ * <p>Save/Load operations are forwarded to the input command queue so the
+ * simulation thread can perform file IO in a controlled manner.
+ */
 public class SaveController implements NeedsSimulationState {
 
     private SimulationState simulationState;

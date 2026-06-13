@@ -1,7 +1,7 @@
 package com.example.simul2d.Entities;
-import com.example.simul2d.grid.Cell;
-
 import java.util.List;
+
+import com.example.simul2d.grid.Cell;
 
 
 /**
@@ -19,17 +19,23 @@ public interface CanPropagate {
     boolean isAbleToPropagate();
 
     /**
-     * CanPropagate the object to the specified target location. 
-     * Assumption is that basic propagation is creating a new instance of the class
+     * Propagate this object to the specified target cell.
      *
-     * @param target the cell where the object should propagate to.
+     * <p>Typical implementations will create or place a new instance into
+     * the {@code target} cell according to propagation rules.
+     *
+     * @param target the destination cell for propagation
      */
     void propagateTo(Cell target);
 
     /**
-     * Return a sorted from highest to lowest probability list of coordinates for each cell
+     * Returns a propagation distribution list describing candidate target
+     * coordinates and their relative weights.
      *
-     * @return a list of map entries containing target positions and associated weights
+     * <p>The list is typically ordered from highest to lowest weight and is
+     * used by propagation systems to select a target cell.
+     *
+     * @return a list of {@link CoorWeight} describing targets and weights
      */
     List<CoorWeight> getPropagationDistributionList();
 

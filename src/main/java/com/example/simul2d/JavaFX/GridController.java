@@ -20,6 +20,15 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 
+/**
+ * Controller that renders the simulation grid as a grid of rectangles and
+ * forwards mouse actions to the input command queue according to the
+ * currently selected `UiState` tool.
+ *
+ * <p>The controller expects to receive the shared {@link SimulationState}
+ * via {@link #setSimulationState(SimulationState)} and will call
+ * {@link #refreshUI()} to update the display.
+ */
 public class GridController implements NeedsSimulationState, NeedsUiState {
 
     // Reference to the shared simulation state (injected by HelloApplication)
@@ -176,7 +185,7 @@ public class GridController implements NeedsSimulationState, NeedsUiState {
         this.state = state;
         this.grid = state.getGrid();
         initializeGridDisplay();
-        refreshUI(); // Dessine la grille dès qu'on reçoit les données
+        refreshUI(); // Draw the grid as soon as state is provided
     }
 
     @Override

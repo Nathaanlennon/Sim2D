@@ -1,21 +1,26 @@
 package com.example.simul2d.Systems;
 
-import com.example.simul2d.Core.SimulationState;
-import com.example.simul2d.Entities.CanGrow;
-import com.example.simul2d.Entities.CanPropagate;
-import com.example.simul2d.Entities.Entities;
-import com.example.simul2d.Entities.Entity;
-import com.example.simul2d.JavaFX.NeedsGraphValues;
-import com.example.simul2d.grid.Cell;
-import com.example.simul2d.grid.Vec2;
-import javafx.application.Platform;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.example.simul2d.Core.SimulationState;
+import com.example.simul2d.Entities.CanGrow;
+import com.example.simul2d.Entities.CanPropagate;
+import com.example.simul2d.Entities.Entities;
+import com.example.simul2d.JavaFX.NeedsGraphValues;
+import com.example.simul2d.grid.Cell;
+import com.example.simul2d.grid.Vec2;
+
+import javafx.application.Platform;
+
 /**
- * Applies one simulation step to the current state.
+ * System responsible for advancing the simulation state by one tick.
+ *
+ * <p>This class coordinates propagation, combat and growth for every cell
+ * in the {@link com.example.simul2d.Core.SimulationState} it is bound to.
+ * It is intended to be invoked from the simulation loop and must not perform
+ * long-blocking operations on the JavaFX application thread.
  */
 public class UpdateSimulationSystem {
     private final SimulationState data;
@@ -60,6 +65,14 @@ public class UpdateSimulationSystem {
 
     /**
      * Advances the simulation by one update tick.
+     *
+     * <p>This method iterates every cell in the grid and applies the
+     * following responsibilities in order: cell-step update, propagation
+     * attempts for propagating entities, and in-cell combat resolution.
+     *
+     * <p>When the internal graphics update counter is reached this method
+     * will collect aggregate values and schedule callbacks on the JavaFX
+     * application thread via {@link javafx.application.Platform#runLater(Runnable)}.
      */
     public void update() {
         this.timeBetweenGraphicsUpdates = 5 * data.getSpeed();

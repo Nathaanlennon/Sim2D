@@ -1,7 +1,5 @@
 package com.example.simul2d.Systems.input.Commands;
 
-import java.io.File;
-import java.nio.file.Path;
-
+/** Command representing a request to load a saved simulation from {@link #filePath()}. */
 public record LoadCommand(String filePath) implements Command{
 }

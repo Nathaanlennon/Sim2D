@@ -7,7 +7,12 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import com.example.simul2d.grid.Grid;
 
 /**
- * Holds the mutable state of the simulation. (It's like the data)
+ * Encapsulates the mutable state of the simulation.
+ *
+ * <p>This class stores the simulation-wide data such as the {@link com.example.simul2d.grid.Grid},
+ * current time and execution speed. It also exposes a {@link java.util.concurrent.locks.ReadWriteLock}
+ * which callers can use to obtain thread-safe access to the state from different
+ * threads (for example the simulation thread and UI threads).
  */
 public class SimulationState {
     private volatile double speed;
@@ -22,11 +27,11 @@ public class SimulationState {
 
     //constructors
     /**
-     * Creates a simulation state with explicit values. Precursor to loader-based initialization
+     * Creates a simulation state with explicit initial values.
      *
-     * @param speed the initial speed, clamped to a positive value
-     * @param time the initial simulation time, clamped to zero or above
-     * @param paused whether the simulation starts paused
+     * @param speed initial simulation speed (will be clamped to a positive value)
+     * @param time initial simulation time (non-negative)
+     * @param paused whether the simulation should start paused
      * @param grid the grid backing the simulation
      */
     SimulationState(double speed, double time, boolean paused, Grid grid) {
@@ -47,7 +52,9 @@ public class SimulationState {
 
     //set methods
     /**
-     * Toggles the paused state.
+     * Toggles the paused flag.
+     *
+     * <p>Convenience method to flip between paused and running states.
      */
     public void changePause() {
         boolean copyPaused = this.paused;
@@ -58,9 +65,9 @@ public class SimulationState {
     }
     
     /**
-     * Updates the simulation speed when the provided value is positive.
+     * Sets the simulation speed when the provided value is positive.
      *
-     * @param speed the new speed value
+     * @param speed the new speed value (must be &gt; 0 to take effect)
      */
     public void setSpeed(double speed) {
         if (speed>0){
@@ -82,9 +89,11 @@ public class SimulationState {
     }
 
     /**
-     * Update the string snapshot of the grid. Call this from the simulation thread
-     * after mutating the grid; the UI can safely read {@link #getGridSnapshot()} from
-     * any thread without locking.
+     * Publishes an atomic string snapshot of the grid for UI consumption.
+     *
+     * <p>Call this method from the simulation thread after mutating the grid to
+     * produce a textual representation which UI threads can read without acquiring
+     * the state lock.
      */
     public void updateGridSnapshot() {
         // create a textual representation once and publish it atomically
@@ -93,7 +102,12 @@ public class SimulationState {
     }
 
     /**
-     * Returns the most recent grid snapshot (may be empty if never published yet).
+     * Returns the most recent pre-rendered grid snapshot.
+     *
+     * <p>If no snapshot has been published yet this method will fall back to
+     * returning the current {@link Grid#toString()} value.
+     *
+     * @return a textual representation of the grid suitable for display
      */
     public String getGridSnapshot() {
         String s = gridSnapshot.get();
@@ -101,7 +115,7 @@ public class SimulationState {
     }
 
     /**
-     * Returns whether the simulation is paused.
+     * Returns whether the simulation is currently paused.
      *
      * @return {@code true} when paused
      */
@@ -111,7 +125,7 @@ public class SimulationState {
     /**
      * Returns the current simulation speed.
      *
-     * @return the speed value
+     * @return the speed value used to control loop timing
      */
     public double getSpeed() {
         return speed;
@@ -120,7 +134,7 @@ public class SimulationState {
     /**
      * Returns the current simulation time.
      *
-     * @return the elapsed time
+     * @return the elapsed time (in simulation steps)
      */
     public double getTime() {
         return time;
@@ -139,7 +153,7 @@ public class SimulationState {
     /**
      * Adds the given delta time to the simulation clock.
      *
-     * @param dt the time increment to add
+     * @param dt the time increment to add (non-negative values will advance time)
      */
     public void addTime(double dt) {
         double newTime = this.time + dt;

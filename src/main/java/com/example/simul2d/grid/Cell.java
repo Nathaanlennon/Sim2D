@@ -171,11 +171,13 @@ public class Cell implements Serializable {
     }
 
     /**
-     * Adds the provided entity to this cell. If an entity of the same concrete
-     * class is already present, the new entity will not be added and the
-     * existing one will remain unchanged.
+     * Adds the provided entity to this cell.
+     *
+     * <p>If an entity of the same concrete class is already present the new
+     * instance will not be added.
      *
      * @param entity the entity to add (must not be {@code null})
+     * @return 0 (placeholder return value currently unused)
      */
     public int addEntity(Entity entity) {
 
@@ -189,7 +191,7 @@ public class Cell implements Serializable {
     }
 
     public String getColorHex() {
-        // 1. Trouver l’entité affichable la plus grande
+        // 1. Find the largest displayable entity (by display size)
         Displayable best = null;
         double maxSize = Double.NEGATIVE_INFINITY;
         for (Entity e : entities.values()) {
@@ -202,21 +204,21 @@ public class Cell implements Serializable {
             }
         }
 
-        // 2. Si aucune entité affichable, retourner le matériau seul
+        // 2. If no displayable entity is found, return the material color
         if (best == null) {
             return material.getColorHex();
         }
-        // 3. Mélanger la couleur de l’entité (avec son opacité) sur le fond du matériau
+        // 3. Blend the entity color (with opacity) over the material background
         return blend(material.getColorHex(), best.getColorHex(), best.getOpacity());
     }
 
     /**
-     * Mélange deux couleurs hexadécimales selon une opacité.
+     * Blend two hexadecimal colors according to an opacity value.
      *
-     * @param bgHex   couleur de fond (matériau)
-     * @param fgHex   couleur de premier plan (entité)
-     * @param opacity opacité du premier plan (0.0 → transparent, 1.0 → opaque)
-     * @return la couleur résultante au format hexadécimal
+     * @param bgHex   background color hex (e.g. material color)
+     * @param fgHex   foreground color hex (e.g. entity color)
+     * @param opacity opacity of the foreground color (0.0 = transparent, 1.0 = opaque)
+     * @return resulting blended color as a hex string ("#RRGGBB")
      */
     private static String blend(String bgHex, String fgHex, double opacity) {
         Color bg = Color.web(bgHex);

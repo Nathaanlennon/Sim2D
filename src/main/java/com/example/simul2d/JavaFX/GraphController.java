@@ -14,11 +14,14 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
-//TODO faire une fonction refreshUI qui va etre appellé à chaque étape de la simulation et qui va mettre à jour le graphique en appelant addDataPoint avec les nouvelles données de population
-//TODO on va prendre une hashmap des valeurs de tot growth pour chaque type de mold
-//TODO faire les bouttons sauvegarde et load
 
-
+/**
+ * Controller for the population and infected LineCharts in the UI.
+ *
+ * <p>Receives aggregated graph values via {@link #graphStep(double, Map, Map)}
+ * and appends them to the appropriate charts. Maintains per-series labels
+ * displayed beneath each chart to show current counts by entity type.
+ */
 public class GraphController implements NeedsGraphValues {
 
     @FXML
@@ -64,7 +67,11 @@ public class GraphController implements NeedsGraphValues {
     }
 
     /**
-     * Réinitialise le graphique (utile pour une nouvelle simulation).
+     * Called each time the simulation produces new aggregate values for the graphs.
+     *
+     * @param timeStep current simulation time step
+     * @param populationsWeight map of entity type → aggregated growth/population
+     * @param infectedCells map of entity type → number of infected cells
      */
     
 
@@ -83,9 +90,10 @@ public class GraphController implements NeedsGraphValues {
         }
     }
     /**
-     * Ajoute un point de données pour tous les types de moisissures.
-     * @param timeStep      le numéro du pas de temps
-     * @param populations   une map associant le nom du type de moule → sa population
+     * Adds a data point for every entity type to the population chart.
+     *
+     * @param timeStep the current simulation timestep
+     * @param populations map of entity type → value to plot
      */
 
     private void addDataPoint(double timeStep, Map<Entities, Integer> populations) {
@@ -149,6 +157,10 @@ public class GraphController implements NeedsGraphValues {
     }
 
     public void clear() {
+        /**
+         * Clears both charts, per-series labels and resets summary labels.
+         * Use when starting a fresh simulation or resetting the UI.
+         */
         populationChart.getData().clear();
         seriesMap.clear();
         if (infectedChart != null) {

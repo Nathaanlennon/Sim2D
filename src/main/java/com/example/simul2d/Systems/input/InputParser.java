@@ -1,10 +1,26 @@
 package com.example.simul2d.Systems.input;
 
 import com.example.simul2d.Entities.Entities;
-import com.example.simul2d.Systems.input.Commands.*;
+import com.example.simul2d.Systems.input.Commands.AddEntityCommand;
+import com.example.simul2d.Systems.input.Commands.ClearEntitiesCommand;
+import com.example.simul2d.Systems.input.Commands.Command;
+import com.example.simul2d.Systems.input.Commands.DecreaseSpeedCommand;
+import com.example.simul2d.Systems.input.Commands.IncreaseSpeedCommand;
+import com.example.simul2d.Systems.input.Commands.LoadCommand;
+import com.example.simul2d.Systems.input.Commands.PauseCommand;
+import com.example.simul2d.Systems.input.Commands.RectangleEntityCommand;
+import com.example.simul2d.Systems.input.Commands.RectangleMaterialCommand;
+import com.example.simul2d.Systems.input.Commands.RemoveEntityCommand;
+import com.example.simul2d.Systems.input.Commands.SaveCommand;
+import com.example.simul2d.Systems.input.Commands.SetMaterialCommand;
+import com.example.simul2d.Systems.input.Commands.SpeedCommand;
 import com.example.simul2d.grid.Material;
 import com.example.simul2d.grid.Vec2;
 
+/**
+ * Utilities for parsing textual console commands into structured command
+ * objects used by the input subsystem.
+ */
 public class InputParser {
 
     private InputParser() {
@@ -136,6 +152,12 @@ public class InputParser {
     }
 
     
+    /**
+     * Parses a raw input string into a {@link Command} instance.
+     *
+     * @param input the raw user input
+     * @return a {@link Command} if parsing succeeded, otherwise {@code null}
+     */
     public static Command parseInput(String input) {
         if (input == null) return null;
         input = input.trim();

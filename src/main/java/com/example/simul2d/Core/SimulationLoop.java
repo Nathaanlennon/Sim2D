@@ -1,16 +1,22 @@
 package com.example.simul2d.Core;
 
-import com.example.simul2d.Systems.UpdateSimulationSystem;
-import com.example.simul2d.Systems.input.InputHandler;
-import com.example.simul2d.Systems.ConsoleRenderSystem;
-import javafx.application.Platform;
-
+import static java.lang.Thread.sleep;
 import java.util.List;
 
-import static java.lang.Thread.sleep;
+import com.example.simul2d.Systems.ConsoleRenderSystem;
+import com.example.simul2d.Systems.UpdateSimulationSystem;
+import com.example.simul2d.Systems.input.InputHandler;
+
+import javafx.application.Platform;
 
 /**
- * Runs the update-render-input loop for the simulation.
+ * Controls and runs the main simulation loop.
+ *
+ * <p>This class coordinates the update, render and input subsystems for a
+ * {@link SimulationState}. It owns an {@link UpdateSimulationSystem} which
+ * advances the simulation logic and uses a {@link ConsoleRenderSystem} and
+ * {@link com.example.simul2d.Systems.input.InputHandler} to render state and
+ * process input respectively.
  */
 public class SimulationLoop {
     public static SimulationLoop self;
@@ -31,7 +37,9 @@ public class SimulationLoop {
     }
 
     /**
-     * Request that the simulation loop stop at the next convenient point.
+     * Requests that the simulation loop stop at the next convenient point.
+     * Calling this method will cause {@link #runSimulation(ConsoleRenderSystem, com.example.simul2d.Systems.input.InputHandler)}
+     * to exit its main loop and return once the current iteration completes.
      */
     public void stop() {
         this.running = false;
@@ -49,7 +57,7 @@ public class SimulationLoop {
     }
 
     /**
-     * Returns whether the loop is still running.
+     * Returns whether the loop is currently running.
      *
      * @return {@code true} while the loop remains active
      */
@@ -90,11 +98,17 @@ public class SimulationLoop {
     }
 
     /**
-     * Executes the main simulation loop until {@code running} becomes false.
+     * Executes the simulation loop until {@link #stop()} is called.
+     *
+     * <p>Each loop iteration first processes any queued input via
+     * {@code inputHandler.handleInput()}, then advances the simulation state
+     * with {@link #update()} (unless the state is paused) and finally invokes
+     * the provided renderer. The loop sleeps between iterations according to
+     * the simulation speed value from {@link SimulationState}.
      *
      * @param render       the renderer used to display the simulation state
      * @param inputHandler the input handler used to consume queued commands
-     * @throws InterruptedException if the loop sleep is interrupted
+     * @throws InterruptedException if the thread sleep is interrupted
      */
     public void runSimulation(ConsoleRenderSystem render, InputHandler inputHandler) throws InterruptedException {
         if (this.consoleRenderSystem == null) this.consoleRenderSystem = render;

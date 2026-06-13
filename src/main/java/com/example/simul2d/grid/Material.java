@@ -2,6 +2,12 @@ package com.example.simul2d.grid;
 
 import java.io.Serializable;
 
+/**
+ * Material types used to describe cell substrates.
+ *
+ * <p>Each material has an associated vulnerability factor used by the
+ * propagation system and a display color expressed as a hex string.
+ */
 public enum Material implements Serializable {
     WOOD(0.6, "#8B5A2B"),
     CONCRETE(0.1, "#808080"),
@@ -20,6 +26,12 @@ public enum Material implements Serializable {
         this.colorHex = colorHex;
     }
 
+    /**
+     * Parse a material name (case-insensitive) into a {@link Material} value.
+     *
+     * @param text the textual name to parse
+     * @return the matching Material or {@code null} if none matches
+     */
     public static Material fromString(String text) {
         if (text == null) return null;
 
@@ -33,10 +45,20 @@ public enum Material implements Serializable {
         return null;
     }
 
+    /**
+     * Returns the vulnerability factor used by propagation calculations.
+     *
+     * @return vulnerability multiplier (non-negative)
+     */
     public double getVulnerability() {
         return vunerability;
     }
 
+    /**
+     * Returns the display color for this material as a hexadecimal string.
+     *
+     * @return color in the form "#RRGGBB"
+     */
     public String getColorHex() {
         return colorHex;
     }
