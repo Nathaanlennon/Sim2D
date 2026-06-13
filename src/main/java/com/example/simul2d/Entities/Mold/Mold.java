@@ -1,6 +1,4 @@
 package com.example.simul2d.Entities.Mold;
-import java.util.Objects;
-
 import com.example.simul2d.Entities.CanGrow;
 import com.example.simul2d.Entities.CanPropagate;
 import com.example.simul2d.Entities.Displayable;
@@ -237,28 +235,6 @@ public abstract class Mold extends Entity implements CanGrow, CanPropagate, Disp
      */
     public void resetGrowth() {
         this.growth = 0;
-    }
-
-
-
-    @Override
-    public boolean equals(Object other) {
-        if (this == other) {
-            return true;
-        }
-
-        if (other == null || getClass() != other.getClass()) {
-            return false;
-        }
-
-        Mold otherMold = (Mold) other;
-        return this.growth == otherMold.growth && this.growthRate == otherMold.growthRate && this.minGrowthValueToPropagate == otherMold.minGrowthValueToPropagate;
-
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(growth, growthRate, minGrowthValueToPropagate);
     }
 
 }
