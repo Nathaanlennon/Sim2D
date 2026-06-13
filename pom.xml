@@ -49,7 +49,7 @@
                 <configuration>
                     <source>21</source>
                     <target>21</target>
-                    <automaticModuleName>com.example.simul2d</automaticModuleName>
+                    <aggregate>false</aggregate>
                 </configuration>
             </plugin>
             <plugin>
