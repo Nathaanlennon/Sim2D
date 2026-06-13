@@ -12,3 +12,6 @@ mvn clean
 mvn javafx:run
 mvn javadoc:javadoc
 mvn exec:java -Dexec.mainClass="com.example.simul2d.Console.ConsoleMain"
+
+
+javafx : clic droit pour activer le mode drag
