@@ -45,7 +45,7 @@ public class HelloController implements NeedsSimulationState{
     @Override
     public void setSimulationState(SimulationState state) {
         this.simulationState = state;
-        // optional: update UI with initial info from state
+        // optional: update UI with initial informations from state
         if (infoText != null && state != null) {
             infoText.setText("Speed: " + state.getSpeed());
         }
