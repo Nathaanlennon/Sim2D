@@ -9,7 +9,8 @@ import com.example.simul2d.grid.Cell;
 public class AxialMold1 extends AxialMold {
     
     public AxialMold1() {
-        super(0, 3, 100, 0.4, Entities.AXIAL_MOLD1); // Call the parent constructor with initial growth and growth rate and minimum growth value for propagation
+        // Further reduced age-death parameters so molds live significantly longer
+        super(0, 3, 100, 0.4, Entities.AXIAL_MOLD1, 0.0002, 0.4);
     }
 
     @Override

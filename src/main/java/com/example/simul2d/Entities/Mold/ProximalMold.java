@@ -1,9 +1,11 @@
 package com.example.simul2d.Entities.Mold;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import com.example.simul2d.Entities.CoorWeight;
 import com.example.simul2d.Entities.Entities;
 import com.example.simul2d.grid.Vec2;
-
-import java.util.*;
 
 
 public abstract class ProximalMold extends Mold {
@@ -12,8 +14,8 @@ public abstract class ProximalMold extends Mold {
     public static final List<CoorWeight> distribution = createProximalDistribution();
 
 
-    public ProximalMold(int initialGrowth, int growthRate, int minimumGrowth, double propagationRate, Entities entityType) {
-        super(initialGrowth, growthRate, minimumGrowth, propagationRate, entityType); // Call the parent constructor with initial growth and growth rate and minimum growth value for propagation
+    public ProximalMold(int initialGrowth, int growthRate, int minimumGrowth, double propagationRate, Entities entityType, double ageDeathFactor, double ageDeathMax) {
+        super(initialGrowth, growthRate, minimumGrowth, propagationRate, entityType, ageDeathFactor, ageDeathMax); // Call the parent constructor with initial growth and growth rate and minimum growth value for propagation
     }
 
     private static List<CoorWeight> createProximalDistribution() {

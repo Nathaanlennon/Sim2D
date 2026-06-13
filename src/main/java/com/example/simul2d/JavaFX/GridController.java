@@ -1,13 +1,17 @@
 package com.example.simul2d.JavaFX;
 
 import com.example.simul2d.Core.SimulationState;
-import com.example.simul2d.Systems.input.Commands.*;
+import com.example.simul2d.Systems.input.Commands.AddEntityCommand;
+import com.example.simul2d.Systems.input.Commands.ClearEntitiesCommand;
+import com.example.simul2d.Systems.input.Commands.RectangleEntityCommand;
+import com.example.simul2d.Systems.input.Commands.RectangleMaterialCommand;
+import com.example.simul2d.Systems.input.Commands.RemoveEntityCommand;
+import com.example.simul2d.Systems.input.Commands.SetMaterialCommand;
 import com.example.simul2d.Systems.input.InputHandler;
 import com.example.simul2d.grid.Cell;
 import com.example.simul2d.grid.Grid;
 import com.example.simul2d.grid.Material;
 import com.example.simul2d.grid.Vec2;
-import com.example.simul2d.JavaFX.ToolsType;
 
 import javafx.fxml.FXML;
 import javafx.scene.layout.GridPane;
@@ -85,6 +89,31 @@ public class GridController implements NeedsSimulationState, NeedsUiState {
     @FXML
     private void initialize() {
         System.out.println("GridController initialized");
+        installZoomHandler();
+    }
+
+    // Current zoom scale for the grid display
+    private double gridScale = 1.0;
+    private static final double GRID_SCALE_MIN = 0.2;
+    private static final double GRID_SCALE_MAX = 6.0;
+
+    private void installZoomHandler() {
+        // zoom with scroll wheel when pointer is over gridDisplay
+        gridDisplay.setOnScroll(e -> {
+            if (e.isControlDown()) return; // allow ctrl+scroll for OS-level behavior if desired
+            double delta = e.getDeltaY();
+            // smooth exponential zooming
+            double factor = Math.pow(1.0015, delta);
+            double next = gridScale * factor;
+            if (next < GRID_SCALE_MIN) factor = GRID_SCALE_MIN / gridScale;
+            if (next > GRID_SCALE_MAX) factor = GRID_SCALE_MAX / gridScale;
+
+            gridScale = gridScale * factor;
+            gridDisplay.setScaleX(gridScale);
+            gridDisplay.setScaleY(gridScale);
+
+            e.consume();
+        });
     }
 
     private void initializeGridDisplay() {

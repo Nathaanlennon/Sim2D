@@ -1,7 +1,11 @@
 package com.example.simul2d.Entities.Mold;
 import java.util.Objects;
 
-import com.example.simul2d.Entities.*;
+import com.example.simul2d.Entities.CanGrow;
+import com.example.simul2d.Entities.CanPropagate;
+import com.example.simul2d.Entities.Displayable;
+import com.example.simul2d.Entities.Entities;
+import com.example.simul2d.Entities.Entity;
 
 
 /**
@@ -13,12 +17,21 @@ import com.example.simul2d.Entities.*;
  * override the default growth behavior and provide specific implementations of
  * the {@link #toString()} method for visualization purposes.
  */
-public abstract class Mold extends Entity implements CanGrow, CanPropagate, Displayable {
+public abstract class Mold extends Entity implements CanGrow, CanPropagate, Displayable, com.example.simul2d.Entities.CanAge {
 //todo : sizemax
     private int growthRate;
     private final int minGrowthValueToPropagate; // Minimum growth required for propagation
     private double PropagationProbability = 0.5; // Default propagation probability
     protected static final int MAX_GROWTH = 100; // Maximum growth value for intensity adjustment
+    // Age in simulation steps. Starts at 0 and increases each step.
+    private int age = 0;
+    // Whether the entity is dead (set when probabilistic death occurs)
+    private boolean dead = false;
+
+    // Per-instance parameters controlling age-based death probability.
+    // death probability = min(ageDeathMax, age * ageDeathFactor)
+    private final double ageDeathFactor;
+    private final double ageDeathMax;
 
 
     /**
@@ -29,11 +42,43 @@ public abstract class Mold extends Entity implements CanGrow, CanPropagate, Disp
      * @param minGrowthValueToPropagate minimum growth required for propagation
      * @param PropagationProbability the probability of successful propagation (0-1)
      */
-    public Mold(int growth, int growthRate, int minGrowthValueToPropagate, double PropagationProbability, Entities entityType) {
+    public Mold(int growth, int growthRate, int minGrowthValueToPropagate, double PropagationProbability, Entities entityType, double ageDeathFactor, double ageDeathMax) {
         super(growth, entityType);
         this.growthRate = growthRate;
         this.minGrowthValueToPropagate = minGrowthValueToPropagate;
         this.PropagationProbability = PropagationProbability;
+        this.ageDeathFactor = Math.max(0.0, ageDeathFactor);
+        this.ageDeathMax = Math.max(0.0, Math.min(1.0, ageDeathMax));
+    }
+
+    @Override
+    public boolean isDead() {
+        return dead;
+    }
+
+    /**
+     * Implements the {@link com.example.simul2d.Entities.CanAge} contract.
+     * Performs one aging step and returns true if the entity died.
+     */
+    @Override
+    public boolean ageOneStep() {
+        // increment age
+        this.age++;
+
+        // compute age-based instantaneous death probability using an exponential law:
+        // deathProb(age) = ageDeathMax * (1 - exp(-ageDeathFactor * age))
+        double deathProb = ageDeathMax * (1 - Math.exp(-ageDeathFactor * this.age));
+        if (Math.random() < deathProb) {
+            this.dead = true;
+            return true;
+        }
+
+        return this.dead;
+    }
+
+    /** Returns the current age in steps. */
+    public int getAge() {
+        return age;
     }
 
     
