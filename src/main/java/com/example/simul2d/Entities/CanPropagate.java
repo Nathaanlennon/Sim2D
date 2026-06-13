@@ -29,8 +29,6 @@ public interface CanPropagate {
     void propagateTo(Cell target);
 
     /**
-     * Returns a propagation distribution list describing candidate target
-     * coordinates and their relative weights.
      *
      * <p>The list is typically ordered from highest to lowest weight and is
      * used by propagation systems to select a target cell.

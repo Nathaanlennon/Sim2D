@@ -22,8 +22,9 @@ public class SaveSystem {
     /**
      * Serializes the provided grid to the given filename (appends ".sim").
      *
-     * @param grid the grid to serialize
+     * @param grid     the grid to serialize
      * @param filename the target filename without extension
+     * @throws IOException if an I/O error occurs during writing
      */
     public static void saveSystem(Grid grid, String filename) throws IOException {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filename + ".sim"))) {
@@ -31,8 +32,14 @@ public class SaveSystem {
         }
     }
 
-    /** Overload that accepts a {@link File}. */
-    public static void saveSystem(Grid grid, File file) throws IOException { // Overloaded method to accept File directly
+    /**
+     * Overload that accepts a {@link File}.
+     *
+     * @param grid the grid to save
+     * @param file the destination file
+     * @throws IOException if an I/O error occurs during writing
+     */
+    public static void saveSystem(Grid grid, File file) throws IOException {
         saveSystem(grid, file.getAbsolutePath());
     }
 
@@ -41,6 +48,8 @@ public class SaveSystem {
      *
      * @param filename file path to read
      * @return the deserialized {@link Grid}
+     * @throws IOException if an I/O error occurs during reading
+     * @throws ClassNotFoundException if the class of a serialized object cannot be found
      */
     public static Grid loadSystem(String filename) throws IOException, ClassNotFoundException {
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filename))) {
@@ -48,7 +57,14 @@ public class SaveSystem {
         }
     }
 
-    /** Overload that accepts a {@link File}. */
+    /**
+     * Overload that accepts a {@link File}.
+     *
+     * @throws IOException if an I/O error occurs during reading
+     * @throws ClassNotFoundException if the class of a serialized object cannot be found
+     * @param file the file to read from
+     * @return the deserialized {@link Grid}
+     */
     public static Grid loadSystem(File file) throws IOException, ClassNotFoundException { // Overloaded method to accept File directly
         return loadSystem(file.getAbsolutePath());
     }

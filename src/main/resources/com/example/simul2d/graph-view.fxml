@@ -10,31 +10,38 @@
       fx:controller="com.example.simul2d.JavaFX.GraphController"
       spacing="10"
       style="-fx-padding: 8; -fx-border-color: #aaa; -fx-border-width: 1;">
+    <!--    add border to the vbox please, one pixel black :
 
-    <LineChart fx:id="populationChart"
-               title="Population of molds"
-               animated="false"
-               createSymbols="false">
-        <xAxis>
-            <NumberAxis label="Time (steps)" forceZeroInRange="false"/>
-        </xAxis>
-        <yAxis>
-            <NumberAxis label="Cell count" forceZeroInRange="false"/>
-        </yAxis>
-    </LineChart>
-    <Label fx:id="populationLabel" text="Population: 0" />
-    <HBox fx:id="populationSeriesBox" spacing="8" />
-    <LineChart fx:id="infectedChart"
-               title="Infected cells"
-               animated="false"
-               createSymbols="false">
-        <xAxis>
-            <NumberAxis label="Time (steps)" forceZeroInRange="false"/>
-        </xAxis>
-        <yAxis>
-            <NumberAxis label="Infected cells" forceZeroInRange="false"/>
-        </yAxis>
-    </LineChart>
-    <Label fx:id="infectedLabel" text="Infected: 0" />
-    <HBox fx:id="infectedSeriesBox" spacing="8" />
+    -->
+
+    <VBox VBox.vgrow="ALWAYS" alignment="TOP_CENTER" style="-fx-border-color: black;-fx-border-width: 1;-fx-border-style: solid;">
+        <LineChart fx:id="populationChart"
+                   title="Population of molds"
+                   animated="false"
+                   createSymbols="false">
+            <xAxis>
+                <NumberAxis label="Time (steps)" forceZeroInRange="false"/>
+            </xAxis>
+            <yAxis>
+                <NumberAxis label="Cell count" forceZeroInRange="false"/>
+            </yAxis>
+        </LineChart>
+        <Label fx:id="populationLabel" text="Population: 0"/>
+        <HBox fx:id="populationSeriesBox" spacing="8"/>
+    </VBox>
+    <VBox VBox.vgrow="ALWAYS" alignment="BOTTOM_CENTER" style="-fx-border-color: black;-fx-border-width: 1;-fx-border-style: solid;">
+        <LineChart fx:id="infectedChart"
+                   title="Infected cells"
+                   animated="false"
+                   createSymbols="false">
+            <xAxis>
+                <NumberAxis label="Time (steps)" forceZeroInRange="false"/>
+            </xAxis>
+            <yAxis>
+                <NumberAxis label="Infected cells" forceZeroInRange="false"/>
+            </yAxis>
+        </LineChart>
+        <Label fx:id="infectedLabel" text="Infected: 0"/>
+        <HBox fx:id="infectedSeriesBox" spacing="8"/>
+    </VBox>
 </VBox>

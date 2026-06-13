@@ -8,6 +8,6 @@ package com.example.simul2d.Entities;
  */
 public interface CanAttack {
 
-    /** Returns the integer attack power for this entity. */
+    /** @return the integer attack power for this entity. */
     int getAttackPower();
 }

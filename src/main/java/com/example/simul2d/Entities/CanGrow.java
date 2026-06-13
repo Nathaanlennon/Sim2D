@@ -18,15 +18,27 @@ public interface CanGrow {
      * @param totalGrowthOnCell the sum of growth values for all entities
      *                          in the containing cell; implementations may
      *                          use this to alter growth behavior
+     * @return the resulting growth value after applying the growth step
      */
     int grow(int totalGrowthOnCell);
-    
-    /** Returns the configured growth rate (units per step). */
+
+    /**
+     */
     int getGrowthRate();
 
-    /** Sets the growth rate (units per step). */
+    /**
+     * Sets the growth rate (units per step).
+     *
+     * @param growthRate the new growth rate to apply per simulation step
+     */
     void setGrowthRate(int growthRate);
 
+    /**
+     * Determines whether the entity is able to grow during the current step.
+     *
+     * @param totalGrowthOnCell the sum of growth values for all entities in the same cell
+     * @return true if the entity can grow, false otherwise
+     */
     boolean isAbleToGrow(int totalGrowthOnCell);
 
 }

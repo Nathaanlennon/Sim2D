@@ -17,12 +17,18 @@ public abstract class Entity implements Serializable {
     protected int growth;
     private Entities entityType;
 
+    /**
+     *
+     * @param growth the initial growth of the entity
+     * @param entityType type following {@link Entities}
+     */
     public Entity(int growth, Entities entityType) {
         this.growth = getGrowth(growth);
         this.entityType = entityType;
     }
 
-    private static int getGrowth(int growth) {
+
+    private int getGrowth(int growth) {
         return growth;
     }
 

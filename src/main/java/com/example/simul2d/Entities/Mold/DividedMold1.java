@@ -42,7 +42,6 @@ public class DividedMold1 extends ProximalMold {
     }
 
     /**
-     * Returns the propagation distribution list for this proximal mold.
      * <p>
      * The returned list is the static, unmodifiable list of weighted proximal
      * targets shared across all instances.
@@ -56,7 +55,6 @@ public class DividedMold1 extends ProximalMold {
     }
 
     /**
-     * Returns the color hex string associated with this mold's entity type.
      *
      * @return the hexadecimal color string (e.g., {@code "#RRGGBB"})
      */
@@ -108,7 +106,6 @@ public class DividedMold1 extends ProximalMold {
     }
 
     /**
-     * Returns a single‑character representation used for text‑based visualization.
      *
      * @return the string {@code "S"}
      */

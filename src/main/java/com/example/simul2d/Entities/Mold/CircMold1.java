@@ -40,7 +40,6 @@ public class CircMold1 extends CircularMold {
     }
 
     /**
-     * Returns the color hex string of the entity type associated with this mold.
      *
      * @return the hexadecimal color string (e.g., {@code "#RRGGBB"})
      */

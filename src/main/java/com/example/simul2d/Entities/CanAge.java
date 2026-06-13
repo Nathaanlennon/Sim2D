@@ -13,7 +13,7 @@ public interface CanAge {
     boolean ageOneStep();
 
     /**
-     * Returns whether the entity is currently dead.
+     * @return whether the entity is currently dead.
      */
     boolean isDead();
 }

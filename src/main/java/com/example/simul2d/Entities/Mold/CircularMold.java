@@ -14,8 +14,7 @@ import com.example.simul2d.grid.Vec2;
  * distance 1 → weight 8, distance 2 → weight 7, distance 3 → weight 1.
  * <p>
  * The static distribution list is shared among all subclasses. Concrete
- * implementations only need to define their specific parameters and the
- * {@link #propagateTo(Cell)} method.
+ * implementations only need to define their specific parameters.
  * </p>
  *
  * @see Mold
@@ -84,7 +83,6 @@ public abstract class CircularMold extends Mold {
     }
 
     /**
-     * Returns the propagation distribution list for this circular mold.
      * <p>
      * The returned list is the static, unmodifiable list of weighted circular
      * targets shared across all instances.

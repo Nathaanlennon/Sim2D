@@ -1,16 +1,18 @@
 package com.example.simul2d.Entities;
 
 
-
+/**
+ * Interface for those who are to be displayed (means printed)
+ */
 public interface Displayable {
 
-    /** Returns the display size used for rendering order (larger = drawn on top). */
+    /** @return the display size used for rendering order (larger = drawn on top). */
     double getDisplaySize();
 
-    /** Returns the entity color as a hex string (e.g. "#RRGGBB"). */
+    /** @return the entity color as a hex string (e.g. "#RRGGBB"). */
     String getColorHex();
 
-    /** Returns the opacity in range [0.0, 1.0]. */
+    /** @return the opacity in range [0.0, 1.0]. */
     double getOpacity();
 
 }

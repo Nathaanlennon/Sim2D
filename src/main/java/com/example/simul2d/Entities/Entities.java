@@ -3,7 +3,6 @@ package com.example.simul2d.Entities;
 import com.example.simul2d.Entities.Mold.AxialMold1;
 import com.example.simul2d.Entities.Mold.CircMold1;
 import com.example.simul2d.Entities.Mold.DividedMold1;
-import com.example.simul2d.Entities.Mold.MoldTest;
 
 
 /**
@@ -15,7 +14,6 @@ import com.example.simul2d.Entities.Mold.MoldTest;
 public enum Entities {
     AXIAL_MOLD1("#33A1FF"),
     CIRC_MOLD1("#FF5733"),
-    MOLD_TEST("#DDDDD0"),
     DIVIDED_MOLD1("#9B59B6");
 
     private final String colorHex;
@@ -24,7 +22,7 @@ public enum Entities {
         this.colorHex = colorHex;
     }
 
-    /** Returns the default display color for the entity type as a hex string. */
+    /** @return the default display color for the entity type as a hex string. */
     public String getColorHex() {
         return colorHex;
     }
@@ -40,7 +38,6 @@ public enum Entities {
             case AXIAL_MOLD1 -> new AxialMold1();
             case CIRC_MOLD1 -> new CircMold1();
             case DIVIDED_MOLD1 -> new DividedMold1();
-            case MOLD_TEST -> new MoldTest();
         };
     }
 

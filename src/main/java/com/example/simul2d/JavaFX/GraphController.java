@@ -50,6 +50,7 @@ public class GraphController implements NeedsGraphValues {
     private final Map<String, XYChart.Series<Number, Number>> seriesMapInfected = new HashMap<>();
 
     @FXML
+
     public void initialize() {
         // Configuration facultative de l'axe X (pas forcément nécessaire)
         NumberAxis xAxis = (NumberAxis) populationChart.getXAxis();
@@ -156,11 +157,11 @@ public class GraphController implements NeedsGraphValues {
         }
     }
 
+    /**
+     * Clears both charts, per-series labels and resets summary labels.
+     * Use when starting a fresh simulation or resetting the UI.
+     */
     public void clear() {
-        /**
-         * Clears both charts, per-series labels and resets summary labels.
-         * Use when starting a fresh simulation or resetting the UI.
-         */
         populationChart.getData().clear();
         seriesMap.clear();
         if (infectedChart != null) {

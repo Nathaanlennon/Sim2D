@@ -88,7 +88,6 @@ public abstract class Mold extends Entity implements CanGrow, CanPropagate, Disp
     }
 
     /**
-     * Returns the current age in simulation steps.
      *
      * @return the age (number of steps) since this entity was created
      */
@@ -98,7 +97,6 @@ public abstract class Mold extends Entity implements CanGrow, CanPropagate, Disp
 
     
     /**
-     * Returns the current growth value for this mold instance.
      *
      * @return the growth units currently stored on this entity
      */
@@ -118,7 +116,6 @@ public abstract class Mold extends Entity implements CanGrow, CanPropagate, Disp
     }
 
     /**
-     * Returns the configured growth rate applied on each growth step.
      *
      * @return growth units added per step
      */
@@ -138,7 +135,6 @@ public abstract class Mold extends Entity implements CanGrow, CanPropagate, Disp
     }
 
     /**
-     * Returns the configured propagation probability for this mold.
      *
      * @return probability in range [0.0, 1.0]
      */

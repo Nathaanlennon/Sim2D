@@ -36,7 +36,6 @@ public class UiState {
     private boolean holdClick = false;
 
     /**
-     * Returns whether a continuous click operation is in progress.
      *
      * @return {@code true} if the mouse button is being held down after a click
      */
@@ -61,7 +60,6 @@ public class UiState {
     }
 
     /**
-     * Returns the current editing mode.
      *
      * @return the mode (entity or material)
      */

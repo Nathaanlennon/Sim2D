@@ -102,7 +102,6 @@ public class SimulationState {
     }
 
     /**
-     * Returns the most recent pre-rendered grid snapshot.
      *
      * <p>If no snapshot has been published yet this method will fall back to
      * returning the current {@link Grid#toString()} value.
@@ -115,7 +114,6 @@ public class SimulationState {
     }
 
     /**
-     * Returns whether the simulation is currently paused.
      *
      * @return {@code true} when paused
      */
@@ -123,7 +121,6 @@ public class SimulationState {
         return paused;
     }
     /**
-     * Returns the current simulation speed.
      *
      * @return the speed value used to control loop timing
      */
@@ -132,7 +129,6 @@ public class SimulationState {
     }
 
     /**
-     * Returns the current simulation time.
      *
      * @return the elapsed time (in simulation steps)
      */

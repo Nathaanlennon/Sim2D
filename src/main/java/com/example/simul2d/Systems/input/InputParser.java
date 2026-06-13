@@ -28,7 +28,9 @@ public class InputParser {
 
 
     /**
-     * Parse "(x,y)" → Vec2, or null on failure.
+     *
+     * @param text the supposed coordinate couple
+     * @return the parsed Vec2 coordinate
      */
     public static Vec2 parseVec2(String text) {
         if (text == null) return null;
@@ -53,7 +55,7 @@ public class InputParser {
     /**
      * Reads the next "(…)" token from {@code args} starting at {@code i[0]},
      * advances {@code i[0]} past it, and returns the raw "(…)" string.
-     * Returns null if no opening parenthesis is found.
+     * @return null if no opening parenthesis is found.
      */
     private static String readVec2Token(String args, int[] i) {
         // skip to the opening '('

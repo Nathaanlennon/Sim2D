@@ -58,7 +58,6 @@ public class Grid implements Serializable {
         }
 
         /**
-         * Returns the height of the grid (number of rows).
          *
          * @return the number of rows
          */

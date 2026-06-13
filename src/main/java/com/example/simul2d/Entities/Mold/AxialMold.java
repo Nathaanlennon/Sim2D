@@ -76,7 +76,6 @@ public abstract class AxialMold extends Mold {
     }
 
     /**
-     * Returns the propagation distribution list for this axial mold.
      * <p>
      * The returned list is the static, unmodifiable list of weighted axial targets
      * shared across all instances.

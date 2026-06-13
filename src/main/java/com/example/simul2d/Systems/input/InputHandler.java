@@ -6,20 +6,7 @@ import com.example.simul2d.Core.SimulationLoop;
 import com.example.simul2d.Core.SimulationState;
 import com.example.simul2d.Systems.ConsoleRenderSystem;
 import com.example.simul2d.Systems.SaveSystem;
-import com.example.simul2d.Systems.input.Commands.AddEntityCommand;
-import com.example.simul2d.Systems.input.Commands.ClearEntitiesCommand;
-import com.example.simul2d.Systems.input.Commands.Command;
-import com.example.simul2d.Systems.input.Commands.DecreaseSpeedCommand;
-import com.example.simul2d.Systems.input.Commands.IncreaseSpeedCommand;
-import com.example.simul2d.Systems.input.Commands.LoadCommand;
-import com.example.simul2d.Systems.input.Commands.PauseCommand;
-import com.example.simul2d.Systems.input.Commands.RectangleEntityCommand;
-import com.example.simul2d.Systems.input.Commands.RectangleMaterialCommand;
-import com.example.simul2d.Systems.input.Commands.RemoveEntityCommand;
-import com.example.simul2d.Systems.input.Commands.SaveCommand;
-import com.example.simul2d.Systems.input.Commands.SetMaterialCommand;
-import com.example.simul2d.Systems.input.Commands.SpeedCommand;
-import com.example.simul2d.Systems.input.Commands.StepCommand;
+import com.example.simul2d.Systems.input.Commands.*;
 
 
 /**
@@ -78,8 +65,8 @@ public class InputHandler {
                 }
             }
             case RectangleEntityCommand r -> {
-                for (int y = r.start().y(); y <= r.end().y(); y++) {
-                    for (int x = r.start().x(); x <= r.end().x(); x++) {
+                for (int y = Math.min(r.start().y(), r.end().y()); y <= Math.max(r.start().y(), r.end().y()); y++) {
+                    for (int x = Math.min(r.start().x(), r.end().x()); x <= Math.max(r.start().x(), r.end().x()); x++) {
                         data.getGrid().getCell(x, y).addEntity(r.entityType().createEntity());
                     }
                 }
@@ -101,7 +88,7 @@ public class InputHandler {
                 data.changePause(false); //TODO: problems while loading, needs lock unlock reading writting 
             }
             case StepCommand sp -> {
-                for (int i = 0; i < sp.StepsNumber();i++){
+                for (int i = 0; i < sp.stepsNumber();i++){
                     SimulationLoop.self.update();
                 }
                 SimulationLoop.self.render();

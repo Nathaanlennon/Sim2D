@@ -116,6 +116,11 @@ public class Cell implements Serializable {
         return capacity;
     }
 
+    /**
+     * Recomputes the total growth value of all growable entities in the cell.
+     *
+     * @return the updated total growth value of the cell
+     */
     public int updateTotalGrowthOnCell() {
         int total = 0;
         for (Entity entity : entities.values()) {

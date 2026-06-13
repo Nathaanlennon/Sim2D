@@ -29,6 +29,7 @@ public class SimulationLoop {
 
 
     //constructors
+
     public SimulationLoop(SimulationState data) {
         this.data = data;
         this.running = true;
@@ -57,7 +58,6 @@ public class SimulationLoop {
     }
 
     /**
-     * Returns whether the loop is currently running.
      *
      * @return {@code true} while the loop remains active
      */
@@ -117,10 +117,7 @@ public class SimulationLoop {
             inputHandler.handleInput();
             if (!data.isPaused()) {
                 update();
-                // render part
                 render();
-
-
                 sleep((long) (1000 / data.getSpeed()));
             }
         }

@@ -76,7 +76,6 @@ public abstract class ProximalMold extends Mold {
     }
 
     /**
-     * Returns the propagation distribution list for this proximal mold.
      * <p>
      * The list is static and shared across all instances of proximal molds.
      * </p>

@@ -14,7 +14,7 @@
     <Label fx:id="currentSpeed" text="Speed : 1x" />
     <Button fx:id="playPauseButton" text="Play/Pause" onAction="#handlePlayPause" prefWidth="140" maxWidth="140"/>
     <HBox spacing="6" alignment="CENTER">
-        <TextField fx:id="countField" prefWidth="65" />
+        <TextField fx:id="countField" text="1" prefWidth="65" />
         <Button fx:id="stepButton" text="Step" onAction="#handleStep" prefWidth="65" maxWidth="140"/>
     </HBox>
     <Label fx:id="statusLabel" style="-fx-text-fill: red;" />

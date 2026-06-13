@@ -13,8 +13,7 @@ import com.example.simul2d.grid.Cell;
 public class CombatSystem {
 
     // constructors
-    public CombatSystem() {
-    }
+
 
     //set methods
 //get methods

@@ -45,8 +45,7 @@ public enum Material implements Serializable {
         return null;
     }
 
-    /**
-     * Returns the vulnerability factor used by propagation calculations.
+    /** the vulnerability factor used by propagation calculations.
      *
      * @return vulnerability multiplier (non-negative)
      */

@@ -62,6 +62,10 @@ public class DrawingController implements NeedsUiState{
         this.currentToolLabel.setText("Selected Tool: Draw");
     }
 //public methods
+
+    /**
+     * initialize the tool buttons for materials and entities, setting up their event handlers to update the UiState accordingly.
+     */
     @FXML
     public void initialize() {
         ConsoleRenderSystem.printSomething("DrawingController initialized");

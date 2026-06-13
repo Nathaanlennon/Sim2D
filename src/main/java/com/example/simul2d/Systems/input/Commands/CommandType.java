@@ -40,8 +40,6 @@ public enum CommandType {
     }
 
     /**
-     * Returns the key mapped to this command.
-     *
      * @return the keyboard key as a string
      */
     public String getKey() {

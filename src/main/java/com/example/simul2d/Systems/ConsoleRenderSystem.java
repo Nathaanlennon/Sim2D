@@ -14,7 +14,9 @@ import com.example.simul2d.Entities.Entities;
  */
 public class ConsoleRenderSystem {
 
-    /** The simulation state to be rendered. */
+    /**
+     * The simulation state to be rendered.
+     */
     private final SimulationState data;
 
     /**
@@ -56,7 +58,6 @@ public class ConsoleRenderSystem {
 
     /**
      * Clears the terminal using ANSI escape sequences.
-     * <p>
      * The escape codes used are:
      * <ul>
      *   <li>{@code \u001B[2J} – clear the screen</li>
@@ -64,7 +65,6 @@ public class ConsoleRenderSystem {
      *   <li>{@code \u001B[3J} – clear the scroll‑back buffer (optional, may not work in all terminals)</li>
      * </ul>
      * The output stream is flushed immediately.
-     * </p>
      */
     public static void clear() {
         // ANSI codes: clear screen, reset cursor, clear scrollback buffer
@@ -74,7 +74,6 @@ public class ConsoleRenderSystem {
 
     /**
      * Prints the current simulation state to the console.
-     * <p>
      * The output consists of:
      * <ul>
      *   <li>a textual grid representation obtained from {@code data.getGrid().toString()}</li>
@@ -83,7 +82,7 @@ public class ConsoleRenderSystem {
      *   <li>the current simulation time and speed</li>
      * </ul>
      * The terminal is cleared before printing.
-     * </p>
+     *
      */
     public void printSimulation() {
         clear();

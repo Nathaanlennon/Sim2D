@@ -7,6 +7,6 @@ package com.example.simul2d.Entities;
  */
 public interface CanDefend {
 
-    /** Returns the integer defense power for this entity. */
+    /** @return the integer defense power for this entity. */
     int getDefensePower();
 }

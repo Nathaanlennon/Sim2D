@@ -72,13 +72,13 @@ public class PropagationSystem {
      * @param canPropagate the propagating entity
      */
     public void propagation(Vec2 OGCoordinates, CanPropagate canPropagate) {
-        if (canPropagate != null && canPropagate.isAbleToPropagate()) {
-            Vec2 targetCoordinates = getPropagationTarget(canPropagate.getPropagationDistributionList());
+        if (canPropagate != null && canPropagate.isAbleToPropagate()) { //can ?
+            Vec2 targetCoordinates = getPropagationTarget(canPropagate.getPropagationDistributionList()); //where ?
             if (targetCoordinates != null) {
-                Cell target = data.getGrid().getCell(OGCoordinates.add(targetCoordinates));
+                Cell target = data.getGrid().getCell(OGCoordinates.add(targetCoordinates)); // there
                 if (target != null) {
-                    if (shouldPropagate(canPropagate, target)) {
-                        canPropagate.propagateTo(target);
+                    if (shouldPropagate(canPropagate, target)) { // will ?
+                        canPropagate.propagateTo(target); // propagation
                     }
                 }
             }
