@@ -1,5 +1,6 @@
 package com.example.simul2d.grid;
 import java.io.Serializable;
+import java.util.Objects;
 /**
  * Immutable 2D integer vector used for grid coordinates.
  *
@@ -37,6 +38,31 @@ public record Vec2(int x, int y) implements Serializable {
      */
     public Vec2 negate() {
         return new Vec2(-this.x, -this.y);
+    }
+
+    /**
+     * Returns a new {@link Vec2} representing this vector scaled by the
+     * provided integer factor.
+     *
+     * @param factor integer to scale by
+     * @return new vector equal to (x * factor, y * factor)
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Vec2)) return false;
+        Vec2 other = (Vec2) o;
+        return this.x == other.x && this.y == other.y;
+    }
+
+    /**
+     * Returns a hash code consistent with {@link #equals}.
+     *
+     * @return hash code based on x and y
+     */
+    @Override
+    public int hashCode() {
+        return Objects.hash(x, y);
     }
 }
 
