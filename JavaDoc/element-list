@@ -1,0 +1,10 @@
+module:com.example.simul2d
+com.example.simul2d.Console
+com.example.simul2d.Core
+com.example.simul2d.Entities
+com.example.simul2d.Entities.Mold
+com.example.simul2d.grid
+com.example.simul2d.JavaFX
+com.example.simul2d.Systems
+com.example.simul2d.Systems.input
+com.example.simul2d.Systems.input.Commands
