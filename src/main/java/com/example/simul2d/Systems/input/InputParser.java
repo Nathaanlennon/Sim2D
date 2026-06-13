@@ -1,10 +1,26 @@
 package com.example.simul2d.Systems.input;
 
 import com.example.simul2d.Entities.Entities;
-import com.example.simul2d.Systems.input.Commands.*;
+import com.example.simul2d.Systems.input.Commands.AddEntityCommand;
+import com.example.simul2d.Systems.input.Commands.ClearEntitiesCommand;
+import com.example.simul2d.Systems.input.Commands.Command;
+import com.example.simul2d.Systems.input.Commands.DecreaseSpeedCommand;
+import com.example.simul2d.Systems.input.Commands.IncreaseSpeedCommand;
+import com.example.simul2d.Systems.input.Commands.LoadCommand;
+import com.example.simul2d.Systems.input.Commands.PauseCommand;
+import com.example.simul2d.Systems.input.Commands.RectangleEntityCommand;
+import com.example.simul2d.Systems.input.Commands.RectangleMaterialCommand;
+import com.example.simul2d.Systems.input.Commands.RemoveEntityCommand;
+import com.example.simul2d.Systems.input.Commands.SaveCommand;
+import com.example.simul2d.Systems.input.Commands.SetMaterialCommand;
+import com.example.simul2d.Systems.input.Commands.SpeedCommand;
 import com.example.simul2d.grid.Material;
 import com.example.simul2d.grid.Vec2;
 
+/**
+ * Utilities for parsing textual console commands into structured command
+ * objects used by the input subsystem.
+ */
 public class InputParser {
 
     private InputParser() {
@@ -12,7 +28,9 @@ public class InputParser {
 
 
     /**
-     * Parse "(x,y)" → Vec2, or null on failure.
+     *
+     * @param text the supposed coordinate couple
+     * @return the parsed Vec2 coordinate
      */
     public static Vec2 parseVec2(String text) {
         if (text == null) return null;
@@ -37,7 +55,7 @@ public class InputParser {
     /**
      * Reads the next "(…)" token from {@code args} starting at {@code i[0]},
      * advances {@code i[0]} past it, and returns the raw "(…)" string.
-     * Returns null if no opening parenthesis is found.
+     * @return null if no opening parenthesis is found.
      */
     private static String readVec2Token(String args, int[] i) {
         // skip to the opening '('
@@ -136,6 +154,12 @@ public class InputParser {
     }
 
     
+    /**
+     * Parses a raw input string into a {@link Command} instance.
+     *
+     * @param input the raw user input
+     * @return a {@link Command} if parsing succeeded, otherwise {@code null}
+     */
     public static Command parseInput(String input) {
         if (input == null) return null;
         input = input.trim();

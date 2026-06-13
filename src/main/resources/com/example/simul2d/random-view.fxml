@@ -13,7 +13,7 @@
     <Label text="Random fill" />
     <HBox spacing="6" alignment="CENTER">
         <Label text="Count:" />
-        <TextField fx:id="countField" prefWidth="80" />
+        <TextField fx:id="countField" prefWidth="65" />
         <Button text="Random" onAction="#onRandomClicked" />
     </HBox>
 

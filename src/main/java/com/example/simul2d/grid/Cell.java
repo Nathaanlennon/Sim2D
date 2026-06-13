@@ -116,6 +116,11 @@ public class Cell implements Serializable {
         return capacity;
     }
 
+    /**
+     * Recomputes the total growth value of all growable entities in the cell.
+     *
+     * @return the updated total growth value of the cell
+     */
     public int updateTotalGrowthOnCell() {
         int total = 0;
         for (Entity entity : entities.values()) {
@@ -134,27 +139,50 @@ public class Cell implements Serializable {
      * accordingly after each entity's growth step.
      */
     public void step() {
-
         totalGrowthOnCell = 0;
 
-        for (Entity entity : entities.values()) {
-            totalGrowthOnCell += entity.getGrowth();
-            if (entity instanceof CanGrow growable) {
-                if (!growable.isAbleToGrow(totalGrowthOnCell)) {
-                    continue; // Skip growth if the entity is not able to grow based on current conditions
-                }
-                totalGrowthOnCell += growable.grow(totalGrowthOnCell); // Update total growth after growth step
+        // Single pass: for each entity, update total growth, apply growth if possible,
+        // then age the entity and mark it for removal if it died.
+        java.util.List<Entities> toRemove = new java.util.ArrayList<>();
+        for (java.util.Map.Entry<Entities, Entity> entry : entities.entrySet()) {
+            Entity entity = entry.getValue();
 
+            // account current stored growth
+            totalGrowthOnCell += entity.getGrowth();
+
+            // growth phase for growable entities
+            if (entity instanceof CanGrow growable) {
+                if (growable.isAbleToGrow(totalGrowthOnCell)) {
+                    totalGrowthOnCell += growable.grow(totalGrowthOnCell);
+                }
+            }
+
+            // aging phase for ageable entities
+            if (entity instanceof com.example.simul2d.Entities.CanAge ager) {
+                boolean dead = ager.ageOneStep();
+                if (dead || ager.isDead()) {
+                    toRemove.add(entry.getKey());
+                }
             }
         }
+
+        // remove dead entities after the pass
+        for (Entities key : toRemove) {
+            entities.remove(key);
+        }
+
+        // Recompute total growth to reflect removals and ensure consistency
+        updateTotalGrowthOnCell();
     }
 
     /**
-     * Adds the provided entity to this cell. If an entity of the same concrete
-     * class is already present, the new entity will not be added and the
-     * existing one will remain unchanged.
+     * Adds the provided entity to this cell.
+     *
+     * <p>If an entity of the same concrete class is already present the new
+     * instance will not be added.
      *
      * @param entity the entity to add (must not be {@code null})
+     * @return 0 (placeholder return value currently unused)
      */
     public int addEntity(Entity entity) {
 
@@ -164,30 +192,11 @@ public class Cell implements Serializable {
             
         }
 
-//        if (entities.containsKey(entity.getClass())) {
-//            Entity existing = entities.get(entity.getClass());
-//            if (existing instanceof CanGrow existingGrowable && entity instanceof CanGrow incomingGrowable) {
-//                int available = 100 - totalGrowthOnCell;
-//                int toAbsorb = Math.min(incomingGrowable.getGrowth(), available);
-//                existingGrowable.setGrowth(existingGrowable.getGrowth() + toAbsorb);
-//                totalGrowthOnCell += toAbsorb;
-//                return toAbsorb;
-//            }
-//            return 0;
-//        }
-
-//        if (entity instanceof CanGrow growable) {
-//            int available = capacity - totalGrowthOnCell;
-//            int toAbsorb = Math.min(growable.getGrowth(), available);
-//            growable.setGrowth(toAbsorb);
-//            totalGrowthOnCell += toAbsorb;
-//            return toAbsorb;
-//        }
         return 0;
     }
 
     public String getColorHex() {
-        // 1. Trouver l’entité affichable la plus grande
+        // 1. Find the largest displayable entity (by display size)
         Displayable best = null;
         double maxSize = Double.NEGATIVE_INFINITY;
         for (Entity e : entities.values()) {
@@ -200,21 +209,21 @@ public class Cell implements Serializable {
             }
         }
 
-        // 2. Si aucune entité affichable, retourner le matériau seul
+        // 2. If no displayable entity is found, return the material color
         if (best == null) {
             return material.getColorHex();
         }
-        // 3. Mélanger la couleur de l’entité (avec son opacité) sur le fond du matériau
+        // 3. Blend the entity color (with opacity) over the material background
         return blend(material.getColorHex(), best.getColorHex(), best.getOpacity());
     }
 
     /**
-     * Mélange deux couleurs hexadécimales selon une opacité.
+     * Blend two hexadecimal colors according to an opacity value.
      *
-     * @param bgHex   couleur de fond (matériau)
-     * @param fgHex   couleur de premier plan (entité)
-     * @param opacity opacité du premier plan (0.0 → transparent, 1.0 → opaque)
-     * @return la couleur résultante au format hexadécimal
+     * @param bgHex   background color hex (e.g. material color)
+     * @param fgHex   foreground color hex (e.g. entity color)
+     * @param opacity opacity of the foreground color (0.0 = transparent, 1.0 = opaque)
+     * @return resulting blended color as a hex string ("#RRGGBB")
      */
     private static String blend(String bgHex, String fgHex, double opacity) {
         Color bg = Color.web(bgHex);

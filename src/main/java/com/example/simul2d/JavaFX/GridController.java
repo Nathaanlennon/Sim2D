@@ -1,20 +1,34 @@
 package com.example.simul2d.JavaFX;
 
 import com.example.simul2d.Core.SimulationState;
-import com.example.simul2d.Systems.input.Commands.*;
+import com.example.simul2d.Systems.input.Commands.AddEntityCommand;
+import com.example.simul2d.Systems.input.Commands.ClearEntitiesCommand;
+import com.example.simul2d.Systems.input.Commands.RectangleEntityCommand;
+import com.example.simul2d.Systems.input.Commands.RectangleMaterialCommand;
+import com.example.simul2d.Systems.input.Commands.RemoveEntityCommand;
+import com.example.simul2d.Systems.input.Commands.SetMaterialCommand;
 import com.example.simul2d.Systems.input.InputHandler;
 import com.example.simul2d.grid.Cell;
 import com.example.simul2d.grid.Grid;
 import com.example.simul2d.grid.Material;
 import com.example.simul2d.grid.Vec2;
-import com.example.simul2d.JavaFX.ToolsType;
 
 import javafx.fxml.FXML;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 
+/**
+ * Controller that renders the simulation grid as a grid of rectangles and
+ * forwards mouse actions to the input command queue according to the
+ * currently selected `UiState` tool.
+ *
+ * <p>The controller expects to receive the shared {@link SimulationState}
+ * via {@link #setSimulationState(SimulationState)} and will call
+ * {@link #refreshUI()} to update the display.
+ */
 public class GridController implements NeedsSimulationState, NeedsUiState {
 
     // Reference to the shared simulation state (injected by HelloApplication)
@@ -24,17 +38,19 @@ public class GridController implements NeedsSimulationState, NeedsUiState {
     private Rectangle[][] tiles; // 2D array to hold references to the grid cell rectangles
 
 
-    private void clickOnCell(Vec2 position) {
+    private void clickOnCell(Vec2 position, Rectangle cell) {
         if (uiState.getActiveTool() == null) return;
         switch (uiState.getActiveTool()) {
             case DRAW -> {
                 if (uiState.getMode() == ToolsType.ENTITY_MODE) {
                     if (uiState.getSelectedEntity() != null) {
                         InputHandler.COMMAND_QUEUE.add(new AddEntityCommand(position, uiState.getSelectedEntity()));
+                        cell.setFill(Color.web(uiState.getSelectedEntity().getColorHex()));
                     }
                 } else if (uiState.getMode() == ToolsType.MATERIAL_MODE) {
                     if (uiState.getSelectedMaterial() != null) {
                         InputHandler.COMMAND_QUEUE.add(new SetMaterialCommand(position, uiState.getSelectedMaterial()));
+                        cell.setFill(Color.web(uiState.getSelectedMaterial().getColorHex()));
                     }
                 }
             }
@@ -49,13 +65,16 @@ public class GridController implements NeedsSimulationState, NeedsUiState {
                         InputHandler.COMMAND_QUEUE.add(new SetMaterialCommand(position, Material.EMPTY));
                     }
                 }
+                cell.setFill(Color.web(Material.EMPTY.getColorHex()));
             }
             case CLEAR_ENTITIES -> {
                 InputHandler.COMMAND_QUEUE.add(new ClearEntitiesCommand(position));
+                cell.setFill(Color.web(Material.EMPTY.getColorHex()));
             }
             case RECTANGLE -> {
                 if (uiState.getFirstClickPos() == null) {
                     uiState.setFirstClickPos(position);
+                    cell.setFill(Color.web("#000000"));
                 } else {
                     Vec2 start = uiState.getFirstClickPos();
                     Vec2 end = position;
@@ -85,9 +104,38 @@ public class GridController implements NeedsSimulationState, NeedsUiState {
     @FXML
     private void initialize() {
         System.out.println("GridController initialized");
+        installZoomHandler();
     }
 
+    // Current zoom scale for the grid display
+    private double gridScale = 1.0;
+    private static final double GRID_SCALE_MIN = 0.2;
+    private static final double GRID_SCALE_MAX = 6.0;
+
+    private void installZoomHandler() {
+        // zoom with scroll wheel when pointer is over gridDisplay
+        gridDisplay.setOnScroll(e -> {
+            if (e.isControlDown()) return; // allow ctrl+scroll for OS-level behavior if desired
+            double delta = e.getDeltaY();
+            // smooth exponential zooming
+            double factor = Math.pow(1.0015, delta);
+            double next = gridScale * factor;
+            if (next < GRID_SCALE_MIN) factor = GRID_SCALE_MIN / gridScale;
+            if (next > GRID_SCALE_MAX) factor = GRID_SCALE_MAX / gridScale;
+
+            gridScale = gridScale * factor;
+            gridDisplay.setScaleX(gridScale);
+            gridDisplay.setScaleY(gridScale);
+
+            e.consume();
+        });
+    }
+
+
+
     private void initializeGridDisplay() {
+
+
         if (grid == null) {
             return;
         }
@@ -111,13 +159,19 @@ public class GridController implements NeedsSimulationState, NeedsUiState {
                 int cx = x;
                 int cy = y;
 
-                tile.setOnMouseClicked(event -> {
-                    clickOnCell(new Vec2(cx, cy));
-                    if (uiState.getMode() == ToolsType.MATERIAL_MODE && uiState.getActiveTool() == ToolsType.DRAW) {
-                        tile.setFill(Color.web(
-                                uiState.getSelectedMaterial().getColorHex()
-                        ));
+                tile.setOnMouseEntered(event -> {
+                    if (uiState.isHoldClick()) {
+                        clickOnCell(new Vec2(cx, cy), tile);
                     }
+                });
+
+
+                tile.setOnMouseClicked(event -> {
+                    if (event.getButton() == MouseButton.SECONDARY){
+                        uiState.changeHoldClick();
+                    }
+                    clickOnCell(new Vec2(cx, cy), tile);
+
                 });
 
                 tiles[y][x] = tile;
@@ -131,7 +185,7 @@ public class GridController implements NeedsSimulationState, NeedsUiState {
         this.state = state;
         this.grid = state.getGrid();
         initializeGridDisplay();
-        refreshUI(); // Dessine la grille dès qu'on reçoit les données
+        refreshUI(); // Draw the grid as soon as state is provided
     }
 
     @Override

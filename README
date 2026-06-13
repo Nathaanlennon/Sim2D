@@ -1,0 +1,14 @@
+Java21
+
+Windows:
+.\mvnw clean
+.\mvnw javafx:run
+.\mvnw javadoc:javadoc
+.\mvnw exec:java -Dexec.mainClass="com.example.simul2d.Console.ConsoleMain"
+
+
+Linux:
+mvn clean
+mvn javafx:run
+mvn javadoc:javadoc
+mvn exec:java -Dexec.mainClass="com.example.simul2d.Console.ConsoleMain"

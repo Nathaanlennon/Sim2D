@@ -17,8 +17,10 @@ import com.example.simul2d.grid.Material;
  */
 public class ConsoleMain {
 
-    // Published simulation state so other parts of the app can access the running
-    // simulation when ConsoleMain is started programmatically.
+    /**
+     * Published simulation state so other parts of the app can access the running
+     * simulation when ConsoleMain is started programmatically.
+     */
     public static volatile com.example.simul2d.Core.SimulationState publishedState;
 
     public static com.example.simul2d.Core.SimulationState getPublishedState() {
@@ -27,20 +29,27 @@ public class ConsoleMain {
 
     /**
      * Small holder describing a running simulation: the thread, the state and the loop.
+     *
+     * @param thread the thread executing the simulation loop
+     * @param state  the current simulation state
+     * @param loop   the simulation loop controller
      */
-    public static record SimulationRun(Thread thread, SimulationState state, SimulationLoop loop) {}
+    public static record SimulationRun(Thread thread, SimulationState state, SimulationLoop loop) {
+    }
 
     /**
      * Start the simulation and return a SimulationRun containing the created
      * SimulationState, the SimulationLoop and the thread running the loop.
      * The SimulationState is published in {@link #publishedState} as well.
+     *
+     * @return a SimulationRun containing the created SimulationState, the SimulationLoop and the thread running the loop
      */
     public static SimulationRun startSimulation() {
         //TODO: make that main calls that somehow or make another function to start sumulation so no code duplication
         // create the model
         SimulationState state = new SimulationState();
         publishedState = state;
-        
+
         // create loop and helpers
         SimulationLoop loop = new SimulationLoop(state);
         ConsoleRenderSystem renderer = new ConsoleRenderSystem(state);
@@ -49,17 +58,9 @@ public class ConsoleMain {
         // sample test setup (same as main)
         Grid grid = state.getGrid();
 
-        // for test purposes for now
-        for (int x = 0; x < grid.getWidth(); x++) {
-            grid.getCell(x, 0).setMaterial(Material.WOOD);
-            grid.getCell(x, grid.getHeight() - 1).setMaterial(Material.CONCRETE);
-        }
+        //for test purposes
 
-        grid.getCell(0,0).addEntity(new CircMold1());
-        grid.getCell(0,0).setMaterial(Material.WOOD);
 
-        grid.getCell(grid.getWidth()-1, grid.getHeight()-1).addEntity(new DividedMold1());
-        grid.getCell(0, grid.getHeight()-1).addEntity(new AxialMold1());
 
         // start the console input reader
         new Thread(new InputReader(), "InputReader-Thread").start();
@@ -75,12 +76,15 @@ public class ConsoleMain {
         t.start();
 
 
-
         return new SimulationRun(t, state, loop);
     }
 
     /**
-     * Overloaded startSimulation that allows specifying grid dimensions and toric flag.
+     *
+     * @param width  of the simulation grid
+     * @param height of the simulation grid
+     * @param toric  true if toric grid
+     * @return the simulation run containing the thread, state and loop
      */
     public static SimulationRun startSimulation(int width, int height, boolean toric) {
         SimulationState state = new SimulationState();
@@ -105,16 +109,8 @@ public class ConsoleMain {
 
         Grid grid = state.getGrid();
 
-        for (int x = 0; x < grid.getWidth(); x++) {
-            grid.getCell(x, 0).setMaterial(Material.WOOD);
-            grid.getCell(x, grid.getHeight() - 1).setMaterial(Material.CONCRETE);
-        }
-        
-        grid.getCell(0,0).addEntity(new CircMold1());
-        grid.getCell(0,0).setMaterial(Material.WOOD);
-  
-        grid.getCell(grid.getWidth()-1, grid.getHeight()-1).addEntity(new DividedMold1());
-        grid.getCell(0, grid.getHeight()-1).addEntity(new AxialMold1());
+
+
 
         return new SimulationRun(t, state, loop);
     }
@@ -126,9 +122,8 @@ public class ConsoleMain {
      * @throws InterruptedException if the simulation loop is interrupted while sleeping
      */
     public static void main(String[] args) throws InterruptedException {
-        
-            startSimulation();
 
+        startSimulation();
 
 
     }

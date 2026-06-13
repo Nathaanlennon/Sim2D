@@ -11,6 +11,20 @@
             fx:controller="com.example.simul2d.JavaFX.DrawingController"
             prefHeight="400.0" prefWidth="220.0" spacing="8" alignment="TOP_CENTER" style="-fx-padding:8;">
 
+    <Label fx:id="mode" text="Mode: None"/>
+    <Label fx:id="currentToolLabel" text="Current Tool: None"/>
+    <Label fx:id="selected" text="Selected: None"/>
+    <Separator />
+    <!-- Tools -->
+    <VBox spacing="6" alignment="CENTER">
+        <Button text="Material Mode" onAction="#handleMaterialMode" prefWidth="140" maxWidth="140"/>
+        <Button text="Entity Mode" onAction="#handleEntityMode" prefWidth="140" maxWidth="140"/>
+        <Separator />
+        <Button text="Erase" onAction="#handleErase" prefWidth="140" maxWidth="140"/>
+        <Button text="Clear entities" onAction="#handleClearEntities" prefWidth="140" maxWidth="140"/>
+        <Button text="Rectangle Tool" onAction="#handleRectangleTool" prefWidth="140" maxWidth="140"/>
+        <Button text="Draw Tool" onAction="#handleDrawTool" prefWidth="140" maxWidth="140"/>
+    </VBox>
     <!-- Materials block (placed on top) -->
     <VBox spacing="6" alignment="CENTER" style="-fx-padding:6; -fx-border-color: transparent; -fx-border-width:0;" >
         <Label text="Materials" style="-fx-font-weight: bold;"/>
@@ -23,20 +37,6 @@
         <Label text="Entities" style="-fx-font-weight: bold;"/>
         <VBox fx:id="buttonContainerEntities" spacing="6" prefWidth="140" alignment="CENTER"/>
     </VBox>
-    <Separator />
 
-    <!-- Tools -->
-    <VBox spacing="6" alignment="CENTER">
-        <Button text="Material Mode" onAction="#handleMaterialMode" prefWidth="140" maxWidth="140"/>
-        <Button text="Entity Mode" onAction="#handleEntityMode" prefWidth="140" maxWidth="140"/>
-        <Separator />
-        <Button text="Erase" onAction="#handleErase" prefWidth="140" maxWidth="140"/>
-        <Button text="Clear entities" onAction="#handleClearEntities"/>
-        <Button text="Rectangle Tool" onAction="#handleRectangleTool" prefWidth="140" maxWidth="140"/>
-        <Button text="Draw Tool" onAction="#handleDrawTool" prefWidth="140" maxWidth="140"/>
-    </VBox>
-    <Label fx:id="mode" text="Mode: None"/>
-    <Label fx:id="currentToolLabel" text="Current Tool: None"/>
-    <Label fx:id="selected" text="Selected: None"/>
 
 </VBox>

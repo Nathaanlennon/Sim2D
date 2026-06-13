@@ -11,7 +11,7 @@ public class Grid implements Serializable {
         /** The number of columns in the grid. */
         private int columns;
         /** Flag indicating if the grid is toric (true) or bounded by walls (false). */
-        private boolean isToric; // True = les bords se touchent, False = murs bloqués
+        private boolean isToric; // true = edges wrap, false = bounded by walls
         /** The 2D array containing the cells of the grid. */
         private Cell[][] matrix;
 
@@ -39,7 +39,8 @@ public class Grid implements Serializable {
 
         /**
          * Constructs a non-toric Grid with the specified dimensions.
-         * * @param rows     the number of rows in the grid
+         *
+         * @param rows     the number of rows in the grid
          * @param columns  the number of columns in the grid
          */
         public Grid(int rows, int columns) {
@@ -57,7 +58,6 @@ public class Grid implements Serializable {
         }
 
         /**
-         * Returns the height of the grid (number of rows).
          *
          * @return the number of rows
          */
@@ -103,6 +103,12 @@ public class Grid implements Serializable {
                 return null;
 
         }
+        /**
+         * Convenience overload that retrieves the cell at the provided position.
+         *
+         * @param pos the position vector
+         * @return the cell at {@code pos}, or {@code null} if out of bounds on a non-toric grid
+         */
         public Cell getCell(Vec2 pos) {
                 return getCell(pos.x(), pos.y());
         }

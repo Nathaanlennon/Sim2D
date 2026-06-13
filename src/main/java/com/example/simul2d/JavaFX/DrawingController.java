@@ -12,6 +12,12 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
+/**
+ * Controller responsible for building and handling drawing/tool UI elements.
+ *
+ * <p>This controller populates material and entity selection buttons and
+ * forwards user tool selections into the shared `UiState` model.
+ */
 public class DrawingController implements NeedsUiState{
 
     private UiState uiState;
@@ -56,6 +62,10 @@ public class DrawingController implements NeedsUiState{
         this.currentToolLabel.setText("Selected Tool: Draw");
     }
 //public methods
+
+    /**
+     * initialize the tool buttons for materials and entities, setting up their event handlers to update the UiState accordingly.
+     */
     @FXML
     public void initialize() {
         ConsoleRenderSystem.printSomething("DrawingController initialized");

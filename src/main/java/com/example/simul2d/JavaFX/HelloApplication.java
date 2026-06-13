@@ -8,19 +8,24 @@ import java.util.List;
 import com.example.simul2d.Core.SimulationLoop;
 import com.example.simul2d.Core.SimulationState;
 
+import com.example.simul2d.Entities.Entities;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+/**
+ * JavaFX application entry point that boots an initialization dialog,
+ * starts the simulation and loads the main UI.
+ */
 public class HelloApplication extends Application {
     private SimulationLoop simulationLoop;
     private Thread simThread;
 
     @Override
     public void init() {
-        // Appelée une seule fois avant l'affichage de la fenêtre.
-        System.out.println("init() : l'application JavaFX démarre.");
+        // Called once before the UI is shown.
+        System.out.println("init(): JavaFX application starting.");
     }
 
     @Override
@@ -72,7 +77,7 @@ public class HelloApplication extends Application {
                             ((NeedsUiState) ctrl).setUiState(UiState);
                         }
                         if (ctrl instanceof NeedsGraphValues){
-                            neededGraphCallbacks.add((timeStep, populations) -> ((NeedsGraphValues) ctrl).addDataPoint(timeStep, populations));
+                            neededGraphCallbacks.add((timeStep, populations,infectedCells) -> ((NeedsGraphValues) ctrl).graphStep(timeStep, populations, infectedCells));
                         }
                     }
 
@@ -92,8 +97,8 @@ public class HelloApplication extends Application {
 
     @Override
     public void stop() {
-        // Appelée quand l'application se ferme.
-        System.out.println("stop() : fermeture de l'application JavaFX.");
+        // Called when the application is shutting down.
+        System.out.println("stop(): shutting down JavaFX application.");
         if (simulationLoop != null) {
             simulationLoop.stop();
         }

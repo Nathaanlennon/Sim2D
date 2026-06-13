@@ -1,16 +1,22 @@
 package com.example.simul2d.Systems.input;
 
+import java.util.concurrent.ConcurrentLinkedQueue;
+
+import com.example.simul2d.Core.SimulationLoop;
 import com.example.simul2d.Core.SimulationState;
 import com.example.simul2d.Systems.ConsoleRenderSystem;
 import com.example.simul2d.Systems.SaveSystem;
 import com.example.simul2d.Systems.input.Commands.*;
 
 
-import java.util.concurrent.ConcurrentLinkedQueue;
-
-
 /**
- * Consumes raw input strings and applies the matching command to the simulation state.
+ * Consumes raw input strings and applies the matching command to the
+ * {@link com.example.simul2d.Core.SimulationState}.
+ *
+ * <p>Commands are read from the shared `queue` and translated into
+ * {@link com.example.simul2d.Systems.input.Commands.Command} instances
+ * before being applied. This class is designed to be invoked regularly by
+ * the simulation loop or by a dedicated input-handling thread.
  */
 public class InputHandler {
     private final SimulationState data;
@@ -59,8 +65,8 @@ public class InputHandler {
                 }
             }
             case RectangleEntityCommand r -> {
-                for (int y = r.start().y(); y <= r.end().y(); y++) {
-                    for (int x = r.start().x(); x <= r.end().x(); x++) {
+                for (int y = Math.min(r.start().y(), r.end().y()); y <= Math.max(r.start().y(), r.end().y()); y++) {
+                    for (int x = Math.min(r.start().x(), r.end().x()); x <= Math.max(r.start().x(), r.end().x()); x++) {
                         data.getGrid().getCell(x, y).addEntity(r.entityType().createEntity());
                     }
                 }
@@ -74,11 +80,19 @@ public class InputHandler {
             }
             case LoadCommand l -> {
                 try {
+//                    data.resetSimulation();
                     data.setGrid(SaveSystem.loadSystem(l.filePath()));
                 } catch (Exception e) {
                     ConsoleRenderSystem.printSomething("Failed to load: " + e.getMessage());
                 }
                 data.changePause(false); //TODO: problems while loading, needs lock unlock reading writting 
+            }
+            case StepCommand sp -> {
+                for (int i = 0; i < sp.stepsNumber();i++){
+                    SimulationLoop.self.update();
+                }
+                SimulationLoop.self.render();
+
             }
             default -> {
             }

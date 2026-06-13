@@ -8,10 +8,14 @@ import com.example.simul2d.Entities.CoorWeight;
 import com.example.simul2d.grid.Cell;
 import com.example.simul2d.grid.Vec2;
 //TODO: add growth to propagation probability calcul
+/**
+ * Responsible for selecting propagation targets and performing propagation
+ * actions for {@link com.example.simul2d.Entities.CanPropagate} entities.
+ */
 public class PropagationSystem {
     private final SimulationState data;
 
-    //constructors
+    // constructors
     public PropagationSystem(SimulationState data) {
         this.data = data;
     }
@@ -58,15 +62,23 @@ public class PropagationSystem {
         return Math.random() < propagationProbability * cellVulnerability; // Simple probabilistic check
     }
 
-    //public methods
+    // public methods
+    /**
+     * Attempts to propagate the provided {@code canPropagate} entity from the
+     * original coordinates to a selected target cell following the entity's
+     * propagation distribution and probability.
+     *
+     * @param OGCoordinates the origin coordinates of the propagating entity
+     * @param canPropagate the propagating entity
+     */
     public void propagation(Vec2 OGCoordinates, CanPropagate canPropagate) {
-        if (canPropagate != null && canPropagate.isAbleToPropagate()) {
-            Vec2 targetCoordinates = getPropagationTarget(canPropagate.getPropagationDistributionList());
+        if (canPropagate != null && canPropagate.isAbleToPropagate()) { //can ?
+            Vec2 targetCoordinates = getPropagationTarget(canPropagate.getPropagationDistributionList()); //where ?
             if (targetCoordinates != null) {
-                Cell target = data.getGrid().getCell(OGCoordinates.add(targetCoordinates));
+                Cell target = data.getGrid().getCell(OGCoordinates.add(targetCoordinates)); // there
                 if (target != null) {
-                    if (shouldPropagate(canPropagate, target)) {
-                        canPropagate.propagateTo(target);
+                    if (shouldPropagate(canPropagate, target)) { // will ?
+                        canPropagate.propagateTo(target); // propagation
                     }
                 }
             }

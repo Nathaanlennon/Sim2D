@@ -1,46 +1,104 @@
 package com.example.simul2d.Entities.Mold;
-import java.util.Objects;
-
-import com.example.simul2d.Entities.*;
+import com.example.simul2d.Entities.CanGrow;
+import com.example.simul2d.Entities.CanPropagate;
+import com.example.simul2d.Entities.Displayable;
+import com.example.simul2d.Entities.Entities;
+import com.example.simul2d.Entities.Entity;
 
 
 /**
- * Base type for mold entities in the simulation. This abstract class provides
- * common properties and behaviors for different mold variants, such as growth
- * and propagation logic.
+ * Abstract base class for mold entities used in the simulation.
  *
- * <p>Concrete subclasses (e.g., {@link AxialMold} and {@link CircularMold}) can
- * override the default growth behavior and provide specific implementations of
- * the {@link #toString()} method for visualization purposes.
+ * <p>This class centralizes common state and behavior shared by concrete mold
+ * implementations (for example {@code AxialMold}, {@code CircularMold}, and
+ * {@code DividedMold1}). It implements several domain traits such as
+ * {@link com.example.simul2d.Entities.CanGrow}, {@link com.example.simul2d.Entities.CanPropagate}
+ * and {@link com.example.simul2d.Entities.CanAge} and exposes properties used by
+ * the simulation systems (growth, propagation probability, age-based death).
+ *
+ * <p>Subclasses may override growth, propagation and string representation
+ * methods to provide variant-specific behavior and display characters.
  */
-public abstract class Mold extends Entity implements CanGrow, CanPropagate, Displayable {
+public abstract class Mold extends Entity implements CanGrow, CanPropagate, Displayable, com.example.simul2d.Entities.CanAge {
 //todo : sizemax
     private int growthRate;
     private final int minGrowthValueToPropagate; // Minimum growth required for propagation
     private double PropagationProbability = 0.5; // Default propagation probability
     protected static final int MAX_GROWTH = 100; // Maximum growth value for intensity adjustment
+    // Age in simulation steps. Starts at 0 and increases each step.
+    private int age = 0;
+    // Whether the entity is dead (set when probabilistic death occurs)
+    private boolean dead = false;
+
+    // Per-instance parameters controlling age-based death probability.
+    // death probability = min(ageDeathMax, age * ageDeathFactor)
+    private final double ageDeathFactor;
+    private final double ageDeathMax;
 
 
     /**
      * Constructs a Mold with the supplied initial growth and growth rate.
      *
-     * @param growth the initial growth value (units)
-     * @param growthRate growth per step (units)
-     * @param minGrowthValueToPropagate minimum growth required for propagation
-     * @param PropagationProbability the probability of successful propagation (0-1)
+     * @param growth initial growth value (units)
+     * @param growthRate growth added per simulation step (units)
+     * @param minGrowthValueToPropagate minimum local growth required to allow propagation
+     * @param PropagationProbability probability of successful propagation (0.0 - 1.0)
+     * @param entityType the {@link com.example.simul2d.Entities.Entities} enum value identifying the mold type
+     * @param ageDeathFactor factor controlling how fast age increases instantaneous death probability
+     * @param ageDeathMax maximum instantaneous death probability due to age (0.0 - 1.0)
      */
-    public Mold(int growth, int growthRate, int minGrowthValueToPropagate, double PropagationProbability, Entities entityType) {
+    public Mold(int growth, int growthRate, int minGrowthValueToPropagate, double PropagationProbability, Entities entityType, double ageDeathFactor, double ageDeathMax) {
         super(growth, entityType);
         this.growthRate = growthRate;
         this.minGrowthValueToPropagate = minGrowthValueToPropagate;
         this.PropagationProbability = PropagationProbability;
+        this.ageDeathFactor = Math.max(0.0, ageDeathFactor);
+        this.ageDeathMax = Math.max(0.0, Math.min(1.0, ageDeathMax));
+    }
+
+    @Override
+    public boolean isDead() {
+        return dead;
+    }
+
+    /**
+     * Performs one aging step and possibly marks the entity as dead.
+     *
+     * <p>The method increases the internal age counter and computes an
+     * instantaneous death probability using an exponential-like law bounded
+     * by {@link #ageDeathMax}. If a random draw falls below that probability
+     * the entity is marked dead and the method returns {@code true}.
+     *
+     * @return {@code true} if the entity died during this aging step
+     */
+    @Override
+    public boolean ageOneStep() {
+        // increment age
+        this.age++;
+
+        // compute age-based instantaneous death probability using an exponential law:
+        // deathProb(age) = ageDeathMax * (1 - exp(-ageDeathFactor * age))
+        double deathProb = ageDeathMax * (1 - Math.exp(-ageDeathFactor * this.age));
+        if (Math.random() < deathProb) {
+            this.dead = true;
+            return true;
+        }
+
+        return this.dead;
+    }
+
+    /**
+     *
+     * @return the age (number of steps) since this entity was created
+     */
+    public int getAge() {
+        return age;
     }
 
     
     /**
-     * Returns the current growth value.
      *
-     * @return current growth
+     * @return the growth units currently stored on this entity
      */
     @Override
     public int getGrowth() {
@@ -48,9 +106,9 @@ public abstract class Mold extends Entity implements CanGrow, CanPropagate, Disp
     }
 
     /**
-     * Sets the current growth value.
+     * Sets the current growth value for this entity.
      *
-     * @param growth new growth value
+     * @param growth new growth value (callers should ensure the value is within valid bounds)
      */
     @Override
     public void setGrowth(int growth) {
@@ -58,9 +116,8 @@ public abstract class Mold extends Entity implements CanGrow, CanPropagate, Disp
     }
 
     /**
-     * Returns the configured growth rate.
      *
-     * @return growth rate per step
+     * @return growth units added per step
      */
     @Override
     public int getGrowthRate() {
@@ -68,9 +125,9 @@ public abstract class Mold extends Entity implements CanGrow, CanPropagate, Disp
     }
 
     /**
-     * Sets the growth rate for subsequent growth steps.
+     * Sets the growth rate used for subsequent growth steps.
      *
-     * @param growthRate new growth rate
+     * @param growthRate growth units per simulation step
      */
     @Override
     public void setGrowthRate(int growthRate) {
@@ -78,9 +135,8 @@ public abstract class Mold extends Entity implements CanGrow, CanPropagate, Disp
     }
 
     /**
-     * Returns the minimum growth value required for this mold to be able to propagate.
      *
-     * @return minimum growth value for propagation
+     * @return probability in range [0.0, 1.0]
      */
     @Override
     public double getPropagationProbability() {
@@ -90,15 +146,15 @@ public abstract class Mold extends Entity implements CanGrow, CanPropagate, Disp
 
 
     /**
-     * Default growth behavior invoked each step.
+     * Default per-step growth implementation.
      *
-     * <p>The implementation is conservative: it does nothing if the
-     * configured growth rate is non-positive, the total growth on the
-     * containing cell has reached a global limit (100), or this mold has
-     * already reached a maximum (100). Otherwise, the mold's growth is
-     * increased by its {@link #growthRate}.
+     * <p>This method increases this entity's growth by {@link #growthRate}
+     * unless doing so would exceed the per-cell capacity (100) or the
+     * entity's own maximum. The method returns the actual growth units
+     * added which may be smaller than {@code growthRate} when capped.
      *
-     * @param totalGrowthOnCell aggregated growth value for the containing cell
+     * @param totalGrowthOnCell the aggregated growth already present in the containing cell
+     * @return the number of growth units actually added during this step
      */
     @Override
     public int grow(int totalGrowthOnCell) { //Todo: envoyer capacitÃ© de cellule aussi
@@ -175,28 +231,6 @@ public abstract class Mold extends Entity implements CanGrow, CanPropagate, Disp
      */
     public void resetGrowth() {
         this.growth = 0;
-    }
-
-
-
-    @Override
-    public boolean equals(Object other) {
-        if (this == other) {
-            return true;
-        }
-
-        if (other == null || getClass() != other.getClass()) {
-            return false;
-        }
-
-        Mold otherMold = (Mold) other;
-        return this.growth == otherMold.growth && this.growthRate == otherMold.growthRate && this.minGrowthValueToPropagate == otherMold.minGrowthValueToPropagate;
-
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(growth, growthRate, minGrowthValueToPropagate);
     }
 
 }

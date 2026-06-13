@@ -1,34 +1,68 @@
 package com.example.simul2d.Entities.Mold;
-import com.example.simul2d.Entities.CoorWeight;
-import com.example.simul2d.Entities.Entities;
-import com.example.simul2d.grid.Vec2;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.example.simul2d.Entities.CoorWeight;
+import com.example.simul2d.Entities.Entities;
+import com.example.simul2d.grid.Vec2;
+
 /**
- * A {@link Mold} implementation with a low growth rate but fast propagation. This class
- * represents a slower-growing mold variant used in the simulation.
+ * An abstract mold whose propagation pattern is circular (all directions within
+ * Manhattan distance 1 to 3). Weights are assigned based on distance:
+ * distance 1 → weight 8, distance 2 → weight 7, distance 3 → weight 1.
+ * <p>
+ * The static distribution list is shared among all subclasses. Concrete
+ * implementations only need to define their specific parameters.
+ * </p>
+ *
+ * @see Mold
  */
 public abstract class CircularMold extends Mold {
 
-
-
+    /**
+     * The static, unmodifiable list of weighted propagation targets for all
+     * circular molds, sorted by weight descending.
+     */
     public static final List<CoorWeight> distribution = createCircularDistribution();
 
-
-
     /**
-     * Constructs a CircularMold with an initial growth of 0 and a growth rate
-     * of 2 units per growth step.
+     * Constructs a {@code CircularMold} with the given growth parameters and entity
+     * type.
+     *
+     * @param initialGrowth   initial growth value
+     * @param growthRate      growth increment per step
+     * @param minimumGrowth   minimum growth required for propagation
+     * @param propagationRate base probability or factor for propagation
+     * @param entityType      the type of entity this mold represents
+     * @param ageDeathFactor  factor affecting death probability based on age
+     * @param ageDeathMax     maximum age after which death probability is capped
      */
-    public CircularMold(int initialGrowth, int growthRate, int minimumGrowth, double propagationRate, Entities entityType) {
-        super(initialGrowth, growthRate, minimumGrowth, propagationRate, entityType); // Call the parent constructor with initial growth and growth rate and minimum growth value for propagation
+    public CircularMold(int initialGrowth, int growthRate, int minimumGrowth, double propagationRate,
+                        Entities entityType, double ageDeathFactor, double ageDeathMax) {
+        super(initialGrowth, growthRate, minimumGrowth, propagationRate, entityType, ageDeathFactor, ageDeathMax);
     }
 
+    /**
+     * Creates and returns the circular distribution of propagation targets.
+     * <p>
+     * The method iterates over dx and dy from -3 to 3. It keeps positions whose
+     * Manhattan distance is between 1 and 3 (inclusive). Each target receives a
+     * weight depending on the distance:
+     * <ul>
+     *   <li>distance 1 → 8</li>
+     *   <li>distance 2 → 7</li>
+     *   <li>distance 3 → 1</li>
+     * </ul>
+     * The list is sorted by weight in descending order and then wrapped into an
+     * unmodifiable list.
+     * </p>
+     *
+     * @return an unmodifiable list of {@link CoorWeight} sorted by weight
+     *         descending
+     */
     private static List<CoorWeight> createCircularDistribution() {
-
         List<CoorWeight> targets = new ArrayList<>();
         for (int dx = -3; dx <= 3; dx++) {
             for (int dy = -3; dy <= 3; dy++) {
@@ -48,12 +82,16 @@ public abstract class CircularMold extends Mold {
         return Collections.unmodifiableList(targets);
     }
 
-
+    /**
+     * <p>
+     * The returned list is the static, unmodifiable list of weighted circular
+     * targets shared across all instances.
+     * </p>
+     *
+     * @return the circular propagation distribution
+     */
     @Override
     public List<CoorWeight> getPropagationDistributionList() {
         return distribution;
     }
-
-
 }
-
